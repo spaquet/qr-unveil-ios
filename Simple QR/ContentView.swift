@@ -75,7 +75,11 @@ struct ContentView: View {
                 if let result = viewModel.qrCodeValue {
                     VStack {
                         Spacer()
-                        ResultView(
+                    }
+                    .sheet(isPresented: .constant(true), onDismiss: {
+                        viewModel.resetScanner()
+                    }) {
+                        QRResultSheet(
                             result: result,
                             type: viewModel.qrCodeType ?? "Unknown",
                             isURL: viewModel.isURLType,
@@ -86,7 +90,8 @@ struct ContentView: View {
                                 showSafari = true
                             }
                         )
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
                     }
                     .zIndex(3)
                 }
@@ -97,6 +102,87 @@ struct ContentView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.3), value: viewModel.qrCodeValue != nil)
+        }
+    }
+}
+
+// Modern iOS 17+ result sheet
+struct QRResultSheet: View {
+    let result: String
+    let type: String
+    let isURL: Bool
+    let resetAction: () -> Void
+    let openURLAction: () -> Void
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    HStack {
+                        Image(systemName: typeIcon)
+                            .font(.system(size: 24))
+                            .foregroundColor(.accentColor)
+                        
+                        VStack(alignment: .leading) {
+                            Text(type)
+                                .font(.headline)
+                            
+                            Text(result)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 8)
+                }
+                
+                Section {
+                    Button(action: {
+                        UIPasteboard.general.string = result
+                        // Optional: Show a toast or haptic feedback
+                        let generator = UINotificationFeedbackGenerator()
+                        generator.notificationOccurred(.success)
+                    }) {
+                        Label("Copy to Clipboard", systemImage: "doc.on.doc")
+                    }
+                    
+                    if isURL {
+                        Button(action: openURLAction) {
+                            Label("Open in Safari", systemImage: "safari")
+                        }
+                    }
+                }
+                
+                Section {
+                    Button(action: {
+                        dismiss()
+                        resetAction()
+                    }) {
+                        Label("Scan Another Code", systemImage: "qrcode.viewfinder")
+                    }
+                    .tint(.accentColor)
+                }
+            }
+            .navigationTitle("Scan Result")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    // Get SF Symbol based on QR code type
+    private var typeIcon: String {
+        switch type.lowercased() {
+        case "url": return "link"
+        case "email": return "envelope"
+        case "phone number": return "phone"
+        case "sms": return "message"
+        case "location": return "map"
+        case "wifi network": return "wifi"
+        case "contact information": return "person.crop.rectangle"
+        case "calendar event": return "calendar"
+        case "app store": return "apple.logo"
+        case "google play store": return "play.rectangle"
+        case "crypto": return "bitcoinsign.circle"
+        default: return "doc.text"
         }
     }
 }
@@ -126,7 +212,7 @@ struct ScannerOverlayView: View {
             .stroke(Color.white, lineWidth: 4)
             .frame(width: size, height: size)
             .position(x: centerX, y: centerY)
-            
+        
         // Scanning line within the border
         Rectangle()
             .fill(
@@ -141,105 +227,6 @@ struct ScannerOverlayView: View {
             .onAppear {
                 viewModel.startScanLineAnimation(containerHeight: size - 60) // Leave safe padding
             }
-    }
-}
-
-// Rest of the code remains the same
-struct ResultView: View {
-    let result: String
-    let type: String
-    let isURL: Bool
-    let resetAction: () -> Void
-    let openURLAction: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            // Handle
-            Capsule()
-                .fill(Color.white.opacity(0.5))
-                .frame(width: 40, height: 5)
-                .padding(.top, 12)
-            
-            // Title with type icon
-            HStack {
-                Image(systemName: typeIcon)
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                
-                Text(type)
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white)
-            }
-            .padding(.top, 20)
-            
-            // Content
-            Text(result)
-                .font(.system(size: 16))
-                .foregroundColor(.white.opacity(0.9))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
-            
-            // Action buttons
-            HStack(spacing: 16) {
-                // Copy button
-                Button {
-                    UIPasteboard.general.string = result
-                } label: {
-                    Label("Copy", systemImage: "doc.on.doc")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.black)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 16)
-                        .background(Capsule().fill(Color.white))
-                }
-                
-                // Open URL button (if applicable)
-                if isURL {
-                    Button(action: openURLAction) {
-                        Label("Open", systemImage: "safari")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.black)
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 16)
-                            .background(Capsule().fill(Color.white))
-                    }
-                }
-                
-                // Scan again button
-                Button(action: resetAction) {
-                    Label("Scan Again", systemImage: "qrcode.viewfinder")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.black)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal, 16)
-                        .background(Capsule().fill(Color.white))
-                }
-            }
-            .padding(.bottom, 32)
-        }
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 32)
-                .fill(Color.black.opacity(0.85))
-                .edgesIgnoringSafeArea(.bottom)
-        )
-    }
-    
-    // Get SF Symbol based on QR code type
-    private var typeIcon: String {
-        switch type.lowercased() {
-        case "url": return "link"
-        case "email": return "envelope"
-        case "phone number": return "phone"
-        case "sms": return "message"
-        case "location": return "map"
-        case "wifi network": return "wifi"
-        case "contact information": return "person.crop.rectangle"
-        case "calendar event": return "calendar"
-        default: return "doc.text"
-        }
     }
 }
 
@@ -381,6 +368,12 @@ struct QRScannerView: UIViewRepresentable {
         // QR code type detection
         func determineQRCodeType(value: String) -> String {
             if value.hasPrefix("http://") || value.hasPrefix("https://") {
+                // Check for app store links first
+                if value.contains("apps.apple.com") || value.contains("itunes.apple.com/app") {
+                    return "App Store"
+                } else if value.contains("play.google.com/store/apps") {
+                    return "Google Play Store"
+                }
                 return "URL"
             } else if value.hasPrefix("mailto:") {
                 return "Email"
@@ -396,9 +389,20 @@ struct QRScannerView: UIViewRepresentable {
                 return "Contact Information"
             } else if value.hasPrefix("BEGIN:VEVENT") {
                 return "Calendar Event"
+            } else if value.lowercased().hasPrefix("bitcoin:") ||
+                      value.lowercased().contains("ethereum:") ||
+                      (value.hasPrefix("0x") && value.count == 42 && isValidHexString(value.dropFirst(2))) || // Ethereum address
+                      (value.hasPrefix("1") || value.hasPrefix("3") || value.hasPrefix("bc1")) { // Bitcoin address
+                return "Crypto"
             } else {
                 return "Text"
             }
+        }
+        
+        // Helper function to validate hex strings for Ethereum addresses
+        private func isValidHexString(_ string: Substring) -> Bool {
+            let hexPattern = "^[0-9a-fA-F]+$"
+            return string.range(of: hexPattern, options: .regularExpression) != nil
         }
     }
 }
