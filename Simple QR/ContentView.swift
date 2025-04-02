@@ -14,7 +14,6 @@ import SafariServices
 // Main View
 struct ContentView: View {
     @StateObject private var viewModel = QRScannerViewModel()
-    @State private var showSafari: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -85,20 +84,12 @@ struct ContentView: View {
                             isURL: viewModel.isURLType,
                             resetAction: {
                                 viewModel.resetScanner()
-                            },
-                            openURLAction: {
-                                showSafari = true
                             }
                         )
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.visible)
                     }
                     .zIndex(3)
-                }
-            }
-            .sheet(isPresented: $showSafari) {
-                if let urlString = viewModel.qrCodeValue, let url = URL(string: urlString) {
-                    SafariView(url: url)
                 }
             }
             .animation(.easeInOut(duration: 0.3), value: viewModel.qrCodeValue != nil)
@@ -112,8 +103,8 @@ struct QRResultSheet: View {
     let type: String
     let isURL: Bool
     let resetAction: () -> Void
-    let openURLAction: () -> Void
     @Environment(\.dismiss) private var dismiss
+    @State private var showSafari = false
     
     var body: some View {
         NavigationStack {
@@ -147,7 +138,9 @@ struct QRResultSheet: View {
                     }
                     
                     if isURL {
-                        Button(action: openURLAction) {
+                        Button(action: {
+                            showSafari = true
+                        }) {
                             Label("Open in Safari", systemImage: "safari")
                         }
                     }
@@ -165,6 +158,11 @@ struct QRResultSheet: View {
             }
             .navigationTitle("Scan Result")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showSafari) {
+                if let url = URL(string: result) {
+                    SafariView(url: url)
+                }
+            }
         }
     }
     
@@ -444,12 +442,5 @@ class QRScannerViewModel: ObservableObject {
         ) {
             self.scanLinePosition = bottomPosition
         }
-    }
-}
-
-// Preview for SwiftUI Canvas
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
