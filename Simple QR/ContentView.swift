@@ -14,6 +14,8 @@ import SafariServices
 // Main View
 struct ContentView: View {
     @StateObject private var viewModel = QRScannerViewModel()
+    @State private var showSafari = false
+    @State private var currentURL: URL?
     
     var body: some View {
         GeometryReader { geometry in
@@ -62,12 +64,58 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    // Removed the scanner indicator since it's now in ScannerOverlayView
-                    
                     Spacer()
                     
                     // Bottom spacing
                     Color.clear.frame(height: viewModel.qrCodeValue != nil ? 0 : 40)
+                }
+                
+                // Menu button in top-left
+                VStack {
+                    HStack {
+                        // Menu Button with tap response
+                        Menu {
+                            // QR Unveil Website
+                            Button {
+                                currentURL = URL(string: "https://qrunveil.pages.dev")
+                                showSafari = true
+                            } label: {
+                                Label("QR Unveil Website", systemImage: "globe")
+                            }
+                            
+                            // Terms of Service
+                            Button {
+                                currentURL = URL(string: "https://qrunveil.pages.dev/terms")
+                                showSafari = true
+                            } label: {
+                                Label("Terms of Service", systemImage: "doc.text")
+                            }
+                            
+                            // Privacy Policy
+                            Button {
+                                currentURL = URL(string: "https://qrunveil.pages.dev/privacy")
+                                showSafari = true
+                            } label: {
+                                Label("Privacy Policy", systemImage: "lock.shield")
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.black.opacity(0.6))
+                                    .frame(width: 40, height: 40)
+                                
+                                Image(systemName: "ellipsis.circle.fill")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(.leading, 20)
+                        .padding(.top, 55) // Safe area spacing + extra for status bar
+                        
+                        Spacer()
+                    }
+                    
+                    Spacer()
                 }
                 
                 // Results overlay
@@ -93,6 +141,11 @@ struct ContentView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.3), value: viewModel.qrCodeValue != nil)
+            .sheet(isPresented: $showSafari) {
+                if let url = currentURL {
+                    SafariView(url: url)
+                }
+            }
         }
     }
 }
