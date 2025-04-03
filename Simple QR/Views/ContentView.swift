@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Simple QR
+//  QR Unveil
 //
 //  Created by Stéphane PAQUET on 4/1/25.
 //
