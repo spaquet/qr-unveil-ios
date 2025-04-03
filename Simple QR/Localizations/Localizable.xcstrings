@@ -4,6 +4,9 @@
     "About" : {
 
     },
+    "Camera Access" : {
+
+    },
     "Copy to Clipboard" : {
       "localizations" : {
         "ar" : {
@@ -110,10 +113,22 @@
         }
       }
     },
+    "Enhance Your QR Experience" : {
+
+    },
+    "Get Started" : {
+
+    },
     "Hello, World!" : {
 
     },
     "History" : {
+
+    },
+    "Location Access" : {
+
+    },
+    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
 
     },
     "Made with ❤️ in SF" : {
@@ -543,6 +558,9 @@
         }
       }
     },
+    "QR Unveil needs camera access to scan QR codes" : {
+
+    },
     "QR Unveil Website" : {
       "localizations" : {
         "ar" : {
@@ -864,6 +882,9 @@
     "Settings" : {
 
     },
+    "Skip (Not Recommended)" : {
+
+    },
     "Terms of Service" : {
       "localizations" : {
         "ar" : {
@@ -969,6 +990,12 @@
           }
         }
       }
+    },
+    "We only use the camera when you're actively scanning, and we never store photos or videos." : {
+
+    },
+    "Welcome to QR Unveil" : {
+
     }
   },
   "version" : "1.0"
