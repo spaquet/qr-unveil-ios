@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "About" : {
+
+    },
     "Copy to Clipboard" : {
       "localizations" : {
         "ar" : {
@@ -106,6 +109,15 @@
           }
         }
       }
+    },
+    "Hello, World!" : {
+
+    },
+    "History" : {
+
+    },
+    "Made with ❤️ in SF" : {
+
     },
     "Open in Safari" : {
       "localizations" : {
@@ -848,6 +860,9 @@
           }
         }
       }
+    },
+    "Settings" : {
+
     },
     "Terms of Service" : {
       "localizations" : {

@@ -75,28 +75,14 @@ struct ContentView: View {
                     HStack {
                         // Menu Button with tap response
                         Menu {
-                            // QR Unveil Website
-                            Button {
-                                currentURL = URL(string: "https://qrunveil.pages.dev")
-                                showSafari = true
-                            } label: {
-                                Label("QR Unveil Website", systemImage: "globe")
+                            // History Option
+                            NavigationLink(destination: HistoryView()) {
+                                Label("History", systemImage: "clock")
                             }
                             
-                            // Terms of Service
-                            Button {
-                                currentURL = URL(string: "https://qrunveil.pages.dev/terms")
-                                showSafari = true
-                            } label: {
-                                Label("Terms of Service", systemImage: "doc.text")
-                            }
-                            
-                            // Privacy Policy
-                            Button {
-                                currentURL = URL(string: "https://qrunveil.pages.dev/privacy")
-                                showSafari = true
-                            } label: {
-                                Label("Privacy Policy", systemImage: "lock.shield")
+                            // Settings Option
+                            NavigationLink(destination: SettingsView()) {
+                                Label("Settings", systemImage: "gear")
                             }
                         } label: {
                             ZStack {
@@ -418,30 +404,32 @@ struct QRScannerView: UIViewRepresentable {
         
         // QR code type detection
         func determineQRCodeType(value: String) -> String {
-            if value.hasPrefix("http://") || value.hasPrefix("https://") {
-                // Check for app store links first
-                if value.contains("apps.apple.com") || value.contains("itunes.apple.com/app") {
+            let lowercaseValue = value.lowercased()
+            
+            if lowercaseValue.hasPrefix("http://") || lowercaseValue.hasPrefix("https://") {
+                // Check for app store links first (case insensitive)
+                if lowercaseValue.contains("apps.apple.com") || lowercaseValue.contains("itunes.apple.com/app") {
                     return "App Store"
-                } else if value.contains("play.google.com/store/apps") {
+                } else if lowercaseValue.contains("play.google.com/store/apps") {
                     return "Google Play Store"
                 }
                 return "URL"
-            } else if value.hasPrefix("mailto:") {
+            } else if lowercaseValue.hasPrefix("mailto:") {
                 return "Email"
-            } else if value.hasPrefix("tel:") {
+            } else if lowercaseValue.hasPrefix("tel:") {
                 return "Phone Number"
-            } else if value.hasPrefix("SMSTO:") || value.hasPrefix("sms:") {
+            } else if lowercaseValue.hasPrefix("smsto:") || lowercaseValue.hasPrefix("sms:") {
                 return "SMS"
-            } else if value.hasPrefix("geo:") {
+            } else if lowercaseValue.hasPrefix("geo:") {
                 return "Location"
-            } else if value.hasPrefix("WIFI:") {
+            } else if lowercaseValue.hasPrefix("wifi:") {
                 return "WiFi Network"
-            } else if value.hasPrefix("BEGIN:VCARD") {
+            } else if value.uppercased().hasPrefix("BEGIN:VCARD") {
                 return "Contact Information"
-            } else if value.hasPrefix("BEGIN:VEVENT") {
+            } else if value.uppercased().hasPrefix("BEGIN:VEVENT") {
                 return "Calendar Event"
-            } else if value.lowercased().hasPrefix("bitcoin:") ||
-                      value.lowercased().contains("ethereum:") ||
+            } else if lowercaseValue.hasPrefix("bitcoin:") ||
+                      lowercaseValue.contains("ethereum:") ||
                       (value.hasPrefix("0x") && value.count == 42 && isValidHexString(value.dropFirst(2))) || // Ethereum address
                       (value.hasPrefix("1") || value.hasPrefix("3") || value.hasPrefix("bc1")) { // Bitcoin address
                 return "Crypto"
@@ -449,12 +437,13 @@ struct QRScannerView: UIViewRepresentable {
                 return "Text"
             }
         }
-        
+
         // Helper function to validate hex strings for Ethereum addresses
         private func isValidHexString(_ string: Substring) -> Bool {
             let hexPattern = "^[0-9a-fA-F]+$"
             return string.range(of: hexPattern, options: .regularExpression) != nil
         }
+        
     }
 }
 

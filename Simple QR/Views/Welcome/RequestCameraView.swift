@@ -9,6 +9,8 @@ import SwiftUI
 
 // This view explain to the user why we need access to the camera, even though it's pretty obvious that in order to scan a QR code and retrieve its raw value we need to scn it 🤣
 // This view will also be used when the user does not grant us access to the camera as we cannot move forward
+// The following view is going to be the RequestLocationView - there is only a grant button. We remain on this view as long as we do not have access to the camera.
+// there is no skip for now button
 struct RequestCameraView: View {
     var body: some View {
         Image(systemName: "camera") // when requesting access

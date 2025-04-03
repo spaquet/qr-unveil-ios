@@ -1,18 +1,18 @@
 //
-//  MapView.swift
-//  QR Unveil
+//  QRCodeDetailsView.swift
+//  Simple QR
 //
 //  Created by Stéphane PAQUET on 4/3/25.
 //
 
 import SwiftUI
 
-struct MapView: View {
+struct QRCodeDetailsView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    MapView()
+    QRCodeDetailsView()
 }
