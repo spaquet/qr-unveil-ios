@@ -33,7 +33,6 @@
 		76873C4E2D9C7A98009DF973 /* Exceptions for "Simple QR" folder in "Simple QR" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Color+Extension.swift",
 				Info.plist,
 			);
 			target = 76873C272D9C7A96009DF973 /* Simple QR */;

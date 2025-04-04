@@ -15,57 +15,158 @@ struct QRDetailHeaderSection: View {
     @Binding var editedLabel: String
     let modelContext: ModelContext
     
+    // Add these state properties to track button presses
+    @State private var isCopyPressed = false
+    @State private var isSharePressed = false
+    @State private var showShareSheet = false  // New state for share sheet
+    @State private var isFavoritePressed = false
+    
     var body: some View {
         Section {
-            VStack(alignment: .center, spacing: 16) {
+            VStack(alignment: .center, spacing: 20) {
                 // QR Code image (placeholder)
                 Image(systemName: "qrcode")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 200, height: 200)
                     .padding()
+                    .background(Color.clear) // Ensure background is clear
                 
                 // Label/Title
                 if isEditing {
                     TextField("Label", text: $editedLabel)
                         .font(.headline)
                         .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .background(Color.clear) // Ensure background is clear
                 } else {
                     Text(qrCode.label ?? qrCode.formattedContent())
                         .font(.headline)
                         .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .background(Color.clear) // Ensure background is clear
                 }
                 
-                // Action buttons
-                HStack(spacing: 30) {
-                    ActionButton(
-                        icon: "doc.on.doc",
-                        label: "Copy",
-                        action: { UIPasteboard.general.string = qrCode.content }
-                    )
+                // Action buttons - Complete redesign with improved touch targets
+                HStack(spacing: 0) {
+                    // Each button is in its own container with clear boundaries
+                    Spacer()
                     
-                    ActionButton(
-                        icon: "square.and.arrow.up",
-                        label: "Share",
-                        action: { /* Share action would go here */ }
-                    )
+                    // Copy Button
+                    VStack {
+                        Button {
+                            UIPasteboard.general.string = qrCode.content
+                            // Visual feedback
+                            withAnimation {
+                                isCopyPressed = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                withAnimation {
+                                    isCopyPressed = false
+                                }
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "doc.on.doc")
+                                    .font(.title2)
+                                    .foregroundColor(isCopyPressed ? .blue : .primary)
+                                
+                                Text("Copy")
+                                    .font(.caption)
+                                    .foregroundColor(.primary)
+                            }
+                            .frame(width: 80, height: 60)
+                            .contentShape(Rectangle()) // Important for proper hit testing
+                        }
+                        .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                    }
+                    .padding(.horizontal, 5)
+                    .background(Color.clear)
                     
-                    ActionButton(
-                        icon: qrCode.isFavorite ? "star.fill" : "star",
-                        label: "Favorite",
-                        iconColor: qrCode.isFavorite ? .yellow : .gray,
-                        action: {
+                    Spacer()
+                    
+                    // Share Button
+                    VStack {
+                        Button {
+                            // Trigger share sheet
+                            withAnimation {
+                                isSharePressed = true
+                            }
+                            showShareSheet = true
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                withAnimation {
+                                    isSharePressed = false
+                                }
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.title2)
+                                    .foregroundColor(isSharePressed ? .blue : .primary)
+                                
+                                Text("Share")
+                                    .font(.caption)
+                                    .foregroundColor(.primary)
+                            }
+                            .frame(width: 80, height: 60)
+                            .contentShape(Rectangle()) // Important for proper hit testing
+                        }
+                        .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                    }
+                    .padding(.horizontal, 5)
+                    .background(Color.clear)
+                    
+                    Spacer()
+                    
+                    // Favorite Button
+                    VStack {
+                        Button {
                             qrCode.toggleFavorite()
                             do {
                                 try modelContext.save()
                             } catch {
                                 print("Error toggling favorite: \(error)")
                             }
+                            // Visual feedback
+                            withAnimation {
+                                isFavoritePressed = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                withAnimation {
+                                    isFavoritePressed = false
+                                }
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: qrCode.isFavorite ? "star.fill" : "star")
+                                    .font(.title2)
+                                    .foregroundColor(qrCode.isFavorite ? .yellow : (isFavoritePressed ? .blue : .gray))
+                                
+                                Text("Favorite")
+                                    .font(.caption)
+                                    .foregroundColor(.primary)
+                            }
+                            .frame(width: 80, height: 60)
+                            .contentShape(Rectangle()) // Important for proper hit testing
                         }
-                    )
+                        .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                    }
+                    .padding(.horizontal, 5)
+                    .background(Color.clear)
+                    
+                    Spacer()
                 }
+                .padding(.top, 10)
+                .background(Color.clear) // Ensure background is clear
             }
             .frame(maxWidth: .infinity)
+            .listRowInsets(EdgeInsets()) // Removes default list row padding
+            .background(Color.clear) // Ensure background is clear for the entire section
+            .shareSheet(isPresented: $showShareSheet, items: [
+                qrCode.content,
+                "Check out this QR code I scanned with QR Unveil! Get the app at https://qrunveil.pages.dev"
+            ])
         }
     }
 }
@@ -79,7 +180,6 @@ struct QRDetailInfoSection: View {
             LabeledContent("Type", value: qrCode.qrType.capitalized)
             LabeledContent("Created", value: formattedDate(qrCode.createdAt))
             LabeledContent("Last Scanned", value: qrCode.lastScanned != nil ? formattedDate(qrCode.lastScanned!) : "N/A")
-            LabeledContent("Scan Count", value: "\(qrCode.scanCount)")
         }
     }
     
@@ -107,24 +207,57 @@ struct QRDetailContentSection: View {
 // MARK: - Location Section
 struct QRDetailLocationSection: View {
     let location: LocationModel
+    @State private var isCopyPressed = false
     
     var body: some View {
         Section("Location") {
             LabeledContent("Name", value: location.name)
-            LabeledContent("Coordinates", value: "\(location.latitude), \(location.longitude)")
+            
+            // Formatted coordinates (shorter display)
+            HStack {
+                Text("Coordinates")
+                Spacer()
+                Text("\(formattedCoordinates(latitude: location.latitude, longitude: location.longitude))")
+                
+                // Copy button for full precision coordinates
+                Button {
+                    // Copy full precision coordinates to clipboard
+                    UIPasteboard.general.string = "\(location.latitude), \(location.longitude)"
+                    
+                    // Visual feedback
+                    withAnimation {
+                        isCopyPressed = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        withAnimation {
+                            isCopyPressed = false
+                        }
+                    }
+                } label: {
+                    Image(systemName: isCopyPressed ? "doc.on.doc.fill" : "doc.on.doc")
+                        .foregroundColor(isCopyPressed ? .blue : .gray)
+                        .font(.footnote)
+                }
+                .buttonStyle(BorderlessButtonStyle())
+                .padding(.leading, 4)
+            }
+            
             if let address = location.address {
                 LabeledContent("Address", value: address)
             }
             
-            // Map placeholder
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.gray.opacity(0.2))
-                .frame(height: 150)
-                .overlay(
-                    Text("Map View")
-                        .foregroundColor(.secondary)
-                )
+            // Map view with interactions disabled
+            NonInteractiveMapLocationView(latitude: location.latitude, longitude: location.longitude)
+                .frame(height: 180)
+                .cornerRadius(8)
+                .padding(.vertical, 4)
         }
+    }
+    
+    // Format coordinates to show fewer decimal places
+    private func formattedCoordinates(latitude: Double, longitude: Double) -> String {
+        // Format to 5 decimal places (approx. 1 meter precision)
+        return String(format: "%.5f, %.5f", latitude, longitude)
     }
 }
 
@@ -134,19 +267,19 @@ struct QRDetailTagsSection: View {
     
     var body: some View {
         Section("Tags") {
-            if !tags.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(tags) { tag in
-                            TagView(tag: tag)
-                        }
-                    }
-                }
-                .padding(.vertical, 4)
-            } else {
+            if tags.isEmpty {
                 Text("No tags")
                     .foregroundColor(.secondary)
                     .italic()
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(tags) { tag in
+                            TagChipView(tag: tag)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
             }
         }
     }
@@ -190,5 +323,62 @@ struct TagView: View {
         .padding(.vertical, 4)
         .background(Color.gray.opacity(0.1))
         .cornerRadius(12)
+    }
+}
+
+
+// Extension to create a Share Sheet in SwiftUI
+extension View {
+    func shareSheet(isPresented: Binding<Bool>, items: [Any]) -> some View {
+        self.modifier(ShareSheetModifier(isPresented: isPresented, items: items))
+    }
+}
+
+// Share Sheet Modifier
+struct ShareSheetModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let items: [Any]
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                ShareSheetRepresentable(isPresented: $isPresented, items: items)
+                    .opacity(0)
+            )
+    }
+}
+
+// UIViewControllerRepresentable for Share Sheet
+struct ShareSheetRepresentable: UIViewControllerRepresentable {
+    @Binding var isPresented: Bool
+    let items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        UIViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        if isPresented {
+            let activityVC = UIActivityViewController(
+                activityItems: items,
+                applicationActivities: nil
+            )
+            
+            // Prevent crash on iPad
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = uiViewController.view
+                popover.sourceRect = CGRect(x: uiViewController.view.bounds.midX,
+                                          y: uiViewController.view.bounds.midY,
+                                          width: 0,
+                                          height: 0)
+                popover.permittedArrowDirections = []
+            }
+            
+            activityVC.completionWithItemsHandler = { _, _, _, _ in
+                self.isPresented = false
+            }
+            
+            uiViewController.present(activityVC, animated: true)
+        }
     }
 }

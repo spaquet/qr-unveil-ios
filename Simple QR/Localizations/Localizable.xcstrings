@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "%lld" : {
 
     },
@@ -43,6 +46,12 @@
     "Coordinates" : {
 
     },
+    "Copy" : {
+
+    },
+    "Create Tag" : {
+
+    },
     "Created" : {
 
     },
@@ -55,6 +64,9 @@
     "Details" : {
 
     },
+    "Done" : {
+
+    },
     "Edit" : {
 
     },
@@ -62,6 +74,9 @@
 
     },
     "Export Data" : {
+
+    },
+    "Favorite" : {
 
     },
     "Favorites" : {
@@ -106,9 +121,6 @@
     "Made with ❤️ in SF" : {
 
     },
-    "Map View" : {
-
-    },
     "Most Scanned" : {
 
     },
@@ -127,7 +139,13 @@
     "No tags" : {
 
     },
+    "No Tags" : {
+
+    },
     "Oldest First" : {
+
+    },
+    "Options" : {
 
     },
     "Position QR code within frame" : {
@@ -375,9 +393,6 @@
     "Scan Another" : {
 
     },
-    "Scan Count" : {
-
-    },
     "Scan Settings" : {
 
     },
@@ -387,7 +402,13 @@
     "Search QR codes" : {
 
     },
+    "Select Tags" : {
+
+    },
     "Settings" : {
+
+    },
+    "Share" : {
 
     },
     "Show Favorites Section" : {
@@ -530,6 +551,9 @@
 
     },
     "WiFi" : {
+
+    },
+    "You haven't created any tags yet." : {
 
     }
   },

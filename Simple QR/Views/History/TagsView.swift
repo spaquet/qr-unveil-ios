@@ -40,7 +40,7 @@ struct TagRowView: View {
     var body: some View {
         HStack {
             Circle()
-                .fill(colorFromHex(tag.color ?? "#CCCCCC"))
+                .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
                 .frame(width: 16, height: 16)
             
             Text(tag.name)
@@ -51,25 +51,27 @@ struct TagRowView: View {
                 .foregroundColor(.secondary)
         }
     }
+}
+
+struct TagChipView: View {
+    let tag: TagModel
     
-    // Helper function to convert hex to Color
-        private func colorFromHex(_ hex: String) -> Color {
-            // Remove the # prefix if it exists
-            var cleanHex = hex
-            if cleanHex.hasPrefix("#") {
-                cleanHex = String(cleanHex.dropFirst())
-            }
+    var body: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
+                .frame(width: 8, height: 8)
             
-            // Convert hex to RGB components
-            var rgb: UInt64 = 0
-            Scanner(string: cleanHex).scanHexInt64(&rgb)
-            
-            let r = Double((rgb & 0xFF0000) >> 16) / 255.0
-            let g = Double((rgb & 0x00FF00) >> 8) / 255.0
-            let b = Double(rgb & 0x0000FF) / 255.0
-            
-            return Color(red: r, green: g, blue: b)
+            Text(tag.name)
+                .font(.subheadline)
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC").opacity(0.15))
+        )
+    }
 }
 
 // Tag detail view placeholder
@@ -97,5 +99,74 @@ struct TagDetailView: View {
             }
         }
         .navigationTitle(tag.name)
+    }
+}
+
+struct TagPickerView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedTags: [TagModel]
+    @Query private var availableTags: [TagModel]
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                if availableTags.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Tags", systemImage: "tag.slash")
+                    } description: {
+                        Text("You haven't created any tags yet.")
+                    } actions: {
+                        Button("Create Tag") {
+                            // Add tag creation logic
+                        }
+                    }
+                } else {
+                    ForEach(availableTags) { tag in
+                        Button {
+                            toggleTag(tag)
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
+                                    .frame(width: 16, height: 16)
+                                
+                                Text(tag.name)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                if selectedTags.contains(where: { $0.id == tag.id }) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Select Tags")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+        }
+    }
+    
+    private func toggleTag(_ tag: TagModel) {
+        if let index = selectedTags.firstIndex(where: { $0.id == tag.id }) {
+            selectedTags.remove(at: index)
+        } else {
+            selectedTags.append(tag)
+        }
     }
 }
