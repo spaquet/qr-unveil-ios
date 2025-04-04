@@ -40,7 +40,7 @@ struct TagRowView: View {
     var body: some View {
         HStack {
             Circle()
-                .fill(Color(tag.color ?? "#CCCCCC"))
+                .fill(colorFromHex(tag.color ?? "#CCCCCC"))
                 .frame(width: 16, height: 16)
             
             Text(tag.name)
@@ -51,6 +51,25 @@ struct TagRowView: View {
                 .foregroundColor(.secondary)
         }
     }
+    
+    // Helper function to convert hex to Color
+        private func colorFromHex(_ hex: String) -> Color {
+            // Remove the # prefix if it exists
+            var cleanHex = hex
+            if cleanHex.hasPrefix("#") {
+                cleanHex = String(cleanHex.dropFirst())
+            }
+            
+            // Convert hex to RGB components
+            var rgb: UInt64 = 0
+            Scanner(string: cleanHex).scanHexInt64(&rgb)
+            
+            let r = Double((rgb & 0xFF0000) >> 16) / 255.0
+            let g = Double((rgb & 0x00FF00) >> 8) / 255.0
+            let b = Double(rgb & 0x0000FF) / 255.0
+            
+            return Color(red: r, green: g, blue: b)
+        }
 }
 
 // Tag detail view placeholder

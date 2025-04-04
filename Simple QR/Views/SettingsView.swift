@@ -7,15 +7,13 @@
 
 import SwiftData
 import SwiftUI
-import SafariServices
+// We can remove the SafariServices import since we won't need it anymore
 
 struct SettingsView: View {
     @Query var settings: [SettingsModel]
     @Environment(\.modelContext) private var modelContext
     
-    @State private var showSafari = false
-    @State private var currentURL: URL?
-    
+    // We don't need showSafari state anymore, just the URL
     @State private var isUpdatingSettings = false
     @State private var autoSaveScans = true
     @State private var vibrationFeedback = true
@@ -39,147 +37,145 @@ struct SettingsView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            Form {
-                Section("Scan Settings") {
-                    Toggle("Auto-save Scans", isOn: $autoSaveScans)
-                        .onChange(of: autoSaveScans) { updateSettings() }
-                    
-                    Toggle("Vibration Feedback", isOn: $vibrationFeedback)
-                        .onChange(of: vibrationFeedback) { updateSettings() }
-                    
-                    Toggle("Sound on Scan", isOn: $playSoundOnScan)
-                        .onChange(of: playSoundOnScan) { updateSettings() }
-                    
-                    Toggle("Save Location Data", isOn: $saveLocationData)
-                        .onChange(of: saveLocationData) { updateSettings() }
+        Form {
+            Section("Scan Settings") {
+                Toggle("Auto-save Scans", isOn: $autoSaveScans)
+                    .onChange(of: autoSaveScans) { updateSettings() }
+                
+                Toggle("Vibration Feedback", isOn: $vibrationFeedback)
+                    .onChange(of: vibrationFeedback) { updateSettings() }
+                
+                Toggle("Sound on Scan", isOn: $playSoundOnScan)
+                    .onChange(of: playSoundOnScan) { updateSettings() }
+                
+                Toggle("Save Location Data", isOn: $saveLocationData)
+                    .onChange(of: saveLocationData) { updateSettings() }
+            }
+            
+            Section("History Settings") {
+                Stepper(value: $historyRetentionDays, in: 7...365, step: 30) {
+                    Text("Keep History: \(historyRetentionDays) days")
+                }
+                .onChange(of: historyRetentionDays) { updateSettings() }
+                
+                Toggle("Group Scans by Date", isOn: $groupScansByDate)
+                    .onChange(of: groupScansByDate) { updateSettings() }
+                
+                Toggle("Show Favorites Section", isOn: $showFavoritesSection)
+                    .onChange(of: showFavoritesSection) { updateSettings() }
+                
+                Picker("Default Sort Order", selection: $defaultSortOrder) {
+                    Text("Newest First").tag(SettingsModel.SortOrder.dateNewest)
+                    Text("Oldest First").tag(SettingsModel.SortOrder.dateOldest)
+                    Text("Most Scanned").tag(SettingsModel.SortOrder.scanCount)
+                    Text("Alphabetical").tag(SettingsModel.SortOrder.alphabetical)
+                }
+                .onChange(of: defaultSortOrder) { updateSettings() }
+            }
+            
+            Section("Data Management") {
+                Button {
+                    exportData()
+                } label: {
+                    Label("Export Data", systemImage: "square.and.arrow.up")
                 }
                 
-                Section("History Settings") {
-                    Stepper(value: $historyRetentionDays, in: 7...365, step: 30) {
-                        Text("Keep History: \(historyRetentionDays) days")
-                    }
-                    .onChange(of: historyRetentionDays) { updateSettings() }
-                    
-                    Toggle("Group Scans by Date", isOn: $groupScansByDate)
-                        .onChange(of: groupScansByDate) { updateSettings() }
-                    
-                    Toggle("Show Favorites Section", isOn: $showFavoritesSection)
-                        .onChange(of: showFavoritesSection) { updateSettings() }
-                    
-                    Picker("Default Sort Order", selection: $defaultSortOrder) {
-                        Text("Newest First").tag(SettingsModel.SortOrder.dateNewest)
-                        Text("Oldest First").tag(SettingsModel.SortOrder.dateOldest)
-                        Text("Most Scanned").tag(SettingsModel.SortOrder.scanCount)
-                        Text("Alphabetical").tag(SettingsModel.SortOrder.alphabetical)
-                    }
-                    .onChange(of: defaultSortOrder) { updateSettings() }
+                Button(role: .destructive) {
+                    showDeletionAlert = true
+                } label: {
+                    Label("Clear All Data", systemImage: "trash")
                 }
-                
-                Section("Data Management") {
-                    Button {
-                        exportData()
-                    } label: {
-                        Label("Export Data", systemImage: "square.and.arrow.up")
-                    }
-                    
-                    Button(role: .destructive) {
-                        showDeletionAlert = true
-                    } label: {
-                        Label("Clear All Data", systemImage: "trash")
-                    }
-                }
-                
-                // Links Section
-                Section("About") {
-                    // QR Unveil Website
-                    Button {
-                        currentURL = URL(string: "https://qrunveil.pages.dev")
-                        showSafari = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "globe")
-                                .foregroundColor(.accentColor)
-                            Text("QR Unveil Website")
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    
-                    // Terms of Service
-                    Button {
-                        currentURL = URL(string: "https://qrunveil.pages.dev/terms")
-                        showSafari = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "doc.text")
-                                .foregroundColor(.accentColor)
-                            Text("Terms of Service")
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    
-                    // Privacy Policy
-                    Button {
-                        currentURL = URL(string: "https://qrunveil.pages.dev/privacy")
-                        showSafari = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "lock.shield")
-                                .foregroundColor(.accentColor)
-                            Text("Privacy Policy")
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+            }
+            
+            // Links Section
+            Section("About") {
+                // QR Unveil Website
+                Button {
+                    openURL("https://qrunveil.pages.dev")
+                } label: {
+                    HStack {
+                        Image(systemName: "globe")
+                            .foregroundColor(.accentColor)
+                        Text("QR Unveil Website")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                 }
                 
-                // App info at the bottom of the view
-                Section {
-                    VStack(spacing: 8) {
-                        Text("Made with ❤️ in SF")
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Text(appVersion)
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                // Terms of Service
+                Button {
+                    openURL("https://qrunveil.pages.dev/terms")
+                } label: {
+                    HStack {
+                        Image(systemName: "doc.text")
+                            .foregroundColor(.accentColor)
+                        Text("Terms of Service")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    .listRowBackground(Color.clear)
-                    .padding(.vertical, 10)
+                }
+                
+                // Privacy Policy
+                Button {
+                    openURL("https://qrunveil.pages.dev/privacy")
+                } label: {
+                    HStack {
+                        Image(systemName: "lock.shield")
+                            .foregroundColor(.accentColor)
+                        Text("Privacy Policy")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
-            .navigationTitle("Settings")
-            .onAppear {
-                loadSettings()
-            }
-            .sheet(isPresented: $showSafari) {
-                if let url = currentURL {
-                    SafariView(url: url)
+            
+            // App info at the bottom of the view
+            Section {
+                VStack(spacing: 8) {
+                    Text("Made with ❤️ in SF")
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Text(appVersion)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .listRowBackground(Color.clear)
+                .padding(.vertical, 10)
             }
-            .alert("Clear All Data", isPresented: $showDeletionAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Clear", role: .destructive) {
-                    clearAllData()
-                }
-            } message: {
-                Text("This will permanently delete all your saved QR codes. This action cannot be undone.")
+        }
+        .navigationTitle("Settings")
+        .onAppear {
+            loadSettings()
+        }
+        .alert("Clear All Data", isPresented: $showDeletionAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Clear", role: .destructive) {
+                clearAllData()
             }
+        } message: {
+            Text("This will permanently delete all your saved QR codes. This action cannot be undone.")
         }
     }
     
+    // Helper function to open URLs in the default browser
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    // The rest of your methods remain unchanged
     private func loadSettings() {
         guard let settings = currentSettings else { return }
         
@@ -238,15 +234,4 @@ struct SettingsView: View {
     }
 }
 
-// Safari View Controller wrapper
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-    
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        return SFSafariViewController(url: url)
-    }
-    
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
-        // No updates needed
-    }
-}
+// Remove the SafariView struct as it's no longer needed
