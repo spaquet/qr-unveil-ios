@@ -21,6 +21,9 @@ final class QRCodeModel: Codable {
     var isFavorite: Bool = false
     var lastScanned: Date?
     
+    // Photo
+    var photoAssetId: String?
+    
     @Relationship(deleteRule: .cascade)
     var securityVerification: SecurityVerificationModel?
     
@@ -41,13 +44,14 @@ final class QRCodeModel: Codable {
         case scanCount = "scan_count"
         case isFavorite = "is_favorite"
         case lastScanned = "last_scanned"
+        case photoAssetId = "photo_asset_id"
         case qrLocation = "qr_location"
         case tags
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
     
-    init(label: String? = nil, content: String, qrType: String? = nil, qrLocation: LocationModel? = nil, tags: [TagModel] = []) {
+    init(label: String? = nil, content: String, qrType: String? = nil, qrLocation: LocationModel? = nil, tags: [TagModel] = [], photoAssetId: String? = nil) {
         self.id = UUID()
         self.label = label
         self.content = content
@@ -55,6 +59,7 @@ final class QRCodeModel: Codable {
         self.scanCount = 1
         self.isFavorite = false
         self.lastScanned = Date()
+        self.photoAssetId = photoAssetId
         self.qrLocation = qrLocation
         self.tags = tags
         self.createdAt = Date()
@@ -71,6 +76,7 @@ final class QRCodeModel: Codable {
         scanCount = try container.decodeIfPresent(Int.self, forKey: .scanCount) ?? 1
         isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
         lastScanned = try container.decodeIfPresent(Date.self, forKey: .lastScanned)
+        photoAssetId = try container.decodeIfPresent(String.self, forKey: .photoAssetId)
         qrLocation = try container.decodeIfPresent(LocationModel.self, forKey: .qrLocation)
         tags = try container.decode([TagModel].self, forKey: .tags)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -87,6 +93,7 @@ final class QRCodeModel: Codable {
         try container.encode(scanCount, forKey: .scanCount)
         try container.encode(isFavorite, forKey: .isFavorite)
         try container.encodeIfPresent(lastScanned, forKey: .lastScanned)
+        try container.encodeIfPresent(photoAssetId, forKey: .photoAssetId)
         try container.encodeIfPresent(qrLocation, forKey: .qrLocation)
         try container.encode(tags, forKey: .tags)
         try container.encode(createdAt, forKey: .createdAt)
@@ -174,6 +181,12 @@ final class QRCodeModel: Codable {
         default:
             return content
         }
+    }
+    
+    /// Helper method to update the photo asset ID:
+    func updatePhotoAssetId(_ assetId: String?) {
+        self.photoAssetId = assetId
+        self.updatedAt = Date()
     }
     
     // MARK: - Static Methods

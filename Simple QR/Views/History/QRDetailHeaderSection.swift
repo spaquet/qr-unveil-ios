@@ -5,6 +5,7 @@
 //  Created by Stéphane PAQUET on 4/3/25.
 //
 
+import MessageUI
 import SwiftData
 import SwiftUI
 
@@ -21,16 +22,40 @@ struct QRDetailHeaderSection: View {
     @State private var showShareSheet = false  // New state for share sheet
     @State private var isFavoritePressed = false
     
+    // Display the picture of the QR code if it exits
+    @State private var qrCodeImage: UIImage?
+    @State private var isLoadingImage: Bool = false
+    
     var body: some View {
         Section {
             VStack(alignment: .center, spacing: 20) {
-                // QR Code image (placeholder)
-                Image(systemName: "qrcode")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 200, height: 200)
-                    .padding()
-                    .background(Color.clear) // Ensure background is clear
+                // QR Code image
+                Group {
+                    if isLoadingImage {
+                        ProgressView()
+                            .frame(width: 200, height: 200)
+                    } else if let image = qrCodeImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    } else {
+                        // Default QR code icon if no image is available
+                        Image(systemName: "qrcode")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                            .padding()
+                            .background(Color.clear)
+                    }
+                }
+                .padding(.vertical, 10)
                 
                 // Label/Title - Enhanced with better editing experience
                 if isEditing {
@@ -179,6 +204,23 @@ struct QRDetailHeaderSection: View {
                 qrCode.content,
                 "Check out this QR code I scanned with QR Unveil! Get the app at https://qrunveil.pages.dev"
             ])
+            .onAppear {
+                loadQRCodeImage()
+            }
+        }
+    }
+    
+    private func loadQRCodeImage() {
+        // Check if we have a photo asset ID
+        guard let assetId = qrCode.photoAssetId, !isLoadingImage else {
+            return
+        }
+        
+        isLoadingImage = true
+        
+        PhotoManager.shared.fetchQRCodeImage(assetId: assetId) { image in
+            self.qrCodeImage = image
+            self.isLoadingImage = false
         }
     }
 }
@@ -206,10 +248,11 @@ struct QRDetailInfoSection: View {
 // MARK: - Content Section
 struct QRDetailContentSection: View {
     let content: String
+    let qrType: String
     
     var body: some View {
         Section("Content") {
-            Text(content)
+            ActionableQRContentView(content: content, type: qrType)
                 .font(.system(.body, design: .monospaced))
                 .textSelection(.enabled)
         }

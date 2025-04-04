@@ -318,6 +318,8 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Unveil needs camera access to scan QR codes";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "QR Unveil requests access to your location to enhance your QR code scanning experience. When enabled, your location is stored only on your device and synchronized across your personal iCloud account. This information helps you remember where QR codes were scanned and is never shared with third parties.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Unveil saves QR code images to a dedicated album in your photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "QR Unveil needs access to save QR code images to your photo library in a dedicated album.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -353,6 +355,8 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Unveil needs camera access to scan QR codes";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "QR Unveil requests access to your location to enhance your QR code scanning experience. When enabled, your location is stored only on your device and synchronized across your personal iCloud account. This information helps you remember where QR codes were scanned and is never shared with third parties.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Unveil saves QR code images to a dedicated album in your photo library.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "QR Unveil needs access to save QR code images to your photo library in a dedicated album.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -31,7 +31,7 @@ struct QRDetailView: View {
             QRDetailInfoSection(qrCode: qrCode)
             
             // Content section showing the raw QR content
-            QRDetailContentSection(content: qrCode.content)
+            QRDetailContentSection(content: qrCode.content, qrType: qrCode.qrType)
             
             // Location section if available
             if let location = qrCode.qrLocation {

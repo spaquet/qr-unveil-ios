@@ -10,13 +10,45 @@ import SwiftUI
 
 // Tags view placeholder
 struct TagsView: View {
-    @Query var tags: [TagModel]
+    @Query(sort: \TagModel.name) var tags: [TagModel]
+    @Environment(\.modelContext) private var modelContext
+    @State private var showingTagEditor = false
+    @State private var showingDeleteAlert = false
+    @State private var tagToDelete: TagModel? = nil
+    @State private var isEditMode: EditMode = .inactive
     
     var body: some View {
         List {
-            ForEach(tags) { tag in
-                NavigationLink(destination: TagDetailView(tag: tag)) {
-                    TagRowView(tag: tag)
+            if tags.isEmpty {
+                ContentUnavailableView {
+                    Label("No Tags", systemImage: "tag.slash")
+                } description: {
+                    Text("You haven't created any tags yet.")
+                } actions: {
+                    Button("Create Tag") {
+                        showingTagEditor = true
+                    }
+                }
+            } else {
+                ForEach(tags) { tag in
+                    NavigationLink(destination: TagDetailView(tag: tag)) {
+                        TagRowView(tag: tag)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            tagToDelete = tag
+                            showingDeleteAlert = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        
+                        Button {
+                            editTag(tag)
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                    }
                 }
             }
         }
@@ -24,11 +56,60 @@ struct TagsView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(action: {
-                    // Add new tag action
+                    showingTagEditor = true
                 }) {
                     Image(systemName: "plus")
                 }
             }
+        }
+        .sheet(isPresented: $showingTagEditor) {
+            TagEditorView()
+        }
+        .alert("Delete Tag", isPresented: $showingDeleteAlert) {
+            Button("Cancel", role: .cancel) {
+                tagToDelete = nil
+            }
+            
+            Button("Delete", role: .destructive) {
+                if let tag = tagToDelete {
+                    deleteTag(tag)
+                }
+                tagToDelete = nil
+            }
+        } message: {
+            Text("Are you sure you want to delete this tag? This action cannot be undone.")
+        }
+    }
+    
+    // Opens the tag editor for an existing tag
+    private func editTag(_ tag: TagModel) {
+        // We need a custom approach for editing since we need to pass the tag
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootViewController = windowScene.windows.first?.rootViewController {
+            rootViewController.present(UIHostingController(rootView:
+                TagEditorView(editingTag: tag)
+                    .environment(\.modelContext, modelContext)
+            ), animated: true)
+        }
+    }
+    
+    // Deletes a tag from the database
+    private func deleteTag(_ tag: TagModel) {
+        // First, remove the tag from all associated QR codes
+        if let qrCodes = tag.qrCodes {
+            for qrCode in qrCodes {
+                tag.removeQRCode(qrCode)
+            }
+        }
+        
+        // Then delete the tag itself
+        modelContext.delete(tag)
+        
+        // Save changes
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error deleting tag: \(error.localizedDescription)")
         }
     }
 }
