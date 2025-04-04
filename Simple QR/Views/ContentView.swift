@@ -52,102 +52,26 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
-                // Camera preview
+                // Camera layer - MUST be first in the ZStack
                 if cameraPermission == .authorized {
-                    CameraPreviewView(session: cameraManager.captureSession)
+                    // Camera preview that fills the entire screen
+                    CameraPreviewRepresentable(session: cameraManager.captureSession)
                         .ignoresSafeArea()
-                        .overlay(
-                            scanningOverlay
-                        )
-                        .onChange(of: cameraManager.qrCodeString) { _, newValue in
-                            if let qrCodeString = newValue, !qrCodeString.isEmpty {
-                                // Process detected QR code
-                                let type = QRCodeModel.determineQRType(from: qrCodeString)
-                                detectedQRCode = DetectedQRCode(
-                                    content: qrCodeString,
-                                    type: type
-                                )
-                                showQRBottomSheet = true
-                            }
+                        .onAppear {
+                            print("Camera view appeared")
                         }
+                    
+                    // Overlay layer with proper blending for the transparent region
+                    ScannerOverlayView()
+                        .ignoresSafeArea()
+                    
+                    // UI Elements layer
+                    scannerUIElements
                 } else {
                     // Camera not authorized - show permission request view
                     RequestCameraView(proceedToNextStep: {
                         checkCameraPermission()
                     })
-                }
-                
-                // Top bar
-                VStack {
-                    HStack {
-                        Text("QR Unveil")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .shadow(radius: 2)
-                        
-                        Spacer()
-                        
-                        // Menu button using SwiftUI Menu
-                        Menu {
-                            ForEach(NavDestination.allCases) { destination in
-                                Button {
-                                    navigationPath.append(destination)
-                                } label: {
-                                    Label(destination.title, systemImage: destination.icon)
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "line.3.horizontal")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding(10)
-                                .background(Color.black.opacity(0.6))
-                                .clipShape(Circle())
-                                .shadow(radius: 2)
-                        }
-                    }
-                    .padding()
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.black.opacity(0.7), Color.black.opacity(0)]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    
-                    // Instruction text above the frame
-                    Text("Position QR code within frame")
-                        .font(.subheadline)
-                        .foregroundColor(.white)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .background(Color.black.opacity(0.6))
-                        .cornerRadius(10)
-                        .padding(.top, 20)
-                    
-                    Spacer()
-                    
-                    // Bottom bar with camera controls
-                    HStack {
-                        Spacer()
-                        
-                        // Flash button
-                        Button {
-                            cameraManager.toggleTorch()
-                        } label: {
-                            Image(systemName: cameraManager.isTorchOn ? "bolt.fill" : "bolt.slash")
-                                .font(.title2)
-                                .foregroundColor(cameraManager.isTorchOn ? .yellow : .white)
-                                .padding(15)
-                                .background(Color.black.opacity(0.6))
-                                .clipShape(Circle())
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 40)
                 }
             }
             .navigationDestination(for: NavDestination.self) { destination in
@@ -166,36 +90,152 @@ struct ContentView: View {
             .onAppear {
                 checkCameraPermission()
             }
+            .onChange(of: cameraManager.qrCodeString) { _, newValue in
+                if let qrCodeString = newValue, !qrCodeString.isEmpty {
+                    // Process detected QR code
+                    let type = QRCodeModel.determineQRType(from: qrCodeString)
+                    detectedQRCode = DetectedQRCode(
+                        content: qrCodeString,
+                        type: type
+                    )
+                    showQRBottomSheet = true
+                }
+            }
         }
     }
     
     // MARK: - UI Components
     
+    // Separate UI elements into their own view
+    private var scannerUIElements: some View {
+        VStack {
+            // Top bar
+            HStack {
+                Text("QR Unveil")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .shadow(radius: 2)
+                
+                Spacer()
+                
+                // Menu button
+                Menu {
+                    ForEach(NavDestination.allCases) { destination in
+                        Button {
+                            navigationPath.append(destination)
+                        } label: {
+                            Label(destination.title, systemImage: destination.icon)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "line.3.horizontal")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .background(Color.black.opacity(0.6))
+                        .clipShape(Circle())
+                        .shadow(radius: 2)
+                }
+            }
+            .padding()
+            
+            // Instruction text above the frame
+            Text("Position QR code within frame")
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 16)
+                .background(Color.black.opacity(0.6))
+                .cornerRadius(10)
+                .padding(.top, 20)
+            
+            Spacer()
+            
+            // Bottom bar with camera controls
+            HStack {
+                Spacer()
+                
+                // Flash button
+                Button {
+                    cameraManager.toggleTorch()
+                } label: {
+                    Image(systemName: cameraManager.isTorchOn ? "bolt.fill" : "bolt.slash")
+                        .font(.title2)
+                        .foregroundColor(cameraManager.isTorchOn ? .yellow : .white)
+                        .padding(15)
+                        .background(Color.black.opacity(0.6))
+                        .clipShape(Circle())
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 40)
+        }
+    }
+
+    // New camera preview representable using UIViewControllerRepresentable
+    struct CameraPreviewRepresentable: UIViewControllerRepresentable {
+        let session: AVCaptureSession
+        
+        func makeUIViewController(context: Context) -> UIViewController {
+            let viewController = UIViewController()
+            
+            let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+            previewLayer.videoGravity = .resizeAspectFill
+            previewLayer.name = "cameraPreviewLayer" // Add a name for debugging
+            
+            DispatchQueue.main.async {
+                // Configure the preview layer
+                previewLayer.frame = viewController.view.bounds
+                
+                // Add as the bottom-most layer
+                viewController.view.layer.insertSublayer(previewLayer, at: 0)
+                
+                // Add debugging info
+                print("Preview layer frame: \(previewLayer.frame)")
+                print("View controller bounds: \(viewController.view.bounds)")
+            }
+            
+            return viewController
+        }
+        
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+            if let previewLayer = uiViewController.view.layer.sublayers?.first(where: { $0.name == "cameraPreviewLayer" }) {
+                previewLayer.frame = uiViewController.view.bounds
+            }
+        }
+    }
+    
     // Scanning overlay with region of interest
     private var scanningOverlay: some View {
-        ZStack {
-            // Semi-transparent mask
-            Rectangle()
-                .fill(Color.black.opacity(0.6))
-                .mask(
-                    Rectangle()
-                        .overlay(
-                            // Cut out a square in the middle
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 260, height: 260)
-                                .blendMode(.destinationOut)
-                        )
-                )
-            
-            // Scan region border
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.white, lineWidth: 3)
-                .frame(width: 260, height: 260)
-            
-            // Scanning animation line
-            ScanningAnimationView()
-                .frame(width: 260, height: 260)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+        GeometryReader { geometry in
+            ZStack {
+                // This creates the semi-transparent mask
+                // First create full black view with 0.6 opacity
+                Color.black.opacity(0.6)
+                    .ignoresSafeArea()
+                
+                // Then cut out a transparent hole
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 260, height: 260)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .blendMode(.destinationOut)
+                
+                // Scan region border - ensure it's positioned correctly
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.white, lineWidth: 3)
+                    .frame(width: 260, height: 260)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                
+                // Scanning animation line - ensure it's positioned correctly
+                ScanningAnimationView()
+                    .frame(width: 260, height: 260)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }
+            .compositingGroup() // Essential for the blendMode to work properly
         }
     }
     
@@ -326,17 +366,34 @@ struct ContentView: View {
     private func checkCameraPermission() {
         cameraPermission = AVCaptureDevice.authorizationStatus(for: .video)
         
-        if cameraPermission == .authorized {
+        print("Current camera permission status: \(cameraPermission.rawValue)")
+        
+        switch cameraPermission {
+        case .authorized:
+            print("Camera permission already authorized, setting up camera")
             cameraManager.setupCamera()
-        } else if cameraPermission == .notDetermined {
+            
+        case .notDetermined:
+            print("Camera permission not determined, requesting access")
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
-                    cameraPermission = granted ? .authorized : .denied
+                    self.cameraPermission = granted ? .authorized : .denied
+                    print("Camera permission result: \(granted ? "granted" : "denied")")
+                    
                     if granted {
-                        cameraManager.setupCamera()
+                        self.cameraManager.setupCamera()
+                    } else {
+                        print("Camera permission denied by user")
                     }
                 }
             }
+            
+        case .denied, .restricted:
+            print("Camera access denied or restricted")
+            // Could show an alert here explaining why camera access is needed
+            
+        @unknown default:
+            print("Unknown camera permission status")
         }
     }
     
@@ -439,23 +496,65 @@ struct ContentView: View {
     }
 }
 
+// Separate overlay view with transparent cutout
+struct ScannerOverlayView: View {
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                // Semi-transparent black overlay
+                Rectangle()
+                    .fill(Color.black.opacity(0.6))
+                
+                // Transparent window in the middle
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 260, height: 260)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .blendMode(.destinationOut)
+                
+                // Border around the scanning area
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.white, lineWidth: 3)
+                    .frame(width: 260, height: 260)
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                
+                // Scanning animation line
+                ScanningAnimationView()
+                    .frame(width: 260, height: 260)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }
+            .compositingGroup()
+        }
+    }
+}
+
 // MARK: - Camera Preview
 struct CameraPreviewView: UIViewRepresentable {
     let session: AVCaptureSession
     
     func makeUIView(context: Context) -> UIView {
+        // Create a container view
         let view = UIView(frame: UIScreen.main.bounds)
-        view.backgroundColor = .black
         
+        // Make background clear to ensure we see through to camera
+        view.backgroundColor = .clear
+        
+        // Create and configure preview layer
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = view.frame
         previewLayer.videoGravity = .resizeAspectFill
+        
+        // Add preview layer to view
         view.layer.addSublayer(previewLayer)
+        
+        print("Camera preview layer created with frame: \(previewLayer.frame)")
+        print("Session running status: \(session.isRunning)")
         
         return view
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
+        // Ensure preview layer stays sized correctly
         if let previewLayer = uiView.layer.sublayers?.first as? AVCaptureVideoPreviewLayer {
             previewLayer.frame = uiView.frame
         }
@@ -513,9 +612,29 @@ class CameraManager: NSObject, ObservableObject {
     }
     
     func setupCamera() {
+        // Start fresh
+        if captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+        
+        // Remove any existing inputs and outputs
+        for input in captureSession.inputs {
+            captureSession.removeInput(input)
+        }
+        
+        for output in captureSession.outputs {
+            captureSession.removeOutput(output)
+        }
+        
+        // Configure session with high resolution if supported
+        if captureSession.canSetSessionPreset(.high) {
+            captureSession.sessionPreset = .high
+        }
+        
         captureSession.beginConfiguration()
         
-        guard let backCamera = AVCaptureDevice.default(for: .video) else {
+        // Explicitly request the back wide-angle camera
+        guard let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             print("Could not find a capture device")
             return
         }
@@ -529,13 +648,23 @@ class CameraManager: NSObject, ObservableObject {
             
             if captureSession.canAddInput(input) {
                 captureSession.addInput(input)
+                print("Camera input added successfully")
+            } else {
+                print("Failed to add camera input")
+                return
             }
             
             // Configure metadata output for QR code detection
             if captureSession.canAddOutput(metadataOutput) {
                 captureSession.addOutput(metadataOutput)
                 metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-                metadataOutput.metadataObjectTypes = [.qr]
+                
+                if metadataOutput.availableMetadataObjectTypes.contains(.qr) {
+                    metadataOutput.metadataObjectTypes = [.qr]
+                    print("QR code detection enabled")
+                } else {
+                    print("QR code detection not available")
+                }
                 
                 // Set region of interest (centered square covering about 60% of view)
                 let screenSize = UIScreen.main.bounds.size
@@ -550,7 +679,7 @@ class CameraManager: NSObject, ObservableObject {
                     height: rectSize
                 )
                 
-                // Convert to normalized coordinates
+                // Convert to normalized coordinates (in the video orientation)
                 let normalizedRect = CGRect(
                     x: scanRect.origin.y / screenSize.height,
                     y: 1.0 - (scanRect.origin.x + scanRect.size.width) / screenSize.width,
@@ -559,6 +688,9 @@ class CameraManager: NSObject, ObservableObject {
                 )
                 
                 metadataOutput.rectOfInterest = normalizedRect
+            } else {
+                print("Failed to add metadata output")
+                return
             }
         } catch {
             print("Could not create video device input: \(error)")
@@ -569,7 +701,15 @@ class CameraManager: NSObject, ObservableObject {
         
         // Start session on background thread
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.captureSession.startRunning()
+            guard let self = self else { return }
+            
+            // Make sure we're not already running
+            if !self.captureSession.isRunning {
+                self.captureSession.startRunning()
+                print("Camera session started")
+            } else {
+                print("Camera session was already running")
+            }
         }
     }
     
