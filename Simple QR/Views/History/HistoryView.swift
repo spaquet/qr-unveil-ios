@@ -74,7 +74,7 @@ struct HistoryView: View {
         .navigationTitle("History")
         .searchable(text: $searchText, prompt: "Search QR codes")
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Picker("Filter", selection: $selectedFilter) {
                         Label("All", systemImage: "qrcode").tag(QRFilter.all)

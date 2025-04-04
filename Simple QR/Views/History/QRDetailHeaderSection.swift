@@ -32,13 +32,19 @@ struct QRDetailHeaderSection: View {
                     .padding()
                     .background(Color.clear) // Ensure background is clear
                 
-                // Label/Title
+                // Label/Title - Enhanced with better editing experience
                 if isEditing {
                     TextField("Label", text: $editedLabel)
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
-                        .background(Color.clear) // Ensure background is clear
+                        .padding(.vertical, 8)
+                        .background(Color(UIColor.tertiarySystemBackground))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
                 } else {
                     Text(qrCode.label ?? qrCode.formattedContent())
                         .font(.headline)
@@ -79,6 +85,8 @@ struct QRDetailHeaderSection: View {
                             .contentShape(Rectangle()) // Important for proper hit testing
                         }
                         .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                        .disabled(isEditing) // Disable when editing
+                        .opacity(isEditing ? 0.5 : 1.0) // Visual indicator when disabled
                     }
                     .padding(.horizontal, 5)
                     .background(Color.clear)
@@ -113,6 +121,8 @@ struct QRDetailHeaderSection: View {
                             .contentShape(Rectangle()) // Important for proper hit testing
                         }
                         .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                        .disabled(isEditing) // Disable when editing
+                        .opacity(isEditing ? 0.5 : 1.0) // Visual indicator when disabled
                     }
                     .padding(.horizontal, 5)
                     .background(Color.clear)
@@ -151,6 +161,8 @@ struct QRDetailHeaderSection: View {
                             .contentShape(Rectangle()) // Important for proper hit testing
                         }
                         .buttonStyle(BorderlessButtonStyle()) // Prevents tap propagation
+                        .disabled(isEditing) // Disable when editing
+                        .opacity(isEditing ? 0.5 : 1.0) // Visual indicator when disabled
                     }
                     .padding(.horizontal, 5)
                     .background(Color.clear)
