@@ -1,13 +1,50 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "About" : {
+
+    },
+    "Add tags" : {
+
+    },
+    "Address" : {
+
+    },
+    "All" : {
+
+    },
+    "Alphabetical" : {
+
+    },
+    "Auto-save Scans" : {
 
     },
     "Camera Access" : {
 
     },
+    "Cancel" : {
+
+    },
+    "Clear" : {
+
+    },
+    "Clear All Data" : {
+
+    },
+    "Contacts" : {
+
+    },
+    "Content" : {
+
+    },
+    "Coordinates" : {
+
+    },
     "Copy to Clipboard" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -113,16 +150,58 @@
         }
       }
     },
+    "Created" : {
+
+    },
+    "Data Management" : {
+
+    },
+    "Default Sort Order" : {
+
+    },
+    "Details" : {
+
+    },
+    "Edit" : {
+
+    },
     "Enhance Your QR Experience" : {
 
     },
+    "Export Data" : {
+
+    },
+    "Favorites" : {
+
+    },
+    "Filter" : {
+
+    },
     "Get Started" : {
+
+    },
+    "Group Scans by Date" : {
 
     },
     "Hello, World!" : {
 
     },
     "History" : {
+
+    },
+    "History Settings" : {
+
+    },
+    "Keep History: %lld days" : {
+
+    },
+    "Label" : {
+
+    },
+    "Last Scanned" : {
+
+    },
+    "Location" : {
 
     },
     "Location Access" : {
@@ -134,7 +213,32 @@
     "Made with ❤️ in SF" : {
 
     },
+    "Map View" : {
+
+    },
+    "Most Scanned" : {
+
+    },
+    "Name" : {
+
+    },
+    "Newest First" : {
+
+    },
+    "No QR Codes" : {
+
+    },
+    "No QR codes with this tag yet." : {
+
+    },
+    "No tags" : {
+
+    },
+    "Oldest First" : {
+
+    },
     "Open in Safari" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -241,6 +345,7 @@
       }
     },
     "Position QR code in the frame" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -345,6 +450,9 @@
           }
         }
       }
+    },
+    "Position QR code within frame" : {
+
     },
     "Privacy Policy" : {
       "localizations" : {
@@ -452,7 +560,11 @@
         }
       }
     },
+    "QR Code Details" : {
+
+    },
     "QR Scanner" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -557,6 +669,9 @@
           }
         }
       }
+    },
+    "QR Unveil" : {
+
     },
     "QR Unveil needs camera access to scan QR codes" : {
 
@@ -667,7 +782,29 @@
         }
       }
     },
+    "Save" : {
+
+    },
+    "Save location data" : {
+
+    },
+    "Save Location Data" : {
+
+    },
+    "Save QR Code" : {
+
+    },
+    "Scan a QR Code" : {
+
+    },
+    "Scan a QR code to add it to your history." : {
+
+    },
+    "Scan Another" : {
+
+    },
     "Scan Another Code" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -773,7 +910,11 @@
         }
       }
     },
+    "Scan Count" : {
+
+    },
     "Scan Result" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -879,10 +1020,28 @@
         }
       }
     },
+    "Scan Settings" : {
+
+    },
+    "Scanned QR Code" : {
+
+    },
+    "Search QR codes" : {
+
+    },
     "Settings" : {
 
     },
+    "Show Favorites Section" : {
+
+    },
     "Skip (Not Recommended)" : {
+
+    },
+    "Sound on Scan" : {
+
+    },
+    "Tags" : {
 
     },
     "Terms of Service" : {
@@ -991,10 +1150,28 @@
         }
       }
     },
+    "Text" : {
+
+    },
+    "This will permanently delete all your saved QR codes. This action cannot be undone." : {
+
+    },
+    "Type" : {
+
+    },
+    "URLs" : {
+
+    },
+    "Vibration Feedback" : {
+
+    },
     "We only use the camera when you're actively scanning, and we never store photos or videos." : {
 
     },
     "Welcome to QR Unveil" : {
+
+    },
+    "WiFi" : {
 
     }
   },

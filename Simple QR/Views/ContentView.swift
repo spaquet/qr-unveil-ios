@@ -2,528 +2,688 @@
 //  ContentView.swift
 //  QR Unveil
 //
-//  Created by Stéphane PAQUET on 4/1/25.
+//  Created on 4/3/25.
 //
 
 import SwiftUI
 import AVFoundation
-import UIKit
-import SafariServices
+import CoreLocation
+import SwiftData
 
-// Main View
 struct ContentView: View {
-    @StateObject private var viewModel = QRScannerViewModel()
-    @State private var showSafari = false
-    @State private var currentURL: URL?
-    @State private var showCameraPermissionView = false
+    // Camera states
+    @StateObject private var cameraManager = CameraManager()
+    @State private var cameraPermission: AVAuthorizationStatus = .notDetermined
     
-    var body: some View {
-        GeometryReader { geometry in
-            // Calculate center and scanner frame size
-            let centerX = geometry.size.width / 2
-            let centerY = geometry.size.height / 2
-            let scannerSize: CGFloat = 260
-            
-            ZStack {
-                // Background color
-                Color.black.edgesIgnoringSafeArea(.all)
-                
-                // Camera feed
-                QRScannerView(viewModel: viewModel, scannerRect: CGRect(
-                    x: centerX - scannerSize/2,
-                    y: centerY - scannerSize/2,
-                    width: scannerSize,
-                    height: scannerSize
-                ))
-                .edgesIgnoringSafeArea(.all)
-                
-                // Semi-transparent overlay with properly positioned cutout
-                ScannerOverlayView(
-                    centerX: centerX,
-                    centerY: centerY,
-                    size: scannerSize,
-                    viewModel: viewModel
-                )
-                .edgesIgnoringSafeArea(.all)
-                
-                // UI Elements
-                VStack {
-                    // Top section with title
-                    Text("QR Scanner")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .padding(.top, 40)
-                    
-                    // Instruction text
-                    Text("Position QR code in the frame")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.9))
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 8)
-                        .background(Capsule().fill(Color.black.opacity(0.5)))
-                    
-                    Spacer()
-                    
-                    Spacer()
-                    
-                    // Bottom spacing
-                    Color.clear.frame(height: viewModel.qrCodeValue != nil ? 0 : 40)
-                }
-                
-                // Menu button in top-left
-                VStack {
-                    HStack {
-                        // Menu Button with tap response
-                        Menu {
-                            // History Option
-                            Button(action: {
-                                let historyView = UIHostingController(rootView: NavigationStack { HistoryView() })
-                                        // Modern approach to get the window for iOS 15+
-                                        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                              let window = windowScene.windows.first else { return }
-                                        window.rootViewController?.present(historyView, animated: true)
-                            }) {
-                                Label("History", systemImage: "clock")
-                            }
-                            
-                            // Settings Option
-                            Button(action: {
-                                let settingsView = UIHostingController(rootView: NavigationStack { SettingsView() })
-                                        // Modern approach to get the window for iOS 15+
-                                        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                              let window = windowScene.windows.first else { return }
-                                        window.rootViewController?.present(settingsView, animated: true)
-                            }) {
-                                Label("Settings", systemImage: "gear")
-                            }
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.black.opacity(0.6))
-                                    .frame(width: 40, height: 40)
-                                
-                                Image(systemName: "ellipsis.circle.fill")
-                                    .font(.system(size: 22))
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        .padding(.leading, 20)
-                        .padding(.top, 55) // Safe area spacing + extra for status bar
-                        
-                        Spacer()
-                    }
-                    
-                    Spacer()
-                }
-                
-                // Results overlay
-                if let result = viewModel.qrCodeValue {
-                    VStack {
-                        Spacer()
-                    }
-                    .sheet(isPresented: .constant(true), onDismiss: {
-                        viewModel.resetScanner()
-                    }) {
-                        QRResultSheet(
-                            result: result,
-                            type: viewModel.qrCodeType ?? "Unknown",
-                            isURL: viewModel.isURLType,
-                            resetAction: {
-                                viewModel.resetScanner()
-                            }
-                        )
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.visible)
-                    }
-                    .zIndex(3)
-                }
-            }
-            .animation(.easeInOut(duration: 0.3), value: viewModel.qrCodeValue != nil)
-            .sheet(isPresented: $showSafari) {
-                if let url = currentURL {
-                    SafariView(url: url)
-                }
+    // Modern navigation
+    @State private var navigationPath = NavigationPath()
+    
+    // QR detection
+    @State private var detectedQRCode: DetectedQRCode? = nil
+    @State private var showQRBottomSheet = false
+    @State private var saveLocation = true
+    
+    // View model access
+    @Environment(\.modelContext) private var modelContext
+    
+    // Navigation destinations
+    enum NavDestination: String, Identifiable, Hashable, CaseIterable {
+        case history, tags, settings
+        
+        var id: String { self.rawValue }
+        
+        var title: String {
+            switch self {
+            case .history: return "History"
+            case .tags: return "Tags"
+            case .settings: return "Settings"
             }
         }
-        .onAppear {
-            // Check camera permission each time view appears
-            checkCameraPermission()
-        }
-        .fullScreenCover(isPresented: $showCameraPermissionView) {
-            // Use the new OnboardingControllerView for a proper flow
-            OnboardingControllerView()
+        
+        var icon: String {
+            switch self {
+            case .history: return "clock.arrow.circlepath"
+            case .tags: return "tag"
+            case .settings: return "gear"
+            }
         }
     }
     
-    // Add this function to ContentView
+    var body: some View {
+        NavigationStack(path: $navigationPath) {
+            ZStack {
+                // Camera preview
+                if cameraPermission == .authorized {
+                    CameraPreviewView(session: cameraManager.captureSession)
+                        .ignoresSafeArea()
+                        .overlay(
+                            scanningOverlay
+                        )
+                        .onChange(of: cameraManager.qrCodeString) { _, newValue in
+                            if let qrCodeString = newValue, !qrCodeString.isEmpty {
+                                // Process detected QR code
+                                let type = QRCodeModel.determineQRType(from: qrCodeString)
+                                detectedQRCode = DetectedQRCode(
+                                    content: qrCodeString,
+                                    type: type
+                                )
+                                showQRBottomSheet = true
+                            }
+                        }
+                } else {
+                    // Camera not authorized - show permission request view
+                    RequestCameraView(proceedToNextStep: {
+                        checkCameraPermission()
+                    })
+                }
+                
+                // Top bar
+                VStack {
+                    HStack {
+                        Text("QR Unveil")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .shadow(radius: 2)
+                        
+                        Spacer()
+                        
+                        // Menu button using SwiftUI Menu
+                        Menu {
+                            ForEach(NavDestination.allCases) { destination in
+                                Button {
+                                    navigationPath.append(destination)
+                                } label: {
+                                    Label(destination.title, systemImage: destination.icon)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "line.3.horizontal")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black.opacity(0.6))
+                                .clipShape(Circle())
+                                .shadow(radius: 2)
+                        }
+                    }
+                    .padding()
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0.7), Color.black.opacity(0)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    
+                    // Instruction text above the frame
+                    Text("Position QR code within frame")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .background(Color.black.opacity(0.6))
+                        .cornerRadius(10)
+                        .padding(.top, 20)
+                    
+                    Spacer()
+                    
+                    // Bottom bar with camera controls
+                    HStack {
+                        Spacer()
+                        
+                        // Flash button
+                        Button {
+                            cameraManager.toggleTorch()
+                        } label: {
+                            Image(systemName: cameraManager.isTorchOn ? "bolt.fill" : "bolt.slash")
+                                .font(.title2)
+                                .foregroundColor(cameraManager.isTorchOn ? .yellow : .white)
+                                .padding(15)
+                                .background(Color.black.opacity(0.6))
+                                .clipShape(Circle())
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 40)
+                }
+            }
+            .navigationDestination(for: NavDestination.self) { destination in
+                switch destination {
+                case .history:
+                    HistoryView()
+                case .tags:
+                    TagsView()
+                case .settings:
+                    SettingsView()
+                }
+            }
+            .sheet(isPresented: $showQRBottomSheet) {
+                qrCodeBottomSheet
+            }
+            .onAppear {
+                checkCameraPermission()
+            }
+        }
+    }
+    
+    // MARK: - UI Components
+    
+    // Scanning overlay with region of interest
+    private var scanningOverlay: some View {
+        ZStack {
+            // Semi-transparent mask
+            Rectangle()
+                .fill(Color.black.opacity(0.6))
+                .mask(
+                    Rectangle()
+                        .overlay(
+                            // Cut out a square in the middle
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width: 260, height: 260)
+                                .blendMode(.destinationOut)
+                        )
+                )
+            
+            // Scan region border
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.white, lineWidth: 3)
+                .frame(width: 260, height: 260)
+            
+            // Scanning animation line
+            ScanningAnimationView()
+                .frame(width: 260, height: 260)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+        }
+    }
+    
+    // Bottom sheet for QR code detection
+    private var qrCodeBottomSheet: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 16) {
+                // QR code icon and type
+                HStack {
+                    ZStack {
+                        Circle()
+                            .fill(qrTypeColor(detectedQRCode?.type ?? "text").opacity(0.2))
+                            .frame(width: 48, height: 48)
+                        
+                        Image(systemName: qrTypeIcon(detectedQRCode?.type ?? "text"))
+                            .font(.title3)
+                            .foregroundColor(qrTypeColor(detectedQRCode?.type ?? "text"))
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(qrTypeTitle(detectedQRCode?.type ?? "text"))
+                            .font(.headline)
+                        
+                        Text("Scanned QR Code")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.leading, 8)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
+                Divider()
+                
+                // QR content
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Content")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    
+                    Text(detectedQRCode?.content ?? "")
+                        .font(.body)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(UIColor.secondarySystemBackground))
+                        .cornerRadius(8)
+                }
+                .padding(.horizontal)
+                
+                // Location toggle
+                Toggle(isOn: $saveLocation) {
+                    HStack {
+                        Image(systemName: "location")
+                            .foregroundColor(.blue)
+                        Text("Save location data")
+                            .font(.subheadline)
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Tag selection placeholder
+                HStack {
+                    Image(systemName: "tag")
+                        .foregroundColor(.orange)
+                    
+                    Text("Add tags")
+                        .font(.subheadline)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+                .padding()
+                .background(Color(UIColor.secondarySystemBackground))
+                .cornerRadius(8)
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                // Action buttons
+                VStack(spacing: 12) {
+                    Button(action: saveQRCode) {
+                        Text("Save QR Code")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(12)
+                    }
+                    
+                    Button {
+                        // Discard and scan another
+                        detectedQRCode = nil
+                        showQRBottomSheet = false
+                        cameraManager.resumeScanning()
+                    } label: {
+                        Text("Scan Another")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(UIColor.secondarySystemBackground))
+                            .cornerRadius(12)
+                    }
+                }
+                .padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        detectedQRCode = nil
+                        showQRBottomSheet = false
+                        cameraManager.resumeScanning()
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+    
+    // MARK: - Helper Methods
+    
     private func checkCameraPermission() {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        cameraPermission = AVCaptureDevice.authorizationStatus(for: .video)
         
-        // If camera permission is not granted, show the permission view
-        // Since we're only in ContentView if onboarding is completed,
-        // we don't need to check the onboarding status again
-        if status != .authorized {
-            showCameraPermissionView = true
+        if cameraPermission == .authorized {
+            cameraManager.setupCamera()
+        } else if cameraPermission == .notDetermined {
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    cameraPermission = granted ? .authorized : .denied
+                    if granted {
+                        cameraManager.setupCamera()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func saveQRCode() {
+        guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
+        
+        do {
+            // Get current location if enabled
+            var location: CLLocation? = nil
+            if saveLocation {
+                location = cameraManager.currentLocation
+            }
+            
+            // Save to database
+            let _ = try QRDataManager.shared.saveQRCode(
+                content: qrCode.content,
+                label: generateLabelFromContent(qrCode.content, type: qrCode.type),
+                location: location
+            )
+            
+            // Provide feedback
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            
+            // Clear and dismiss
+            detectedQRCode = nil
+            showQRBottomSheet = false
+            cameraManager.resumeScanning()
+        } catch {
+            print("Error saving QR code: \(error.localizedDescription)")
+        }
+    }
+    
+    private func generateLabelFromContent(_ content: String, type: String) -> String? {
+        switch type {
+        case "url":
+            if let url = URL(string: content), let host = url.host {
+                return host
+            }
+            return "Website"
+        case "phone":
+            return "Phone Number"
+        case "email":
+            return "Email Address"
+        case "wifi":
+            if let ssidRange = content.range(of: "S:") {
+                let startIndex = content.index(ssidRange.upperBound, offsetBy: 0)
+                if let endIndex = content.range(of: ";", range: startIndex..<content.endIndex)?.lowerBound {
+                    return "WiFi: \(content[startIndex..<endIndex])"
+                }
+            }
+            return "WiFi Network"
+        case "vcard":
+            return "Contact Card"
+        case "location":
+            return "Location"
+        case "sms":
+            return "SMS Message"
+        default:
+            return nil
+        }
+    }
+    
+    private func qrTypeIcon(_ type: String) -> String {
+        switch type {
+        case "url": return "link"
+        case "phone": return "phone.fill"
+        case "email": return "envelope.fill"
+        case "wifi": return "wifi"
+        case "vcard": return "person.crop.square.fill"
+        case "location": return "mappin.and.ellipse"
+        case "sms": return "message.fill"
+        default: return "doc.text.fill"
+        }
+    }
+    
+    private func qrTypeColor(_ type: String) -> Color {
+        switch type {
+        case "url": return .blue
+        case "phone": return .green
+        case "email": return .purple
+        case "wifi": return .orange
+        case "vcard": return .indigo
+        case "location": return .red
+        case "sms": return .pink
+        default: return .gray
+        }
+    }
+    
+    private func qrTypeTitle(_ type: String) -> String {
+        switch type {
+        case "url": return "Website URL"
+        case "phone": return "Phone Number"
+        case "email": return "Email Address"
+        case "wifi": return "WiFi Network"
+        case "vcard": return "Contact Card"
+        case "location": return "Geographic Location"
+        case "sms": return "Text Message"
+        default: return "Plain Text"
         }
     }
 }
+
+// MARK: - Camera Preview
+struct CameraPreviewView: UIViewRepresentable {
+    let session: AVCaptureSession
     
-    // Modern iOS 17+ result sheet
-    struct QRResultSheet: View {
-        let result: String
-        let type: String
-        let isURL: Bool
-        let resetAction: () -> Void
-        @Environment(\.dismiss) private var dismiss
-        @State private var showSafari = false
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: UIScreen.main.bounds)
+        view.backgroundColor = .black
         
-        var body: some View {
-            NavigationStack {
-                List {
-                    Section {
-                        HStack {
-                            Image(systemName: typeIcon)
-                                .font(.system(size: 24))
-                                .foregroundColor(.accentColor)
-                            
-                            VStack(alignment: .leading) {
-                                Text(type)
-                                    .font(.headline)
-                                
-                                Text(result)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 8)
-                    }
-                    
-                    Section {
-                        Button(action: {
-                            UIPasteboard.general.string = result
-                            // Optional: Show a toast or haptic feedback
-                            let generator = UINotificationFeedbackGenerator()
-                            generator.notificationOccurred(.success)
-                        }) {
-                            Label("Copy to Clipboard", systemImage: "doc.on.doc")
-                        }
-                        
-                        if isURL {
-                            Button(action: {
-                                showSafari = true
-                            }) {
-                                Label("Open in Safari", systemImage: "safari")
-                            }
-                        }
-                    }
-                    
-                    Section {
-                        Button(action: {
-                            dismiss()
-                            resetAction()
-                        }) {
-                            Label("Scan Another Code", systemImage: "qrcode.viewfinder")
-                        }
-                        .tint(.accentColor)
-                    }
-                }
-                .navigationTitle("Scan Result")
-                .navigationBarTitleDisplayMode(.inline)
-                .sheet(isPresented: $showSafari) {
-                    if let url = URL(string: result) {
-                        SafariView(url: url)
-                    }
-                }
-            }
-        }
+        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer.frame = view.frame
+        previewLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(previewLayer)
         
-        // Get SF Symbol based on QR code type
-        private var typeIcon: String {
-            switch type.lowercased() {
-            case "url": return "link"
-            case "email": return "envelope"
-            case "phone number": return "phone"
-            case "sms": return "message"
-            case "location": return "map"
-            case "wifi network": return "wifi"
-            case "contact information": return "person.crop.rectangle"
-            case "calendar event": return "calendar"
-            case "app store": return "apple.logo"
-            case "google play store": return "play.rectangle"
-            case "crypto": return "bitcoinsign.circle"
-            default: return "doc.text"
-            }
-        }
+        return view
     }
     
-    // New custom overlay view for better positioning and control of scanner frame
-    struct ScannerOverlayView: View {
-        let centerX: CGFloat
-        let centerY: CGFloat
-        let size: CGFloat
-        @ObservedObject var viewModel: QRScannerViewModel
-        
-        var body: some View {
-            ZStack {
-                // Semi-transparent overlay covering the entire screen
-                Color.black.opacity(0.6)
-                
-                // Transparent cutout area
-                RoundedRectangle(cornerRadius: 24)
-                    .frame(width: size, height: size)
-                    .position(x: centerX, y: centerY)
-                    .blendMode(.destinationOut)
-            }
-            .compositingGroup() // This ensures proper blending
-            
-            // Add border on top as a separate element (not part of the mask)
-            RoundedRectangle(cornerRadius: 24)
-                .stroke(Color.white, lineWidth: 4)
-                .frame(width: size, height: size)
-                .position(x: centerX, y: centerY)
-            
-            // Create a clipping container for the scan line to prevent it from going outside
-            Rectangle()
-                .frame(width: size - 40, height: size - 40)
-                .position(x: centerX, y: centerY)
-                .opacity(0) // Make it invisible
-                .clipped() // Apply clipping to children
-                .overlay(
-                    // Scanning line within the border and clipped to stay inside
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.clear, .white.opacity(0.8), .clear]),
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                        .frame(width: size - 40, height: 4)
-                        .offset(y: viewModel.scanLinePosition)
+    func updateUIView(_ uiView: UIView, context: Context) {
+        if let previewLayer = uiView.layer.sublayers?.first as? AVCaptureVideoPreviewLayer {
+            previewLayer.frame = uiView.frame
+        }
+    }
+}
+
+// MARK: - Scanning Animation
+struct ScanningAnimationView: View {
+    @State private var offsetY: CGFloat = -130
+    
+    var body: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: [.clear, .green.opacity(0.7), .clear]),
+                    startPoint: .leading,
+                    endPoint: .trailing
                 )
-                .position(x: centerX, y: centerY)
-                .onAppear {
-                    // Reset the animation range to stay within the container
-                    let adjustedHeight = size - 60 // Leave safe padding
-                    viewModel.startScanLineAnimation(containerHeight: adjustedHeight)
+            )
+            .frame(height: 2)
+            .offset(y: offsetY)
+            .onAppear {
+                withAnimation(
+                    Animation.easeInOut(duration: 1.5)
+                        .repeatForever(autoreverses: true)
+                ) {
+                    offsetY = 130
                 }
-        }
+            }
+    }
+}
+
+// MARK: - Camera Manager
+class CameraManager: NSObject, ObservableObject {
+    // Camera session
+    let captureSession = AVCaptureSession()
+    private var captureDevice: AVCaptureDevice?
+    private var deviceInput: AVCaptureDeviceInput?
+    private var metadataOutput = AVCaptureMetadataOutput()
+    
+    // Torch state
+    @Published var isTorchOn = false
+    
+    // QR detection
+    @Published var qrCodeString: String? = nil
+    private var isQRDetectionPaused = false
+    
+    // Location
+    private let locationManager = CLLocationManager()
+    private(set) var currentLocation: CLLocation?
+    
+    override init() {
+        super.init()
+        setupLocationManager()
     }
     
-    // Safari View Controller wrapper
-    struct SafariView: UIViewControllerRepresentable {
-        let url: URL
+    func setupCamera() {
+        captureSession.beginConfiguration()
         
-        func makeUIViewController(context: Context) -> SFSafariViewController {
-            return SFSafariViewController(url: url)
+        guard let backCamera = AVCaptureDevice.default(for: .video) else {
+            print("Could not find a capture device")
+            return
         }
         
-        func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
-    }
-    
-    // QR Scanner View
-    struct QRScannerView: UIViewRepresentable {
-        @ObservedObject var viewModel: QRScannerViewModel
-        var scannerRect: CGRect
+        captureDevice = backCamera
         
-        func makeUIView(context: Context) -> UIView {
-            let view = UIView(frame: UIScreen.main.bounds)
+        do {
+            // Add camera input
+            let input = try AVCaptureDeviceInput(device: backCamera)
+            deviceInput = input
             
-            guard let captureDevice = AVCaptureDevice.default(for: .video) else {
-                print("Failed to get camera device")
-                return view
+            if captureSession.canAddInput(input) {
+                captureSession.addInput(input)
             }
             
-            do {
-                // Setup camera input
-                let input = try AVCaptureDeviceInput(device: captureDevice)
-                viewModel.captureSession.addInput(input)
-                
-                // Setup metadata output
-                let metadataOutput = AVCaptureMetadataOutput()
-                viewModel.captureSession.addOutput(metadataOutput)
-                metadataOutput.setMetadataObjectsDelegate(context.coordinator, queue: DispatchQueue.main)
+            // Configure metadata output for QR code detection
+            if captureSession.canAddOutput(metadataOutput) {
+                captureSession.addOutput(metadataOutput)
+                metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
                 metadataOutput.metadataObjectTypes = [.qr]
                 
-                // Setup preview layer
-                let previewLayer = AVCaptureVideoPreviewLayer(session: viewModel.captureSession)
-                previewLayer.frame = view.bounds
-                previewLayer.videoGravity = .resizeAspectFill
-                view.layer.addSublayer(previewLayer)
+                // Set region of interest (centered square covering about 60% of view)
+                let screenSize = UIScreen.main.bounds.size
+                let centerX = screenSize.width / 2
+                let centerY = screenSize.height / 2
+                let rectSize: CGFloat = 260
                 
-                // Store previewLayer in viewModel for coordinate calculations
-                viewModel.previewLayer = previewLayer
-                
-                // Start capture session
-                DispatchQueue.global(qos: .background).async {
-                    viewModel.captureSession.startRunning()
-                    
-                    // Update ROI after session is running and previewLayer is set
-                    DispatchQueue.main.async {
-                        setupROI(metadataOutput: metadataOutput, in: view, scannerRect: scannerRect)
-                    }
-                }
-            } catch {
-                print("Error setting up camera: \(error.localizedDescription)")
-            }
-            
-            return view
-        }
-        
-        func updateUIView(_ uiView: UIView, context: Context) {
-            // Update ROI if needed based on any layout changes
-            if let metadataOutput = viewModel.captureSession.outputs.first as? AVCaptureMetadataOutput {
-                setupROI(metadataOutput: metadataOutput, in: uiView, scannerRect: scannerRect)
-            }
-        }
-        
-        // Helper method to set up region of interest
-        private func setupROI(metadataOutput: AVCaptureMetadataOutput, in view: UIView, scannerRect: CGRect) {
-            guard let previewLayer = viewModel.previewLayer else { return }
-            
-            // Convert UIKit coordinates to AVFoundation coordinates (which are normalized)
-            // In AVFoundation coordinates, (0,0) is in the top-left and (1,1) is in the bottom-right
-            let topLeft = previewLayer.captureDevicePointConverted(fromLayerPoint: scannerRect.origin)
-            let bottomRight = previewLayer.captureDevicePointConverted(
-                fromLayerPoint: CGPoint(
-                    x: scannerRect.origin.x + scannerRect.width,
-                    y: scannerRect.origin.y + scannerRect.height
+                let scanRect = CGRect(
+                    x: centerX - (rectSize / 2),
+                    y: centerY - (rectSize / 2),
+                    width: rectSize,
+                    height: rectSize
                 )
-            )
-            
-            let roi = CGRect(
-                x: min(topLeft.x, bottomRight.x),
-                y: min(topLeft.y, bottomRight.y),
-                width: abs(bottomRight.x - topLeft.x),
-                height: abs(bottomRight.y - topLeft.y)
-            )
-            
-            // Set ROI - must be within 0-1 range
-            let normalizedROI = CGRect(
-                x: max(0, min(roi.origin.x, 1)),
-                y: max(0, min(roi.origin.y, 1)),
-                width: max(0, min(roi.width, 1)),
-                height: max(0, min(roi.height, 1))
-            )
-            
-            metadataOutput.rectOfInterest = normalizedROI
+                
+                // Convert to normalized coordinates
+                let normalizedRect = CGRect(
+                    x: scanRect.origin.y / screenSize.height,
+                    y: 1.0 - (scanRect.origin.x + scanRect.size.width) / screenSize.width,
+                    width: scanRect.size.height / screenSize.height,
+                    height: scanRect.size.width / screenSize.width
+                )
+                
+                metadataOutput.rectOfInterest = normalizedRect
+            }
+        } catch {
+            print("Could not create video device input: \(error)")
+            return
         }
         
-        func makeCoordinator() -> Coordinator {
-            Coordinator(parent: self)
-        }
+        captureSession.commitConfiguration()
         
-        // Coordinator for handling camera delegate methods
-        class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
-            var parent: QRScannerView
-            
-            init(parent: QRScannerView) {
-                self.parent = parent
-            }
-            
-            func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-                guard let metadataObject = metadataObjects.first,
-                      let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject,
-                      let stringValue = readableObject.stringValue else {
-                    return
-                }
-                
-                // Play success sound and haptic feedback
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.success)
-                
-                // Update view model on main thread
-                DispatchQueue.main.async {
-                    if self.parent.viewModel.captureSession.isRunning && self.parent.viewModel.qrCodeValue == nil {
-                        let type = self.determineQRCodeType(value: stringValue)
-                        self.parent.viewModel.qrCodeValue = stringValue
-                        self.parent.viewModel.qrCodeType = type
-                        self.parent.viewModel.isURLType = type.lowercased() == "url"
-                        self.parent.viewModel.captureSession.stopRunning()
-                    }
-                }
-            }
-            
-            // QR code type detection
-            func determineQRCodeType(value: String) -> String {
-                let lowercaseValue = value.lowercased()
-                
-                if lowercaseValue.hasPrefix("http://") || lowercaseValue.hasPrefix("https://") {
-                    // Check for app store links first (case insensitive)
-                    if lowercaseValue.contains("apps.apple.com") || lowercaseValue.contains("itunes.apple.com/app") {
-                        return "App Store"
-                    } else if lowercaseValue.contains("play.google.com/store/apps") {
-                        return "Google Play Store"
-                    }
-                    return "URL"
-                } else if lowercaseValue.hasPrefix("mailto:") {
-                    return "Email"
-                } else if lowercaseValue.hasPrefix("tel:") {
-                    return "Phone Number"
-                } else if lowercaseValue.hasPrefix("smsto:") || lowercaseValue.hasPrefix("sms:") {
-                    return "SMS"
-                } else if lowercaseValue.hasPrefix("geo:") {
-                    return "Location"
-                } else if lowercaseValue.hasPrefix("wifi:") {
-                    return "WiFi Network"
-                } else if value.uppercased().hasPrefix("BEGIN:VCARD") {
-                    return "Contact Information"
-                } else if value.uppercased().hasPrefix("BEGIN:VEVENT") {
-                    return "Calendar Event"
-                } else if lowercaseValue.hasPrefix("bitcoin:") ||
-                            lowercaseValue.contains("ethereum:") ||
-                            (value.hasPrefix("0x") && value.count == 42 && isValidHexString(value.dropFirst(2))) || // Ethereum address
-                            (value.hasPrefix("1") || value.hasPrefix("3") || value.hasPrefix("bc1")) { // Bitcoin address
-                    return "Crypto"
-                } else {
-                    return "Text"
-                }
-            }
-            
-            // Helper function to validate hex strings for Ethereum addresses
-            private func isValidHexString(_ string: Substring) -> Bool {
-                let hexPattern = "^[0-9a-fA-F]+$"
-                return string.range(of: hexPattern, options: .regularExpression) != nil
-            }
-            
+        // Start session on background thread
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.captureSession.startRunning()
         }
     }
     
-    // View Model for QR Scanner
-    class QRScannerViewModel: ObservableObject {
-        @Published var qrCodeValue: String? = nil
-        @Published var qrCodeType: String? = nil
-        @Published var isURLType: Bool = false
-        @Published var scanLinePosition: CGFloat = 0
+    func toggleTorch() {
+        guard let device = captureDevice, device.hasTorch else { return }
         
-        var previewLayer: AVCaptureVideoPreviewLayer? = nil
-        let captureSession = AVCaptureSession()
-        
-        func resetScanner() {
-            qrCodeValue = nil
-            qrCodeType = nil
-            isURLType = false
+        do {
+            try device.lockForConfiguration()
             
-            DispatchQueue.global(qos: .background).async {
-                self.captureSession.startRunning()
+            if device.torchMode == .on {
+                device.torchMode = .off
+                isTorchOn = false
+            } else {
+                try device.setTorchModeOn(level: 1.0)
+                isTorchOn = true
             }
-        }
-        
-        func startScanLineAnimation(containerHeight: CGFloat) {
-            // Calculate half of the height since we'll be moving from -half to +half
-            let halfHeight = containerHeight / 2
             
-            // Start at the top position (-halfHeight)
-            self.scanLinePosition = -halfHeight
-            
-            // Animate to the bottom position (+halfHeight)
-            withAnimation(
-                Animation
-                    .easeInOut(duration: 2)
-                    .repeatForever(autoreverses: true)
-            ) {
-                self.scanLinePosition = halfHeight
-            }
+            device.unlockForConfiguration()
+        } catch {
+            print("Error setting torch: \(error)")
         }
     }
+    
+    func switchCamera() {
+        captureSession.beginConfiguration()
+        
+        // Remove current input
+        if let currentInput = deviceInput {
+            captureSession.removeInput(currentInput)
+        }
+        
+        // Get new camera position
+        let newPosition: AVCaptureDevice.Position = (captureDevice?.position == .back) ? .front : .back
+        let devices = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.builtInWideAngleCamera],
+            mediaType: .video,
+            position: newPosition
+        ).devices
+        
+        // Add new camera input
+        if let newDevice = devices.first {
+            captureDevice = newDevice
+            
+            do {
+                let newInput = try AVCaptureDeviceInput(device: newDevice)
+                deviceInput = newInput
+                
+                if captureSession.canAddInput(newInput) {
+                    captureSession.addInput(newInput)
+                }
+                
+                // Turn off torch when switching to front camera
+                if newPosition == .front && isTorchOn {
+                    isTorchOn = false
+                }
+            } catch {
+                print("Error creating new input: \(error)")
+            }
+        }
+        
+        captureSession.commitConfiguration()
+    }
+    
+    func pauseQRDetection() {
+        isQRDetectionPaused = true
+    }
+    
+    func resumeScanning() {
+        isQRDetectionPaused = false
+        qrCodeString = nil
+    }
+    
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+}
+
+// MARK: - Camera Manager Extensions
+extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        // Skip if QR detection is paused
+        if isQRDetectionPaused {
+            return
+        }
+        
+        // Process QR code
+        if let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+           let stringValue = metadataObject.stringValue,
+           metadataObject.type == .qr {
+            
+            // Provide haptic feedback
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            
+            // Update QR code value and pause detection
+            qrCodeString = stringValue
+            pauseQRDetection()
+        }
+    }
+}
+
+extension CameraManager: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            currentLocation = location
+        }
+    }
+}
+
+// MARK: - Data Models
+struct DetectedQRCode {
+    let content: String
+    let type: String
+}

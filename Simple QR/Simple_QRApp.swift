@@ -7,11 +7,96 @@
 
 import SwiftUI
 import AVFoundation
+import SwiftData
 
 @main
 struct Simple_QRApp: App {
     // Track the entire onboarding completion instead of just welcome screen
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    
+    // Setup SwiftData container
+    let container: ModelContainer
+    
+    init() {
+        do {
+            // Define the model schema
+            let schema = Schema([
+                QRCodeModel.self,
+                LocationModel.self,
+                TagModel.self,
+                SettingsModel.self,
+                SecurityVerificationModel.self 
+            ])
+            
+            // Configure model container for local storage only
+            let modelConfiguration = ModelConfiguration(
+                schema: schema,
+                isStoredInMemoryOnly: false,
+                allowsSave: true,
+                cloudKitDatabase: .automatic
+            )
+            
+            // Create container
+            container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            
+            // Check if we need to create default settings on first launch
+            initializeDefaultDataIfNeeded()
+        } catch {
+            // Handle container creation error
+            fatalError("Failed to create SwiftData container: \(error.localizedDescription)")
+        }
+    }
+    
+    // Initialize default data if needed (first launch)
+    private func initializeDefaultDataIfNeeded() {
+        let context = container.mainContext
+        
+        // Initialize QRDataManager with the main context
+        QRDataManager.initializeShared(modelContext: context)
+        
+        // Check if settings exist, create if not
+        let settingsFetchDescriptor = FetchDescriptor<SettingsModel>()
+        do {
+            let existingSettings = try context.fetch(settingsFetchDescriptor)
+            if existingSettings.isEmpty {
+                // Create default settings
+                let defaultSettings = SettingsModel()
+                context.insert(defaultSettings)
+                try context.save()
+                print("Created default settings")
+            }
+        } catch {
+            print("Error checking for settings: \(error.localizedDescription)")
+        }
+        
+        // Create some default tags if none exist
+        let tagsFetchDescriptor = FetchDescriptor<TagModel>()
+        do {
+            let existingTags = try context.fetch(tagsFetchDescriptor)
+            if existingTags.isEmpty {
+                // Create default tags
+                let workTag = TagModel()
+                workTag.name = "Work"
+                workTag.color = "#FF5733"
+                
+                let personalTag = TagModel()
+                personalTag.name = "Personal"
+                personalTag.color = "#33FF57"
+                
+                let favoriteTag = TagModel()
+                favoriteTag.name = "Important"
+                favoriteTag.color = "#3357FF"
+                
+                context.insert(workTag)
+                context.insert(personalTag)
+                context.insert(favoriteTag)
+                try context.save()
+                print("Created default tags")
+            }
+        } catch {
+            print("Error checking for tags: \(error.localizedDescription)")
+        }
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -24,6 +109,8 @@ struct Simple_QRApp: App {
                     ContentView()
                 }
             }
+            // Provide the model container to the view hierarchy
+            .modelContainer(container)
         }
     }
 }
