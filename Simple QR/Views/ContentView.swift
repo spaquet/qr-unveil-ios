@@ -10,7 +10,10 @@ import AVFoundation
 import CoreLocation
 import SwiftData
 
+/// Main view controller for QR code scanning application
 struct ContentView: View {
+    // MARK: - Properties
+    
     // Camera states
     @StateObject private var cameraManager = CameraManager()
     @State private var cameraPermission: AVAuthorizationStatus = .notDetermined
@@ -48,6 +51,8 @@ struct ContentView: View {
             }
         }
     }
+    
+    // MARK: - View Body
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -106,7 +111,7 @@ struct ContentView: View {
     
     // MARK: - UI Components
     
-    // Separate UI elements into their own view
+    /// Scanner UI elements displayed on top of camera
     private var scannerUIElements: some View {
         VStack {
             // Top bar
@@ -175,7 +180,7 @@ struct ContentView: View {
         }
     }
 
-    // New camera preview representable using UIViewControllerRepresentable
+    /// Camera preview representable using UIViewControllerRepresentable
     struct CameraPreviewRepresentable: UIViewControllerRepresentable {
         let session: AVCaptureSession
         
@@ -205,37 +210,6 @@ struct ContentView: View {
             if let previewLayer = uiViewController.view.layer.sublayers?.first(where: { $0.name == "cameraPreviewLayer" }) {
                 previewLayer.frame = uiViewController.view.bounds
             }
-        }
-    }
-    
-    // Scanning overlay with region of interest
-    private var scanningOverlay: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // This creates the semi-transparent mask
-                // First create full black view with 0.6 opacity
-                Color.black.opacity(0.6)
-                    .ignoresSafeArea()
-                
-                // Then cut out a transparent hole
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: 260, height: 260)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                    .blendMode(.destinationOut)
-                
-                // Scan region border - ensure it's positioned correctly
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white, lineWidth: 3)
-                    .frame(width: 260, height: 260)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                
-                // Scanning animation line - ensure it's positioned correctly
-                ScanningAnimationView()
-                    .frame(width: 260, height: 260)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-            }
-            .compositingGroup() // Essential for the blendMode to work properly
         }
     }
     
@@ -363,6 +337,7 @@ struct ContentView: View {
     
     // MARK: - Helper Methods
     
+    /// Checks and requests camera permission if needed
     private func checkCameraPermission() {
         cameraPermission = AVCaptureDevice.authorizationStatus(for: .video)
         
@@ -397,6 +372,7 @@ struct ContentView: View {
         }
     }
     
+    /// Saves the detected QR code to database
     private func saveQRCode() {
         guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
         
@@ -426,6 +402,7 @@ struct ContentView: View {
         }
     }
     
+    /// Generates a label based on QR code content and type
     private func generateLabelFromContent(_ content: String, type: String) -> String? {
         switch type {
         case "url":
@@ -456,6 +433,7 @@ struct ContentView: View {
         }
     }
     
+    /// Returns an icon name for the given QR code type
     private func qrTypeIcon(_ type: String) -> String {
         switch type {
         case "url": return "link"
@@ -469,6 +447,7 @@ struct ContentView: View {
         }
     }
     
+    /// Returns a color for the given QR code type
     private func qrTypeColor(_ type: String) -> Color {
         switch type {
         case "url": return .blue
@@ -482,6 +461,7 @@ struct ContentView: View {
         }
     }
     
+    /// Returns a title for the given QR code type
     private func qrTypeTitle(_ type: String) -> String {
         switch type {
         case "url": return "Website URL"
@@ -496,7 +476,7 @@ struct ContentView: View {
     }
 }
 
-// Separate overlay view with transparent cutout
+/// Separate overlay view with transparent cutout for scanning area
 struct ScannerOverlayView: View {
     var body: some View {
         GeometryReader { geometry in
@@ -528,40 +508,7 @@ struct ScannerOverlayView: View {
     }
 }
 
-// MARK: - Camera Preview
-struct CameraPreviewView: UIViewRepresentable {
-    let session: AVCaptureSession
-    
-    func makeUIView(context: Context) -> UIView {
-        // Create a container view
-        let view = UIView(frame: UIScreen.main.bounds)
-        
-        // Make background clear to ensure we see through to camera
-        view.backgroundColor = .clear
-        
-        // Create and configure preview layer
-        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.frame = view.frame
-        previewLayer.videoGravity = .resizeAspectFill
-        
-        // Add preview layer to view
-        view.layer.addSublayer(previewLayer)
-        
-        print("Camera preview layer created with frame: \(previewLayer.frame)")
-        print("Session running status: \(session.isRunning)")
-        
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // Ensure preview layer stays sized correctly
-        if let previewLayer = uiView.layer.sublayers?.first as? AVCaptureVideoPreviewLayer {
-            previewLayer.frame = uiView.frame
-        }
-    }
-}
-
-// MARK: - Scanning Animation
+/// Animation view for the scanning line that moves up and down
 struct ScanningAnimationView: View {
     @State private var offsetY: CGFloat = -130
     
@@ -588,6 +535,8 @@ struct ScanningAnimationView: View {
 }
 
 // MARK: - Camera Manager
+
+/// Manages camera operations including QR code detection and torch control
 class CameraManager: NSObject, ObservableObject {
     // Camera session
     let captureSession = AVCaptureSession()
@@ -611,6 +560,7 @@ class CameraManager: NSObject, ObservableObject {
         setupLocationManager()
     }
     
+    /// Sets up the camera capture session for QR scanning
     func setupCamera() {
         // Start fresh
         if captureSession.isRunning {
@@ -713,6 +663,7 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    /// Toggles the device torch (flashlight) on/off
     func toggleTorch() {
         guard let device = captureDevice, device.hasTorch else { return }
         
@@ -733,55 +684,18 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
     
-    func switchCamera() {
-        captureSession.beginConfiguration()
-        
-        // Remove current input
-        if let currentInput = deviceInput {
-            captureSession.removeInput(currentInput)
-        }
-        
-        // Get new camera position
-        let newPosition: AVCaptureDevice.Position = (captureDevice?.position == .back) ? .front : .back
-        let devices = AVCaptureDevice.DiscoverySession(
-            deviceTypes: [.builtInWideAngleCamera],
-            mediaType: .video,
-            position: newPosition
-        ).devices
-        
-        // Add new camera input
-        if let newDevice = devices.first {
-            captureDevice = newDevice
-            
-            do {
-                let newInput = try AVCaptureDeviceInput(device: newDevice)
-                deviceInput = newInput
-                
-                if captureSession.canAddInput(newInput) {
-                    captureSession.addInput(newInput)
-                }
-                
-                // Turn off torch when switching to front camera
-                if newPosition == .front && isTorchOn {
-                    isTorchOn = false
-                }
-            } catch {
-                print("Error creating new input: \(error)")
-            }
-        }
-        
-        captureSession.commitConfiguration()
-    }
-    
+    /// Pauses QR code detection temporarily
     func pauseQRDetection() {
         isQRDetectionPaused = true
     }
     
+    /// Resumes QR code scanning
     func resumeScanning() {
         isQRDetectionPaused = false
         qrCodeString = nil
     }
     
+    /// Sets up location manager for recording scan locations
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -791,7 +705,9 @@ class CameraManager: NSObject, ObservableObject {
 }
 
 // MARK: - Camera Manager Extensions
+
 extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
+    /// Handles QR code detection from the camera feed
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         // Skip if QR detection is paused
         if isQRDetectionPaused {
@@ -815,6 +731,7 @@ extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
 }
 
 extension CameraManager: CLLocationManagerDelegate {
+    /// Updates current location when location changes
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             currentLocation = location
@@ -823,6 +740,8 @@ extension CameraManager: CLLocationManagerDelegate {
 }
 
 // MARK: - Data Models
+
+/// Model representing a detected QR code
 struct DetectedQRCode {
     let content: String
     let type: String
