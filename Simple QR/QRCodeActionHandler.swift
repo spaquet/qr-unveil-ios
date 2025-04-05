@@ -22,6 +22,7 @@ class QRCodeActionHandler {
         case addContact(String) // vCard data
         case sendSMS(to: String, body: String?)
         case callPhone(String)
+        case sendEmail(to: String, subject: String?, body: String?)
         case none // For text or unsupported types
     }
     
@@ -96,6 +97,46 @@ class QRCodeActionHandler {
             let phoneNumber = content.replacingOccurrences(of: "[^0-9+]", with: "", options: .regularExpression)
             if !phoneNumber.isEmpty {
                 return .callPhone(phoneNumber)
+            }
+            
+        case "email":
+            // Parse email format: mailto:email@example.com?subject=Subject&body=Body
+            var emailAddress: String = ""
+            var subject: String? = nil
+            var body: String? = nil
+            
+            if content.hasPrefix("mailto:") {
+                let contentWithoutPrefix = content.replacingOccurrences(of: "mailto:", with: "")
+                
+                // Split the content into address and parameters
+                let components = contentWithoutPrefix.components(separatedBy: "?")
+                if components.count > 0 {
+                    emailAddress = components[0]
+                    
+                    // Parse parameters if they exist
+                    if components.count > 1 {
+                        let paramString = components[1]
+                        let params = paramString.components(separatedBy: "&")
+                        
+                        for param in params {
+                            let keyValue = param.components(separatedBy: "=")
+                            if keyValue.count == 2 {
+                                let key = keyValue[0]
+                                let value = keyValue[1].removingPercentEncoding ?? keyValue[1]
+                                
+                                if key == "subject" {
+                                    subject = value
+                                } else if key == "body" {
+                                    body = value
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if !emailAddress.isEmpty {
+                return .sendEmail(to: emailAddress, subject: subject, body: body)
             }
             
         default:
@@ -288,6 +329,78 @@ class QRCodeActionHandler {
             
             viewController.present(alert, animated: true)
             
+        case .sendEmail(let emailAddress, let subject, let body):
+            // Show action sheet with email options
+            let alert = UIAlertController(
+                title: "Send Email",
+                message: "Send email to \(emailAddress)",
+                preferredStyle: .actionSheet
+            )
+            
+            // Mail app option
+            if MFMailComposeViewController.canSendMail() {
+                alert.addAction(UIAlertAction(title: "Mail App", style: .default) { _ in
+                    let mailVC = MFMailComposeViewController()
+                    mailVC.setToRecipients([emailAddress])
+                    if let subject = subject {
+                        mailVC.setSubject(subject)
+                    }
+                    if let body = body {
+                        mailVC.setMessageBody(body, isHTML: false)
+                    }
+                    mailVC.mailComposeDelegate = MailDelegate.shared
+                    
+                    viewController.present(mailVC, animated: true)
+                })
+            }
+            
+            // Direct mailto URL option
+            var mailtoURLString = "mailto:\(emailAddress)"
+            var queryItems: [String] = []
+            
+            if let subject = subject {
+                queryItems.append("subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? subject)")
+            }
+            
+            if let body = body {
+                queryItems.append("body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? body)")
+            }
+            
+            if !queryItems.isEmpty {
+                mailtoURLString += "?" + queryItems.joined(separator: "&")
+            }
+            
+            if let mailtoURL = URL(string: mailtoURLString) {
+                alert.addAction(UIAlertAction(title: "Default Mail App", style: .default) { _ in
+                    UIApplication.shared.open(mailtoURL, options: [:], completionHandler: nil)
+                })
+            }
+            
+            // Copy email address option
+            alert.addAction(UIAlertAction(title: "Copy Email Address", style: .default) { _ in
+                UIPasteboard.general.string = emailAddress
+                
+                // Show a confirmation toast
+                let successAlert = UIAlertController(
+                    title: "Email Copied",
+                    message: "Email address has been copied to clipboard.",
+                    preferredStyle: .alert
+                )
+                successAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                viewController.present(successAlert, animated: true)
+            })
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            
+            // For iPad support
+            if let popoverController = alert.popoverPresentationController {
+                popoverController.sourceView = viewController.view
+                popoverController.sourceRect = CGRect(x: viewController.view.bounds.midX, y: viewController.view.bounds.midY, width: 0, height: 0)
+                popoverController.permittedArrowDirections = []
+            }
+            
+            viewController.present(alert, animated: true)
+            
         case .none:
             // No action needed for text or unsupported types
             break
@@ -302,6 +415,15 @@ class MessageDelegate: NSObject, MFMessageComposeViewControllerDelegate {
     static let shared = MessageDelegate()
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true)
+    }
+}
+
+/// Delegate for handling mail compose view controller
+class MailDelegate: NSObject, MFMailComposeViewControllerDelegate {
+    static let shared = MailDelegate()
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
     }
 }
