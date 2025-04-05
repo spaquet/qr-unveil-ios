@@ -22,10 +22,7 @@
     "All" : {
 
     },
-    "Allow" : {
-
-    },
-    "Allow Photo Library Access" : {
+    "Allow Full Photo Access" : {
 
     },
     "Alphabetical" : {
@@ -53,6 +50,9 @@
 
     },
     "Content" : {
+
+    },
+    "Continue Without Saving Image" : {
 
     },
     "Coordinates" : {
@@ -83,9 +83,6 @@
 
     },
     "Details" : {
-
-    },
-    "Don't Allow" : {
 
     },
     "Done" : {
@@ -179,6 +176,9 @@
 
     },
     "Options" : {
+
+    },
+    "Photo Library Access" : {
 
     },
     "Position QR code within frame" : {
@@ -305,6 +305,12 @@
     "QR Unveil needs camera access to scan QR codes" : {
 
     },
+    "QR Unveil needs full access to your photo library to save QR code images and display them later. Without this permission, you won't be able to see your saved QR codes within the app." : {
+
+    },
+    "QR Unveil needs full access to your photo library to save QR code images and display them within the app. This allows you to easily reference and share your scanned codes." : {
+
+    },
     "QR Unveil Website" : {
       "localizations" : {
         "ar" : {
@@ -411,13 +417,13 @@
         }
       }
     },
-    "QR Unveil would like to save the QR code image to your photo library. This allows you to view and share the QR code later." : {
-
-    },
     "Region" : {
 
     },
     "Save" : {
+
+    },
+    "Save and Share Your QR Codes" : {
 
     },
     "Save location data" : {
@@ -427,6 +433,9 @@
 
     },
     "Save QR Code" : {
+
+    },
+    "Save Your QR Code" : {
 
     },
     "Scan a QR Code" : {

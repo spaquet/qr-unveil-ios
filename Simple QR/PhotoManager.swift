@@ -29,17 +29,22 @@ class PhotoManager: NSObject, ObservableObject {
     
     /// Updates the current authorization status
     func updateAuthorizationStatus() {
-        authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
+        // Request full access instead of addOnly to ensure we can read images back
+        authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
     }
     
+    /// Requests full authorization to access the photo library
     func requestPhotoLibraryAccess(completion: @escaping (Bool) -> Void) {
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { [weak self] status in
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
             DispatchQueue.main.async {
                 self?.authorizationStatus = status
                 
                 switch status {
-                case .authorized, .limited:
-                    print("Photo library access granted")
+                case .authorized:
+                    print("Full photo library access granted")
+                    completion(true)
+                case .limited:
+                    print("Limited photo library access granted - QR code viewing may be limited")
                     completion(true)
                 case .denied, .restricted:
                     print("Photo library access denied")
@@ -57,13 +62,15 @@ class PhotoManager: NSObject, ObservableObject {
     
     /// Requests authorization to access the photo library
     func requestAuthorization(completion: (() -> Void)? = nil) {
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { [weak self] status in
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
             DispatchQueue.main.async {
                 self?.authorizationStatus = status
                 
                 switch status {
-                case .authorized, .limited:
-                    print("Photo library access granted")
+                case .authorized:
+                    print("Full photo library access granted")
+                case .limited:
+                    print("Limited photo library access granted - some features may be restricted")
                 case .denied, .restricted:
                     print("Photo library access denied")
                 case .notDetermined:

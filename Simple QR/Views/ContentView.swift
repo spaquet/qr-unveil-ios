@@ -466,55 +466,31 @@ struct ContentView: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
-        
-        /// View for requesting photo library access
-        private var photoPermissionView: some View {
-            VStack(spacing: 20) {
-                Image(systemName: "photo.stack")
-                    .font(.system(size: 60))
-                    .foregroundColor(.blue)
-                
-                Text("Allow Photo Library Access")
-                    .font(.headline)
-                
-                Text("QR Unveil would like to save the QR code image to your photo library. This allows you to view and share the QR code later.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding()
-                
-                HStack(spacing: 20) {
-                    Button("Don't Allow") {
-                        // Proceed without saving image
-                        saveQRCodeWithoutImage()
-                        showPhotoPermission = false
-                    }
-                    .foregroundColor(.red)
-                    
-                    Button("Allow") {
-                        // Request photo library permission
-                        PhotoManager.shared.requestPhotoLibraryAccess { success in
-                            if success {
-                                // If permission granted, save the image
-                                if let capturedImage = cameraManager.capturedImage {
-                                    saveQRCodeWithImage(capturedImage)
-                                }
-                            } else {
-                                // User denied, proceed without image
-                                saveQRCodeWithoutImage()
-                            }
-                            showPhotoPermission = false
+    
+    private var photoPermissionView: some View {
+        PhotoPermissionView(
+            onAllow: {
+                // Request photo library permission
+                PhotoManager.shared.requestPhotoLibraryAccess { success in
+                    if success {
+                        // If permission granted, save the image
+                        if let capturedImage = cameraManager.capturedImage {
+                            saveQRCodeWithImage(capturedImage)
                         }
+                    } else {
+                        // User denied, proceed without image
+                        saveQRCodeWithoutImage()
                     }
-                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
+                    showPhotoPermission = false
                 }
-                .padding()
+            },
+            onDeny: {
+                // Proceed without saving image
+                saveQRCodeWithoutImage()
+                showPhotoPermission = false
             }
-            .background(Color(UIColor.systemBackground))
-            .cornerRadius(12)
-            .padding()
-        }
-
+        )
+    }
     
     // MARK: - Helper Methods
     
