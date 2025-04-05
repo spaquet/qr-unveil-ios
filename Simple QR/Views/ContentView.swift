@@ -42,7 +42,7 @@ struct ContentView: View {
     
     // Navigation destinations
     enum NavDestination: String, Identifiable, Hashable, CaseIterable {
-        case history, tags, settings
+        case history, tags, tagMap, settings
         
         var id: String { self.rawValue }
         
@@ -50,6 +50,7 @@ struct ContentView: View {
             switch self {
             case .history: return "History"
             case .tags: return "Tags"
+            case .tagMap: return "Map"
             case .settings: return "Settings"
             }
         }
@@ -58,6 +59,7 @@ struct ContentView: View {
             switch self {
             case .history: return "clock.arrow.circlepath"
             case .tags: return "tag"
+            case .tagMap: return "map"
             case .settings: return "gear"
             }
         }
@@ -110,6 +112,8 @@ struct ContentView: View {
                     HistoryView()
                 case .tags:
                     TagsView()
+                case .tagMap:
+                    MapView()
                 case .settings:
                     SettingsView()
                 }

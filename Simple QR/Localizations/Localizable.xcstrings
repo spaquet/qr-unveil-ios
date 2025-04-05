@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "%@" : {
 
     },
@@ -58,6 +61,9 @@
     "Copy" : {
 
     },
+    "Country" : {
+
+    },
     "Create Tag" : {
 
     },
@@ -113,9 +119,6 @@
 
     },
     "Group Scans by Date" : {
-
-    },
-    "Hello, World!" : {
 
     },
     "History" : {
@@ -290,6 +293,12 @@
     "QR Code Details" : {
 
     },
+    "QR Codes at Location" : {
+
+    },
+    "QR Map" : {
+
+    },
     "QR Unveil" : {
 
     },
@@ -405,6 +414,9 @@
     "QR Unveil would like to save the QR code image to your photo library. This allows you to view and share the QR code later." : {
 
     },
+    "Region" : {
+
+    },
     "Save" : {
 
     },
@@ -429,6 +441,9 @@
     "Scan Settings" : {
 
     },
+    "Scanned on %@" : {
+
+    },
     "Scanned QR Code" : {
 
     },
@@ -451,6 +466,9 @@
 
     },
     "Sound on Scan" : {
+
+    },
+    "State" : {
 
     },
     "Tag Color" : {
@@ -572,6 +590,9 @@
 
     },
     "This will permanently delete all your saved QR codes. This action cannot be undone." : {
+
+    },
+    "Time" : {
 
     },
     "Type" : {
