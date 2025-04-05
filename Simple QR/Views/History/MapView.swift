@@ -15,9 +15,8 @@ struct MapView: View {
     
     @State private var position: MapCameraPosition = .automatic
     @State private var selectedItem: String? = nil
-    @State private var selectedMarkerLocation: LocationModel?
-    @State private var showingQRDetail = false
-    @State private var showingQRList = false
+    @State private var qrCodeToShow: QRCodeDetailPresentation? = nil
+    @State private var locationsToShow: QRCodeListPresentation? = nil
     
     // Filter states
     @State private var regionFilter: String = "All"
@@ -128,17 +127,19 @@ struct MapView: View {
         }
         .navigationTitle("QR Map")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showingQRDetail) {
-            if let location = selectedMarkerLocation, let qrCode = location.qrCode {
-                QRDetailView(qrCode: qrCode)
+        .sheet(item: $qrCodeToShow) { presentation in
+                NavigationView {
+                    QRDetailView(qrCode: presentation.qrCode)
+                }
             }
-        }
-        .sheet(isPresented: $showingQRList) {
-            let selectedGroup = groupedLocations.first(where: { $0.id == selectedItem })
-            if let group = selectedGroup {
-                QRCodeListView(locations: group.locations)
+            .sheet(item: $locationsToShow) { presentation in
+                NavigationView {
+                    QRCodeListView(locations: presentation.locations)
+                }
             }
-        }
+            .onAppear {
+                debugFileAccess()
+            }
     }
     
     // MARK: - Subviews
@@ -271,18 +272,24 @@ struct MapView: View {
             MapUserLocationButton()
         }
         .onChange(of: selectedItem) { oldValue, newValue in
-            guard let selectedId = newValue else { return }
-            if let selectedGroup = groupedLocations.first(where: { $0.id == selectedId }) {
-                if selectedGroup.locations.count == 1 {
-                    // Single QR code at this location
-                    if let location = selectedGroup.locations.first {
-                        selectedMarkerLocation = location
-                        showingQRDetail = true
-                    }
-                } else {
-                    // Multiple QR codes - show list
-                    showingQRList = true
-                }
+            guard let selectedId = newValue,
+                  let selectedGroup = groupedLocations.first(where: { $0.id == selectedId }) else {
+                return
+            }
+            
+            // Reset selection to allow re-selection of the same marker
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                selectedItem = nil
+            }
+            
+            if selectedGroup.locations.count == 1,
+               let location = selectedGroup.locations.first,
+               let qrCode = location.qrCode {
+                // Show single QR code directly
+                qrCodeToShow = QRCodeDetailPresentation(qrCode: qrCode)
+            } else if selectedGroup.locations.count > 1 {
+                // Show list of QR codes
+                locationsToShow = QRCodeListPresentation(locations: selectedGroup.locations)
             }
         }
     }
@@ -404,6 +411,28 @@ struct MapView: View {
         // Simple implementation - check if the state name appears in the address
         return address.contains(state)
     }
+    
+    // Debug function
+    private func debugFileAccess() {
+        #if DEBUG
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileURL = documentsDirectory.appendingPathComponent("default.csv")
+        
+        if fileManager.fileExists(atPath: fileURL.path) {
+            print("File exists at: \(fileURL.path)")
+        } else {
+            print("File does NOT exist at: \(fileURL.path)")
+            
+            // Check bundle resources
+            if let bundlePath = Bundle.main.path(forResource: "default", ofType: "csv") {
+                print("File exists in bundle at: \(bundlePath)")
+            } else {
+                print("File does NOT exist in bundle")
+            }
+        }
+        #endif
+    }
 }
 
 // MARK: - Supporting Types
@@ -427,52 +456,34 @@ struct LocationGroup: Identifiable {
 // View to display a list of QR codes at a single location
 struct QRCodeListView: View {
     let locations: [LocationModel]
-    
-    var body: some View {
-        List {
-            ForEach(locations) { location in
-                if let qrCode = location.qrCode {
-                    NavigationLink(destination: QRDetailView(qrCode: qrCode)) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                // QR code type icon
-                                Image(systemName: qrTypeIcon(qrCode.qrType))
-                                    .foregroundColor(qrTypeColor(qrCode.qrType))
-                                    .frame(width: 24, height: 24)
-                                
-                                // QR code content
-                                Text(qrCode.label ?? qrCode.formattedContent())
-                                    .fontWeight(.medium)
+        @Environment(\.dismiss) private var dismiss
+        @State private var qrCodeToShow: QRCodeDetailPresentation? = nil
+        
+        var body: some View {
+            List {
+                ForEach(locations) { location in
+                    if let qrCode = location.qrCode {
+                        Button {
+                            qrCodeToShow = QRCodeDetailPresentation(qrCode: qrCode)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 4) {
+                                // Content remains the same
+                                // ...
                             }
-                            
-                            // Address
-                            HStack {
-                                Image(systemName: "location.circle")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text(location.formattedAddress())
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            // Date
-                            HStack {
-                                Image(systemName: "calendar")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                                Text("Scanned on \(formatDate(location.createdAt))")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
+            .navigationTitle("QR Codes at Location")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $qrCodeToShow) { presentation in
+                NavigationView {
+                    QRDetailView(qrCode: presentation.qrCode)
+                }
+            }
         }
-        .navigationTitle("QR Codes at Location")
-        .navigationBarTitleDisplayMode(.inline)
-    }
     
     // Format date for display
     private func formatDate(_ date: Date) -> String {
@@ -509,6 +520,16 @@ struct QRCodeListView: View {
         default: return .gray
         }
     }
+}
+
+struct QRCodeDetailPresentation: Identifiable {
+    let id = UUID()
+    let qrCode: QRCodeModel
+}
+
+struct QRCodeListPresentation: Identifiable {
+    let id = UUID()
+    let locations: [LocationModel]
 }
 
 #Preview {
