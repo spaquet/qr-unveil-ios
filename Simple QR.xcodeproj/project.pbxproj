@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		76BDB2762DA3393C00741603 /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 76BDB2752DA3393C00741603 /* SentrySwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		76873C3D2D9C7A98009DF973 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76BDB2762DA3393C00741603 /* SentrySwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = "Simple QR";
 			packageProductDependencies = (
+				76BDB2752DA3393C00741603 /* SentrySwiftUI */,
 			);
 			productName = "Simple QR";
 			productReference = 76873C282D9C7A96009DF973 /* Simple QR.app */;
@@ -228,6 +234,9 @@
 			);
 			mainGroup = 76873C1F2D9C7A96009DF973;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				76BDB2742DA3393C00741603 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 76873C292D9C7A96009DF973 /* Products */;
 			projectDirPath = "";
@@ -331,7 +340,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stephanepaquet.Simple-QR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -369,7 +378,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stephanepaquet.Simple-QR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -611,6 +620,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		76BDB2742DA3393C00741603 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.48.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		76BDB2752DA3393C00741603 /* SentrySwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76BDB2742DA3393C00741603 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = SentrySwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 76873C202D9C7A96009DF973 /* Project object */;
 }
