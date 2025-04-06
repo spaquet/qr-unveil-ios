@@ -15,11 +15,20 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var location: CLLocation?
     
+    static let shared = LocationManager()
+    
     override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    }
+            super.init()
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            authorizationStatus = locationManager.authorizationStatus
+        }
+    
+//    override init() {
+//        super.init()
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//    }
     
     func requestAuthorization() {
         locationManager.requestWhenInUseAuthorization()

@@ -52,6 +52,9 @@ struct Simple_QRApp: App {
     private func initializeDefaultDataIfNeeded() {
         let context = container.mainContext
         
+        // Initialize SettingsManager with the model context
+        SettingsManager.shared.setup(modelContext: context)
+        
         // Check if settings exist, create if not
         let settingsFetchDescriptor = FetchDescriptor<SettingsModel>()
         do {

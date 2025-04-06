@@ -12,6 +12,7 @@ import CloudKit
 struct SettingsView: View {
     @Query var settings: [SettingsModel]
     @Environment(\.modelContext) private var modelContext
+    @State private var settingsManager = SettingsManager.shared
     
     // Removed autoSaveScans since it's not implemented yet
     @State private var vibrationFeedback = true
@@ -89,6 +90,9 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .onAppear {
             loadSettings()
+            
+            // Also refresh the settings manager
+            settingsManager.loadSettings()
         }
     }
     

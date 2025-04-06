@@ -5,6 +5,7 @@
 //  Created on 4/3/25.
 //
 
+import AudioToolbox
 import AVFoundation
 import CoreLocation
 import MessageUI
@@ -14,6 +15,10 @@ import SwiftUI
 /// Main view controller for QR code scanning application
 struct ContentView: View {
     // MARK: - Properties
+    
+    // Observers for settings and location manager
+    @State private var settingsManager = SettingsManager.shared
+    @ObservedObject private var locationManager = LocationManager.shared
     
     // Camera states
     @StateObject private var cameraManager = CameraManager()
@@ -25,7 +30,7 @@ struct ContentView: View {
     // QR detection
     @State private var detectedQRCode: DetectedQRCode? = nil
     @State private var showQRBottomSheet = false
-    @State private var saveLocation = true
+    @State private var saveLocation = SettingsManager.shared.saveLocationData
     
     // Label
     @State private var customLabel: String = ""
@@ -68,7 +73,7 @@ struct ContentView: View {
     private var safeDetectedContent: String {
         return detectedQRCode?.content ?? cameraManager.qrCodeString ?? ""
     }
-
+    
     private var safeDetectedType: String {
         if let type = detectedQRCode?.type {
             return type
@@ -128,10 +133,17 @@ struct ContentView: View {
                 qrCodeBottomSheet
             }
             .onAppear {
+                // Initialize saveLocation based on current settings
+                saveLocation = settingsManager.saveLocationData
+                
                 checkCameraPermission()
                 
                 // Check CloudKit status
                 SimpleCloudKitChecker.addCloudKitStatusChecks()
+            }
+            .onChange(of: locationManager.authorizationStatus) { _, newStatus in
+                // Update saveLocation based on current settings and authorization
+                saveLocation = settingsManager.saveLocationData
             }
             .onChange(of: cameraManager.qrCodeString) { _, newValue in
                 if let qrCodeString = newValue, !qrCodeString.isEmpty {
@@ -227,7 +239,7 @@ struct ContentView: View {
             .padding(.bottom, 40)
         }
     }
-
+    
     /// Camera preview representable using UIViewControllerRepresentable
     struct CameraPreviewRepresentable: UIViewControllerRepresentable {
         let session: AVCaptureSession
@@ -263,212 +275,222 @@ struct ContentView: View {
     
     // Bottom sheet for QR code detection
     private var qrCodeBottomSheet: some View {
-            NavigationStack {
-                ZStack {
-                    // Background color
-                    Color(UIColor.systemBackground)
-                        .ignoresSafeArea()
-                    
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 20) {
-                            // QR code icon and type with better styling
-                            HStack(spacing: 16) {
-                                ZStack {
-                                    Circle()
-                                        .fill(qrTypeColor(safeDetectedType).opacity(0.2))
-                                        .frame(width: 56, height: 56)
-                                    
-                                    Image(systemName: qrTypeIcon(safeDetectedType))
-                                        .font(.title2)
-                                        .foregroundColor(qrTypeColor(safeDetectedType))
-                                }
+        NavigationStack {
+            ZStack {
+                // Background color
+                Color(UIColor.systemBackground)
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // QR code icon and type with better styling
+                        HStack(spacing: 16) {
+                            ZStack {
+                                Circle()
+                                    .fill(qrTypeColor(safeDetectedType).opacity(0.2))
+                                    .frame(width: 56, height: 56)
                                 
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(qrTypeTitle(safeDetectedType))
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
-                                    
-                                    Text("Scanned QR Code")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                }
-                                
-                                Spacer()
+                                Image(systemName: qrTypeIcon(safeDetectedType))
+                                    .font(.title2)
+                                    .foregroundColor(qrTypeColor(safeDetectedType))
                             }
-                            .padding(.horizontal)
-                            .padding(.top, 8)
                             
-                            Divider()
-                                .padding(.horizontal)
-                            
-                            // QR content with better styling
-                            VStack(alignment: .leading, spacing: 10) {
-                                Label("Content", systemImage: "doc.text")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(qrTypeTitle(safeDetectedType))
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
                                 
-                                ActionableQRContentView(content: safeDetectedContent, type: safeDetectedType)
-                                    .font(.body)
-                                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                Text("Scanned QR Code")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                             }
-                            .padding(.horizontal)
                             
-                            // Add custom label field
-                            VStack(alignment: .leading, spacing: 10) {
-                                Label("Label", systemImage: "tag.circle")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                
-                                TextField(
-                                    generateLabelFromContent(detectedQRCode?.content ?? "",
-                                                            type: detectedQRCode?.type ?? "text") ?? "Custom Label",
-                                    text: $customLabel
-                                )
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        
+                        Divider()
+                            .padding(.horizontal)
+                        
+                        // QR content with better styling
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label("Content", systemImage: "doc.text")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            ActionableQRContentView(content: safeDetectedContent, type: safeDetectedType)
                                 .font(.body)
-                                .padding()
-                                .background(Color(UIColor.tertiarySystemBackground))
-                                .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-                            }
-                            .padding(.horizontal)
+                        }
+                        .padding(.horizontal)
+                        
+                        // Add custom label field
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label("Label", systemImage: "tag.circle")
+                                .font(.headline)
+                                .foregroundColor(.primary)
                             
-                            // Location toggle with better styling
-                            VStack(alignment: .leading, spacing: 10) {
-                                Label("Options", systemImage: "gear")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                
-                                Toggle(isOn: $saveLocation) {
-                                    HStack {
-                                        Image(systemName: "location.circle.fill")
-                                            .foregroundColor(.blue)
-                                            .font(.headline)
-                                        Text("Save location data")
-                                            .font(.subheadline)
-                                    }
-                                }
-                                .padding()
-                                .background(Color(UIColor.tertiarySystemBackground))
-                                .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-                            }
-                            .padding(.horizontal)
-                            
-                            // Tag selection with better styling and button
-                            VStack(alignment: .leading, spacing: 10) {
-                                Label("Tags", systemImage: "tag")
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                
-                                Button {
-                                    // Show tag picker
-                                    showTagPicker = true
-                                } label: {
-                                    HStack {
-                                        if selectedTags.isEmpty {
-                                            Text("Add tags")
-                                                .foregroundColor(.primary)
-                                        } else {
-                                            ScrollView(.horizontal, showsIndicators: false) {
-                                                HStack {
-                                                    ForEach(selectedTags) { tag in
-                                                        HStack(spacing: 4) {
-                                                            Circle()
-                                                                .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
-                                                                .frame(width: 8, height: 8)
-                                                            Text(tag.name)
-                                                            Image(systemName: "xmark")
-                                                                .font(.system(size: 10))
-                                                        }
-                                                        .padding(.vertical, 4)
-                                                        .padding(.horizontal, 8)
-                                                        .background(
-                                                            Capsule()
-                                                                .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC").opacity(0.2))
-                                                        )
-                                                    }
-                                                }
-                                            }
+                            TextField(
+                                generateLabelFromContent(detectedQRCode?.content ?? "",
+                                                         type: detectedQRCode?.type ?? "text") ?? "Custom Label",
+                                text: $customLabel
+                            )
+                            .font(.body)
+                            .padding()
+                            .background(Color(UIColor.tertiarySystemBackground))
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                        .padding(.horizontal)
+                        
+                        // Location toggle with better styling
+                        VStack(alignment: .leading, spacing: 10) {
+                                    Label("Options", systemImage: "gear")
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    
+                                    Toggle(isOn: $saveLocation) {
+                                        HStack {
+                                            Image(systemName: "location.circle.fill")
+                                                .foregroundColor(.blue)
+                                                .font(.headline)
+                                            Text("Save location data")
+                                                .font(.subheadline)
                                         }
-                                        
-                                        Spacer()
-                                        
-                                        Image(systemName: "chevron.right")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
                                     }
-                                    .foregroundColor(.primary)
+                                    .disabled(!LocationManager.shared.isAuthorized)
                                     .padding()
                                     .background(Color(UIColor.tertiarySystemBackground))
                                     .cornerRadius(12)
                                     .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-                                }
-                            }
-                            .padding(.horizontal)
-                            
-                            Spacer(minLength: 30)
-                            
-                            // Action buttons with better styling
-                            VStack(spacing: 16) {
-                                Button(action: saveQRCode) {
-                                    HStack {
-                                        Image(systemName: "qrcode")
-                                        Text("Save QR Code")
-                                            .fontWeight(.semibold)
+                                    
+                                    // Show warning if location services are disabled
+                                    if !LocationManager.shared.isAuthorized {
+                                        Text("Location services are disabled. Enable in Settings to use this feature.")
+                                            .font(.caption)
+                                            .foregroundColor(.orange)
+                                            .padding(.horizontal)
                                     }
+                                }
+                                .padding(.horizontal)
+                        
+                        // Tag selection with better styling and button
+                        VStack(alignment: .leading, spacing: 10) {
+                            Label("Tags", systemImage: "tag")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Button {
+                                // Show tag picker
+                                showTagPicker = true
+                            } label: {
+                                HStack {
+                                    if selectedTags.isEmpty {
+                                        Text("Add tags")
+                                            .foregroundColor(.primary)
+                                    } else {
+                                        ScrollView(.horizontal, showsIndicators: false) {
+                                            HStack {
+                                                ForEach(selectedTags) { tag in
+                                                    HStack(spacing: 4) {
+                                                        Circle()
+                                                            .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
+                                                            .frame(width: 8, height: 8)
+                                                        Text(tag.name)
+                                                        Image(systemName: "xmark")
+                                                            .font(.system(size: 10))
+                                                    }
+                                                    .padding(.vertical, 4)
+                                                    .padding(.horizontal, 8)
+                                                    .background(
+                                                        Capsule()
+                                                            .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC").opacity(0.2))
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .foregroundColor(.primary)
+                                .padding()
+                                .background(Color(UIColor.tertiarySystemBackground))
+                                .cornerRadius(12)
+                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        Spacer(minLength: 30)
+                        
+                        // Action buttons with better styling
+                        VStack(spacing: 16) {
+                            Button(action: saveQRCode) {
+                                HStack {
+                                    Image(systemName: "qrcode")
+                                    Text("Save QR Code")
+                                        .fontWeight(.semibold)
+                                }
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(LinearGradient(
+                                    gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ))
+                                .cornerRadius(16)
+                                .shadow(color: Color.blue.opacity(0.3), radius: 4, x: 0, y: 2)
+                            }
+                            
+                            Button {
+                                // Discard and scan another
+                                detectedQRCode = nil
+                                customLabel = ""
+                                selectedTags = []
+                                showQRBottomSheet = false
+                                cameraManager.resumeScanning()
+                            } label: {
+                                Text("Scan Another")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.blue)
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(LinearGradient(
-                                        gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ))
+                                    .background(Color(UIColor.tertiarySystemBackground))
                                     .cornerRadius(16)
-                                    .shadow(color: Color.blue.opacity(0.3), radius: 4, x: 0, y: 2)
-                                }
-                                
-                                Button {
-                                    // Discard and scan another
-                                    detectedQRCode = nil
-                                    customLabel = ""
-                                    selectedTags = []
-                                    showQRBottomSheet = false
-                                    cameraManager.resumeScanning()
-                                } label: {
-                                    Text("Scan Another")
-                                        .font(.headline)
-                                        .foregroundColor(.blue)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color(UIColor.tertiarySystemBackground))
-                                        .cornerRadius(16)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
-                                        )
-                                }
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                    )
                             }
-                            .padding(.horizontal)
-                            .padding(.bottom, 20)
                         }
-                        .padding(.vertical)
+                        .padding(.horizontal)
+                        .padding(.bottom, 20)
                     }
-                }
-                .sheet(isPresented: $showTagPicker) {
-                    TagPickerView(selectedTags: $selectedTags)
-                }
-                .sheet(isPresented: $showPhotoPermission) {
-                    photoPermissionView
+                    .padding(.vertical)
                 }
             }
-            .onAppear {
-                debugQRData()
+            .sheet(isPresented: $showTagPicker) {
+                TagPickerView(selectedTags: $selectedTags)
             }
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
+            .sheet(isPresented: $showPhotoPermission) {
+                photoPermissionView
+            }
         }
+        .onAppear {
+            saveLocation = SettingsManager.shared.saveLocationData
+            debugQRData()
+        }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
     
     private var photoPermissionView: some View {
         PhotoPermissionView(
@@ -543,43 +565,43 @@ struct ContentView: View {
     
     /// Saves the detected QR code to database
     private func saveQRCode() {
-            guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
-            
-            // Check if we have a captured image to save
-            guard let capturedImage = cameraManager.capturedImage else {
-                saveQRCodeWithoutImage()
-                return
-            }
-            
-            // Check current photo library authorization status
-            switch PhotoManager.shared.authorizationStatus {
-            case .authorized, .limited:
-                // Directly save the image
-                saveQRCodeWithImage(capturedImage)
-                
-            case .notDetermined:
-                // Request permission and show sheet
-                showPhotoPermission = true
-                
-            case .denied, .restricted:
-                // Proceed without image, optionally show a warning
-                saveQRCodeWithoutImage()
-                
-            @unknown default:
-                saveQRCodeWithoutImage()
-            }
+        guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
+        
+        // Check if we have a captured image to save
+        guard let capturedImage = cameraManager.capturedImage else {
+            saveQRCodeWithoutImage()
+            return
         }
+        
+        // Check current photo library authorization status
+        switch PhotoManager.shared.authorizationStatus {
+        case .authorized, .limited:
+            // Directly save the image
+            saveQRCodeWithImage(capturedImage)
+            
+        case .notDetermined:
+            // Request permission and show sheet
+            showPhotoPermission = true
+            
+        case .denied, .restricted:
+            // Proceed without image, optionally show a warning
+            saveQRCodeWithoutImage()
+            
+        @unknown default:
+            saveQRCodeWithoutImage()
+        }
+    }
     
     /// Saves QR code with image after photo library permission is granted
     private func saveQRCodeWithImage(_ image: UIImage) {
         guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
         
         // Capture these values before async operations
-        let saveLocationValue = saveLocation
-        let currentLocation = cameraManager.currentLocation
+        let saveLocationValue = saveLocation && LocationManager.shared.isAuthorized
+        let currentLocation = saveLocationValue ? cameraManager.currentLocation : nil
         let customLabelValue = customLabel.isEmpty
-            ? generateLabelFromContent(qrCode.content, type: qrCode.type)
-            : customLabel
+        ? generateLabelFromContent(qrCode.content, type: qrCode.type)
+        : customLabel
         let selectedTagsCopy = selectedTags
         
         do {
@@ -657,51 +679,51 @@ struct ContentView: View {
             finalizeQRCodeSave()
         }
     }
+    
+    /// Saves QR code without an image
+    private func saveQRCodeWithoutImage() {
+        guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
         
-        /// Saves QR code without an image
-        private func saveQRCodeWithoutImage() {
-            guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
+        do {
+            // Get current location if enabled
+            let location = saveLocation && LocationManager.shared.isAuthorized ? cameraManager.currentLocation : nil
             
-            do {
-                // Get current location if enabled
-                let location = saveLocation ? cameraManager.currentLocation : nil
-                
-                // Use custom label if provided, otherwise use generated label
-                let finalLabel = customLabel.isEmpty
-                    ? generateLabelFromContent(qrCode.content, type: qrCode.type)
-                    : customLabel
-                
-                // Save to database
-                let savedCode = try QRDataManager.shared.saveQRCode(
-                    content: qrCode.content,
-                    label: finalLabel,
-                    location: location
-                )
-                
-                // Add selected tags if any
-                for tag in selectedTags {
-                    savedCode.addTag(tag)
-                }
-                
-                // Finalize and reset
-                finalizeQRCodeSave()
-            } catch {
-                print("Error saving QR code: \(error.localizedDescription)")
+            // Use custom label if provided, otherwise use generated label
+            let finalLabel = customLabel.isEmpty
+            ? generateLabelFromContent(qrCode.content, type: qrCode.type)
+            : customLabel
+            
+            // Save to database
+            let savedCode = try QRDataManager.shared.saveQRCode(
+                content: qrCode.content,
+                label: finalLabel,
+                location: location
+            )
+            
+            // Add selected tags if any
+            for tag in selectedTags {
+                savedCode.addTag(tag)
             }
-        }
-        
-        /// Common finalization steps for QR code save
-        private func finalizeQRCodeSave() {
-            // Provide feedback
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
             
-            // Clear and dismiss
-            detectedQRCode = nil
-            customLabel = ""
-            selectedTags = []
-            showQRBottomSheet = false
-            cameraManager.resumeScanning()
+            // Finalize and reset
+            finalizeQRCodeSave()
+        } catch {
+            print("Error saving QR code: \(error.localizedDescription)")
         }
+    }
+    
+    /// Common finalization steps for QR code save
+    private func finalizeQRCodeSave() {
+        // Provide feedback
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        
+        // Clear and dismiss
+        detectedQRCode = nil
+        customLabel = ""
+        selectedTags = []
+        showQRBottomSheet = false
+        cameraManager.resumeScanning()
+    }
     
     /// Generates a label based on QR code content and type
     private func generateLabelFromContent(_ content: String, type: String) -> String? {
@@ -859,6 +881,9 @@ class CameraManager: NSObject, ObservableObject {
     // Location
     private let locationManager = CLLocationManager()
     private(set) var currentLocation: CLLocation?
+    
+    // Settings manager reference
+    private let settingsManager = SettingsManager.shared
     
     override init() {
         super.init()
@@ -1040,9 +1065,16 @@ extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
            let stringValue = metadataObject.stringValue,
            metadataObject.type == .qr {
             
-            // Provide haptic feedback
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
+            // Check settings and provide haptic feedback if enabled
+            if settingsManager.vibrationFeedback {
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.impactOccurred()
+            }
+            
+            // Play sound if enabled
+            if settingsManager.playSoundOnScan {
+                playDetectionSound()
+            }
             
             // Update QR code value and pause detection
             qrCodeString = stringValue
@@ -1051,6 +1083,12 @@ extension CameraManager: AVCaptureMetadataOutputObjectsDelegate {
             // Capture the image showing the QR code
             captureQRCodeImage()
         }
+    }
+    
+    // Add method to play sound
+    private func playDetectionSound() {
+        // Simple implementation using AudioServicesPlaySystemSound
+        AudioServicesPlaySystemSound(1103) // Standard system sound
     }
 }
 

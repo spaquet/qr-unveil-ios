@@ -124,6 +124,9 @@
     "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
 
     },
+    "Location services are disabled. Enable in Settings to use this feature." : {
+
+    },
     "Made with ❤️ in SF" : {
 
     },

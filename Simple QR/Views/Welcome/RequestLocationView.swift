@@ -12,7 +12,7 @@ struct RequestLocationView: View {
     // Callback to complete the onboarding process
     var completeOnboarding: () -> Void
     
-    @StateObject private var locationManager = LocationManager()
+    @StateObject private var locationManager = LocationManager.shared
     @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
