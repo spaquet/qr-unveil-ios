@@ -10,12 +10,6 @@
     "%lld" : {
 
     },
-    "About" : {
-
-    },
-    "Account Status" : {
-
-    },
     "Add tags" : {
 
     },
@@ -34,31 +28,10 @@
     "Are you sure you want to delete this tag? This action cannot be undone." : {
 
     },
-    "Auto-save Scans" : {
-
-    },
     "Camera Access" : {
 
     },
     "Cancel" : {
-
-    },
-    "Checking..." : {
-
-    },
-    "Clear" : {
-
-    },
-    "Clear All Data" : {
-
-    },
-    "Clear Logs" : {
-
-    },
-    "CloudKit Debug" : {
-
-    },
-    "Connected" : {
 
     },
     "Contacts" : {
@@ -85,9 +58,6 @@
     "Created" : {
 
     },
-    "Data Management" : {
-
-    },
     "Default Sort Order" : {
 
     },
@@ -98,9 +68,6 @@
 
     },
     "Details" : {
-
-    },
-    "Developer Tools" : {
 
     },
     "Done" : {
@@ -118,12 +85,6 @@
     "Error" : {
 
     },
-    "Error: %@" : {
-
-    },
-    "Export Data" : {
-
-    },
     "Favorite" : {
 
     },
@@ -131,9 +92,6 @@
 
     },
     "Filter" : {
-
-    },
-    "Force CloudKit Sync" : {
 
     },
     "Get Started" : {
@@ -148,15 +106,6 @@
     "History Settings" : {
 
     },
-    "iCloud Status" : {
-
-    },
-    "iCloud Sync" : {
-
-    },
-    "iCloud Sync Update Required" : {
-
-    },
     "Keep History: %lld days" : {
 
     },
@@ -164,12 +113,6 @@
 
     },
     "Last Scanned" : {
-
-    },
-    "Last Sync" : {
-
-    },
-    "Later" : {
 
     },
     "Location" : {
@@ -196,9 +139,6 @@
     "Newest First" : {
 
     },
-    "No CloudKit operations logged" : {
-
-    },
     "No QR Codes" : {
 
     },
@@ -209,9 +149,6 @@
 
     },
     "No Tags" : {
-
-    },
-    "Not Available" : {
 
     },
     "OK" : {
@@ -230,6 +167,7 @@
 
     },
     "Privacy Policy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -357,6 +295,7 @@
 
     },
     "QR Unveil Website" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -462,19 +401,7 @@
         }
       }
     },
-    "Refresh Status" : {
-
-    },
     "Region" : {
-
-    },
-    "Reset CloudKit State" : {
-
-    },
-    "Restart Now" : {
-
-    },
-    "Restricted" : {
 
     },
     "Save" : {
@@ -525,9 +452,6 @@
     "Show Favorites Section" : {
 
     },
-    "Simulate CloudKit Error" : {
-
-    },
     "Skip (Not Recommended)" : {
 
     },
@@ -535,12 +459,6 @@
 
     },
     "State" : {
-
-    },
-    "Sync Logs" : {
-
-    },
-    "Sync Now" : {
 
     },
     "Tag Color" : {
@@ -553,6 +471,7 @@
 
     },
     "Terms of Service" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -661,13 +580,7 @@
     "Text" : {
 
     },
-    "This will permanently delete all your saved QR codes. This action cannot be undone." : {
-
-    },
     "Time" : {
-
-    },
-    "Trigger Sync" : {
 
     },
     "Type" : {
@@ -680,9 +593,6 @@
 
     },
     "We only use the camera when you're actively scanning, and we never store photos or videos." : {
-
-    },
-    "We've updated how your data syncs with iCloud. Please restart the app to continue syncing properly." : {
 
     },
     "Welcome to QR Unveil" : {

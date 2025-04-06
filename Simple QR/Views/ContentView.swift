@@ -129,6 +129,9 @@ struct ContentView: View {
             }
             .onAppear {
                 checkCameraPermission()
+                
+                // Check CloudKit status
+                SimpleCloudKitChecker.addCloudKitStatusChecks()
             }
             .onChange(of: cameraManager.qrCodeString) { _, newValue in
                 if let qrCodeString = newValue, !qrCodeString.isEmpty {
