@@ -7,13 +7,12 @@
 
 import SwiftData
 import SwiftUI
-// We can remove the SafariServices import since we won't need it anymore
+import CloudKit
 
 struct SettingsView: View {
     @Query var settings: [SettingsModel]
     @Environment(\.modelContext) private var modelContext
     
-    // We don't need showSafari state anymore, just the URL
     @State private var isUpdatingSettings = false
     @State private var autoSaveScans = true
     @State private var vibrationFeedback = true
@@ -24,6 +23,15 @@ struct SettingsView: View {
     @State private var defaultSortOrder: SettingsModel.SortOrder = .dateNewest
     @State private var showFavoritesSection = true
     @State private var showDeletionAlert = false
+    
+    // CloudKit sync status
+    @State private var cloudSyncStatus: CloudSyncStatus = .unknown
+    @State private var lastSyncTime: Date?
+    @State private var isSyncing = false
+    @State private var syncError: String?
+    
+    // Timer to check CloudKit status
+    @State private var statusTimer: Timer?
     
     var currentSettings: SettingsModel? {
         settings.first
@@ -38,6 +46,39 @@ struct SettingsView: View {
     
     var body: some View {
         Form {
+            // CloudKit Sync Status Section
+            Section {
+                HStack {
+                    Text("iCloud Sync")
+                    Spacer()
+                    cloudStatusView
+                }
+                
+                if cloudSyncStatus == .available {
+                    Button {
+                        triggerManualSync()
+                    } label: {
+                        Label("Sync Now", systemImage: "arrow.triangle.2.circlepath")
+                    }
+                    .disabled(isSyncing)
+                }
+                
+                if let lastSync = lastSyncTime {
+                    HStack {
+                        Text("Last Sync")
+                        Spacer()
+                        Text(lastSync, style: .relative)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                if let error = syncError {
+                    Text(error)
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                }
+            }
+            
             Section("Scan Settings") {
                 Toggle("Auto-save Scans", isOn: $autoSaveScans)
                     .onChange(of: autoSaveScans) { updateSettings() }
@@ -157,6 +198,11 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .onAppear {
             loadSettings()
+            checkCloudKitStatus()
+            startStatusTimer()
+        }
+        .onDisappear {
+            stopStatusTimer()
         }
         .alert("Clear All Data", isPresented: $showDeletionAlert) {
             Button("Cancel", role: .cancel) { }
@@ -168,6 +214,40 @@ struct SettingsView: View {
         }
     }
     
+    // CloudKit status indicator view
+    private var cloudStatusView: some View {
+        HStack(spacing: 4) {
+            switch cloudSyncStatus {
+            case .available:
+                Image(systemName: "checkmark.icloud")
+                    .foregroundColor(.green)
+                Text("Connected")
+                    .foregroundColor(.green)
+            case .unavailable:
+                Image(systemName: "xmark.icloud")
+                    .foregroundColor(.red)
+                Text("Not Available")
+                    .foregroundColor(.red)
+            case .restricted:
+                Image(systemName: "exclamationmark.icloud")
+                    .foregroundColor(.orange)
+                Text("Restricted")
+                    .foregroundColor(.orange)
+            case .unknown:
+                Image(systemName: "exclamationmark.icloud")
+                    .foregroundColor(.gray)
+                Text("Checking...")
+                    .foregroundColor(.gray)
+            }
+            
+            if isSyncing {
+                ProgressView()
+                    .scaleEffect(0.7)
+                    .padding(.leading, 4)
+            }
+        }
+    }
+    
     // Helper function to open URLs in the default browser
     private func openURL(_ urlString: String) {
         if let url = URL(string: urlString) {
@@ -175,7 +255,71 @@ struct SettingsView: View {
         }
     }
     
-    // The rest of your methods remain unchanged
+    // CloudKit status management
+    private func checkCloudKitStatus() {
+        CKContainer.default().accountStatus { status, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.syncError = "Error: \(error.localizedDescription)"
+                    self.cloudSyncStatus = .unavailable
+                    return
+                }
+                
+                switch status {
+                case .available:
+                    self.cloudSyncStatus = .available
+                    self.syncError = nil
+                case .noAccount, .couldNotDetermine:
+                    self.cloudSyncStatus = .unavailable
+                    self.syncError = "Please sign in to iCloud in Settings"
+                case .restricted:
+                    self.cloudSyncStatus = .restricted
+                    self.syncError = "iCloud access restricted"
+                case .temporarilyUnavailable:
+                    self.cloudSyncStatus = .unavailable
+                    self.syncError = "iCloud temporarily unavailable"
+                @unknown default:
+                    self.cloudSyncStatus = .unknown
+                    self.syncError = "Unknown iCloud status"
+                }
+            }
+        }
+    }
+    
+    private func startStatusTimer() {
+        statusTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            checkCloudKitStatus()
+        }
+    }
+    
+    private func stopStatusTimer() {
+        statusTimer?.invalidate()
+        statusTimer = nil
+    }
+    
+    private func triggerManualSync() {
+        isSyncing = true
+        
+        // Force save any pending changes first
+        do {
+            try QRDataManager.shared.forceSave()
+        } catch {
+            print("Error saving before sync: \(error.localizedDescription)")
+        }
+        
+        // Trigger CloudKit sync
+        CloudKitSyncManager.shared.triggerSync()
+        
+        // Update the last sync time and toggle off the syncing indicator after a delay
+        lastSyncTime = Date()
+        
+        // Simulate sync completion after a reasonable delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.isSyncing = false
+        }
+    }
+    
+    // The rest of your methods
     private func loadSettings() {
         guard let settings = currentSettings else { return }
         
@@ -207,6 +351,9 @@ struct SettingsView: View {
         
         do {
             try modelContext.save()
+            
+            // Trigger CloudKit sync after settings update
+            CloudKitSyncManager.shared.triggerSync()
         } catch {
             print("Error saving settings: \(error)")
         }
@@ -233,5 +380,3 @@ struct SettingsView: View {
         }
     }
 }
-
-// Remove the SafariView struct as it's no longer needed

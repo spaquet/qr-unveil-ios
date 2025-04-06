@@ -13,6 +13,9 @@
     "About" : {
 
     },
+    "Account Status" : {
+
+    },
     "Add tags" : {
 
     },
@@ -40,10 +43,22 @@
     "Cancel" : {
 
     },
+    "Checking..." : {
+
+    },
     "Clear" : {
 
     },
     "Clear All Data" : {
+
+    },
+    "Clear Logs" : {
+
+    },
+    "CloudKit Debug" : {
+
+    },
+    "Connected" : {
 
     },
     "Contacts" : {
@@ -85,6 +100,9 @@
     "Details" : {
 
     },
+    "Developer Tools" : {
+
+    },
     "Done" : {
 
     },
@@ -100,6 +118,9 @@
     "Error" : {
 
     },
+    "Error: %@" : {
+
+    },
     "Export Data" : {
 
     },
@@ -110,6 +131,9 @@
 
     },
     "Filter" : {
+
+    },
+    "Force CloudKit Sync" : {
 
     },
     "Get Started" : {
@@ -124,6 +148,15 @@
     "History Settings" : {
 
     },
+    "iCloud Status" : {
+
+    },
+    "iCloud Sync" : {
+
+    },
+    "iCloud Sync Update Required" : {
+
+    },
     "Keep History: %lld days" : {
 
     },
@@ -131,6 +164,12 @@
 
     },
     "Last Scanned" : {
+
+    },
+    "Last Sync" : {
+
+    },
+    "Later" : {
 
     },
     "Location" : {
@@ -157,6 +196,9 @@
     "Newest First" : {
 
     },
+    "No CloudKit operations logged" : {
+
+    },
     "No QR Codes" : {
 
     },
@@ -167,6 +209,9 @@
 
     },
     "No Tags" : {
+
+    },
+    "Not Available" : {
 
     },
     "OK" : {
@@ -417,7 +462,19 @@
         }
       }
     },
+    "Refresh Status" : {
+
+    },
     "Region" : {
+
+    },
+    "Reset CloudKit State" : {
+
+    },
+    "Restart Now" : {
+
+    },
+    "Restricted" : {
 
     },
     "Save" : {
@@ -468,6 +525,9 @@
     "Show Favorites Section" : {
 
     },
+    "Simulate CloudKit Error" : {
+
+    },
     "Skip (Not Recommended)" : {
 
     },
@@ -475,6 +535,12 @@
 
     },
     "State" : {
+
+    },
+    "Sync Logs" : {
+
+    },
+    "Sync Now" : {
 
     },
     "Tag Color" : {
@@ -601,6 +667,9 @@
     "Time" : {
 
     },
+    "Trigger Sync" : {
+
+    },
     "Type" : {
 
     },
@@ -611,6 +680,9 @@
 
     },
     "We only use the camera when you're actively scanning, and we never store photos or videos." : {
+
+    },
+    "We've updated how your data syncs with iCloud. Please restart the app to continue syncing properly." : {
 
     },
     "Welcome to QR Unveil" : {

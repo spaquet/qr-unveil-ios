@@ -5,9 +5,10 @@
 //  Created by Stéphane PAQUET on 4/1/25.
 //
 
-import SwiftUI
 import AVFoundation
+import CloudKit
 import SwiftData
+import SwiftUI
 
 @main
 struct Simple_QRApp: App {
@@ -25,10 +26,13 @@ struct Simple_QRApp: App {
                 LocationModel.self,
                 TagModel.self,
                 SettingsModel.self,
-                SecurityVerificationModel.self 
+                SecurityVerificationModel.self
             ])
             
-            // Configure model container for local storage only
+            // Check for schema migration before configuring model container
+            _ = CloudKitSchemaMigrator.shared.checkAndMigrateIfNeeded()
+            
+            // Configure model container with more controlled CloudKit sync
             let modelConfiguration = ModelConfiguration(
                 schema: schema,
                 isStoredInMemoryOnly: false,
@@ -41,9 +45,28 @@ struct Simple_QRApp: App {
             
             // Check if we need to create default settings on first launch
             initializeDefaultDataIfNeeded()
+            
+            // Set up schema error observer
+            setupSchemaErrorObserver()
+            
+            // Make container available to the app delegate
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.modelContainer = container
+            }
         } catch {
             // Handle container creation error
             fatalError("Failed to create SwiftData container: \(error.localizedDescription)")
+        }
+    }
+    
+    private func setupSchemaErrorObserver() {
+        NotificationCenter.default.addObserver(
+            forName: .cloudKitSchemaError,
+            object: nil,
+            queue: .main
+        ) { _ in
+            // Show alert to user about schema change requiring restart
+            // This could show a UI alert or notification
         }
     }
     
@@ -107,6 +130,10 @@ struct Simple_QRApp: App {
                 } else {
                     // User has completed onboarding - show main content
                     ContentView()
+                        .onAppear {
+                            // Trigger initial sync when app appears
+                            CloudKitSyncManager.shared.triggerSync()
+                        }
                 }
             }
             // Provide the model container to the view hierarchy
