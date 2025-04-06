@@ -2,610 +2,954 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
-    },
-    "%@" : {
-
-    },
-    "%lld" : {
-
-    },
-    "Add tags" : {
-
-    },
-    "Address" : {
-
-    },
-    "All" : {
-
-    },
-    "Allow Full Photo Access" : {
-
-    },
-    "Alphabetical" : {
-
-    },
-    "Are you sure you want to delete this tag? This action cannot be undone." : {
-
-    },
-    "Camera Access" : {
-
-    },
-    "Cancel" : {
-
-    },
-    "Contacts" : {
-
-    },
-    "Content" : {
-
-    },
-    "Continue Without Saving Image" : {
-
-    },
-    "Coordinates" : {
-
-    },
-    "Copy" : {
-
-    },
-    "Country" : {
-
-    },
-    "Create Tag" : {
-
-    },
-    "Created" : {
-
-    },
-    "Default Sort Order" : {
-
-    },
-    "Delete" : {
-
-    },
-    "Delete Tag" : {
-
-    },
-    "Details" : {
-
-    },
-    "Done" : {
-
-    },
-    "Edit" : {
-
-    },
-    "Edit Tag" : {
-
-    },
-    "Enhance Your QR Experience" : {
-
-    },
-    "Error" : {
-
-    },
-    "Favorite" : {
-
-    },
-    "Favorites" : {
-
-    },
-    "Filter" : {
-
-    },
-    "Get Started" : {
-
-    },
-    "Group Scans by Date" : {
-
-    },
-    "History" : {
-
-    },
-    "History Settings" : {
-
-    },
-    "Keep History: %lld days" : {
-
-    },
-    "Label" : {
-
-    },
-    "Last Scanned" : {
-
-    },
-    "Location" : {
-
-    },
-    "Location Access" : {
-
-    },
-    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
-
-    },
-    "Location services are disabled. Enable in Settings to use this feature." : {
-
-    },
-    "Made with ❤️ in SF" : {
-
-    },
-    "Most Scanned" : {
-
-    },
-    "Name" : {
-
-    },
-    "New Tag" : {
-
-    },
-    "Newest First" : {
-
-    },
-    "No QR Codes" : {
-
-    },
-    "No QR codes with this tag yet." : {
-
-    },
-    "No tags" : {
-
-    },
-    "No Tags" : {
-
-    },
-    "OK" : {
-
-    },
-    "Oldest First" : {
-
-    },
-    "Options" : {
-
-    },
-    "Photo Library Access" : {
-
-    },
-    "Position QR code within frame" : {
-
-    },
-    "Privacy Policy" : {
-      "extractionState" : "stale",
       "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "سياسة الخصوصية"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Política de privacitat"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Privatlivspolitik"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Datenschutzrichtlinie"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Πολιτική Απορρήτου"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Política de privacidad"
-          }
-        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Politique de confidentialité"
+            "value" : ""
           }
-        },
-        "fr-CA" : {
+        }
+      }
+    },
+    "%@" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Politique de confidentialité"
+            "value" : "%@"
           }
-        },
-        "it" : {
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Informativa sulla privacy"
+            "value" : "%lld"
           }
-        },
-        "ja" : {
+        }
+      }
+    },
+    "Add tags" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "プライバシーポリシー"
+            "value" : "Ajouter des tags"
           }
-        },
-        "ko" : {
+        }
+      }
+    },
+    "Address" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "개인정보 처리방침"
+            "value" : "Adresse"
           }
-        },
-        "pt-PT" : {
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Política de Privacidade"
+            "value" : "Tout"
           }
-        },
-        "ru" : {
+        }
+      }
+    },
+    "Allow Full Photo Access" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Политика конфиденциальности"
+            "value" : "Autoriser l'accès complet aux photos"
           }
-        },
-        "sv" : {
+        }
+      }
+    },
+    "Alphabetical" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Integritetspolicy"
+            "value" : "Alphabétique"
           }
-        },
-        "tr" : {
+        }
+      }
+    },
+    "Are you sure you want to delete this tag? This action cannot be undone." : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gizlilik Politikası"
+            "value" : "Êtes-vous sûr de vouloir supprimer ce tag ? Cette action ne peut pas être annulée."
           }
-        },
-        "uk" : {
+        }
+      }
+    },
+    "Camera Access" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Політика конфіденційності"
+            "value" : "Accès à l'appareil photo"
           }
-        },
-        "zh-Hans" : {
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "隐私政策"
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "Contacts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacts"
+          }
+        }
+      }
+    },
+    "Content" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contenu"
+          }
+        }
+      }
+    },
+    "Continue Without Saving Image" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer sans enregistrer l'image"
+          }
+        }
+      }
+    },
+    "Coordinates" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coordonnées"
+          }
+        }
+      }
+    },
+    "Copy" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier"
+          }
+        }
+      }
+    },
+    "Country" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pays"
+          }
+        }
+      }
+    },
+    "Create Tag" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer un tag"
+          }
+        }
+      }
+    },
+    "Created" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créé"
+          }
+        }
+      }
+    },
+    "Default Sort Order" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordre de tri par défaut"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
+          }
+        }
+      }
+    },
+    "Delete Tag" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le tag"
+          }
+        }
+      }
+    },
+    "Details" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier"
+          }
+        }
+      }
+    },
+    "Edit Tag" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le tag"
+          }
+        }
+      }
+    },
+    "Enhance Your QR Experience" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Améliorez votre expérience QR"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
+          }
+        }
+      }
+    },
+    "Favorite" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favori"
+          }
+        }
+      }
+    },
+    "Favorites" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favoris"
+          }
+        }
+      }
+    },
+    "Filter" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrer"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
+          }
+        }
+      }
+    },
+    "Group Scans by Date" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regrouper les scans par date"
+          }
+        }
+      }
+    },
+    "History" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique"
+          }
+        }
+      }
+    },
+    "History Settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres d'historique"
+          }
+        }
+      }
+    },
+    "Keep History: %lld days" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conserver l'historique : %lld jours"
+          }
+        }
+      }
+    },
+    "Label" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étiquette"
+          }
+        }
+      }
+    },
+    "Last Scanned" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier scan"
+          }
+        }
+      }
+    },
+    "Location" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lieu"
+          }
+        }
+      }
+    },
+    "Location Access" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès à la localisation"
+          }
+        }
+      }
+    },
+    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'accès à la localisation permet à QR Unveil de fournir des fonctionnalités géolocalisées lors du scan de codes QR de lieu. Cette option est facultative mais recommandée pour une fonctionnalité complète."
+          }
+        }
+      }
+    },
+    "Location services are disabled. Enable in Settings to use this feature." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les services de localisation sont désactivés. Activez-les dans les Paramètres pour utiliser cette fonctionnalité."
+          }
+        }
+      }
+    },
+    "Made with ❤️ in SF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fait avec ❤️ à SF"
+          }
+        }
+      }
+    },
+    "Most Scanned" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les plus scannés"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
+          }
+        }
+      }
+    },
+    "New Tag" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau tag"
+          }
+        }
+      }
+    },
+    "Newest First" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus récents d'abord"
+          }
+        }
+      }
+    },
+    "No QR Codes" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun code QR"
+          }
+        }
+      }
+    },
+    "No QR codes with this tag yet." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun code QR avec ce tag pour l'instant."
+          }
+        }
+      }
+    },
+    "No tags" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun tag"
+          }
+        }
+      }
+    },
+    "No Tags" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun tag"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Oldest First" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus anciens d'abord"
+          }
+        }
+      }
+    },
+    "Options" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Options"
+          }
+        }
+      }
+    },
+    "Photo Library Access" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès à la photothèque"
+          }
+        }
+      }
+    },
+    "Position QR code within frame" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positionnez le code QR dans le cadre"
           }
         }
       }
     },
     "QR Code Details" : {
-
-    },
-    "QR Codes at Location" : {
-
-    },
-    "QR Map" : {
-
-    },
-    "QR Unveil" : {
-
-    },
-    "QR Unveil needs camera access to scan QR codes" : {
-
-    },
-    "QR Unveil needs full access to your photo library to save QR code images and display them later. Without this permission, you won't be able to see your saved QR codes within the app." : {
-
-    },
-    "QR Unveil needs full access to your photo library to save QR code images and display them within the app. This allows you to easily reference and share your scanned codes." : {
-
-    },
-    "QR Unveil Website" : {
-      "extractionState" : "stale",
       "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "موقع QR Unveil"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar lloc web QR"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vis QR-hjemmeside"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QR Unveil Webseite"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Εμφάνιση ιστοσελίδας QR"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar sitio web QR"
-          }
-        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Site web QR Unveil"
+            "value" : "Détails du code QR"
           }
-        },
-        "fr-CA" : {
+        }
+      }
+    },
+    "QR Codes at Location" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Site web QR Unveil"
+            "value" : "Codes QR à cet emplacement"
           }
-        },
-        "it" : {
+        }
+      }
+    },
+    "QR Map" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sito web QR Unveil"
+            "value" : "Carte QR"
           }
-        },
-        "ja" : {
+        }
+      }
+    },
+    "QR Unveil" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QRウェブサイトを表示"
+            "value" : "QR Unveil"
           }
-        },
-        "ko" : {
+        }
+      }
+    },
+    "QR Unveil needs camera access to scan QR codes" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR 웹사이트 열기"
+            "value" : "QR Unveil a besoin d'accéder à l'appareil photo pour scanner les codes QR"
           }
-        },
-        "pt-PT" : {
+        }
+      }
+    },
+    "QR Unveil needs full access to your photo library to save QR code images and display them later. Without this permission, you won't be able to see your saved QR codes within the app." : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Revelar Website do QR"
+            "value" : "QR Unveil a besoin d'un accès complet à votre photothèque pour enregistrer les images de codes QR et les afficher ultérieurement. Sans cette autorisation, vous ne pourrez pas voir vos codes QR enregistrés dans l'application."
           }
-        },
-        "ru" : {
+        }
+      }
+    },
+    "QR Unveil needs full access to your photo library to save QR code images and display them within the app. This allows you to easily reference and share your scanned codes." : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Открыть веб-сайт QR"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Visa QR-webbplats"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QR Web Sitesini Göster"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Відкрити веб-сайт QR"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QR Unveil网站"
+            "value" : "QR Unveil a besoin d'un accès complet à votre photothèque pour enregistrer les images de codes QR et les afficher dans l'application. Cela vous permet de consulter et partager facilement vos codes scannés."
           }
         }
       }
     },
     "Region" : {
-
-    },
-    "Save" : {
-
-    },
-    "Save and Share Your QR Codes" : {
-
-    },
-    "Save location data" : {
-
-    },
-    "Save Location Data" : {
-
-    },
-    "Save QR Code" : {
-
-    },
-    "Save Your QR Code" : {
-
-    },
-    "Scan a QR Code" : {
-
-    },
-    "Scan a QR code to add it to your history." : {
-
-    },
-    "Scan Another" : {
-
-    },
-    "Scan Settings" : {
-
-    },
-    "Scanned QR Code" : {
-
-    },
-    "Search QR codes" : {
-
-    },
-    "Select Tags" : {
-
-    },
-    "Settings" : {
-
-    },
-    "Share" : {
-
-    },
-    "Show Favorites Section" : {
-
-    },
-    "Skip (Not Recommended)" : {
-
-    },
-    "Sound on Scan" : {
-
-    },
-    "State" : {
-
-    },
-    "Tag Color" : {
-
-    },
-    "Tag Name" : {
-
-    },
-    "Tags" : {
-
-    },
-    "Terms of Service" : {
-      "extractionState" : "stale",
       "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " شروط الخدمة"
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Condicions del servei"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Servicevilkår"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nutzungsbedingungen"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Όροι Χρήσης"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Términos de servicio"
-          }
-        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conditions d'utilisation"
+            "value" : "Région"
           }
-        },
-        "fr-CA" : {
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conditions d'utilisation"
+            "value" : "Enregistrer"
           }
-        },
-        "it" : {
+        }
+      }
+    },
+    "Save and Share Your QR Codes" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Termini di servizio"
+            "value" : "Enregistrez et partagez vos codes QR"
           }
-        },
-        "ja" : {
+        }
+      }
+    },
+    "Save location data" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "利用規約"
+            "value" : "Enregistrer les données de localisation"
           }
-        },
-        "ko" : {
+        }
+      }
+    },
+    "Save Location Data" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "서비스 이용약관"
+            "value" : "Enregistrer les données de localisation"
           }
-        },
-        "pt-PT" : {
+        }
+      }
+    },
+    "Save QR Code" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Termos de Serviço"
+            "value" : "Enregistrer le code QR"
           }
-        },
-        "ru" : {
+        }
+      }
+    },
+    "Save Your QR Code" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Условия использования"
+            "value" : "Enregistrez votre code QR"
           }
-        },
-        "sv" : {
+        }
+      }
+    },
+    "Scan a QR Code" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Användarvillkor"
+            "value" : "Scanner un code QR"
           }
-        },
-        "tr" : {
+        }
+      }
+    },
+    "Scan a QR code to add it to your history." : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kullanım Koşulları"
+            "value" : "Scannez un code QR pour l'ajouter à votre historique."
           }
-        },
-        "uk" : {
+        }
+      }
+    },
+    "Scan Another" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Умови використання"
+            "value" : "Scanner un autre"
           }
-        },
-        "zh-Hans" : {
+        }
+      }
+    },
+    "Scan Settings" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "服务条款"
+            "value" : "Paramètres de scan"
+          }
+        }
+      }
+    },
+    "Scanned QR Code" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code QR scanné"
+          }
+        }
+      }
+    },
+    "Search QR codes" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher des codes QR"
+          }
+        }
+      }
+    },
+    "Select Tags" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner des tags"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres"
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
+          }
+        }
+      }
+    },
+    "Show Favorites Section" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la section Favoris"
+          }
+        }
+      }
+    },
+    "Skip (Not Recommended)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer (Non recommandé)"
+          }
+        }
+      }
+    },
+    "Sound on Scan" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son lors du scan"
+          }
+        }
+      }
+    },
+    "State" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "État"
+          }
+        }
+      }
+    },
+    "Tag Color" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur du tag"
+          }
+        }
+      }
+    },
+    "Tag Name" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du tag"
+          }
+        }
+      }
+    },
+    "Tags" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tags"
           }
         }
       }
     },
     "Text" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte"
+          }
+        }
+      }
     },
     "Time" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heure"
+          }
+        }
+      }
     },
     "Type" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        }
+      }
     },
     "URLs" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLs"
+          }
+        }
+      }
     },
     "Vibration Feedback" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour haptique"
+          }
+        }
+      }
     },
     "We only use the camera when you're actively scanning, and we never store photos or videos." : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous n'utilisons l'appareil photo que lorsque vous scannez activement, et nous ne stockons jamais de photos ou de vidéos."
+          }
+        }
+      }
     },
     "Welcome to QR Unveil" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue sur QR Unveil"
+          }
+        }
+      }
     },
     "WiFi" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiFi"
+          }
+        }
+      }
     },
     "You haven't created any tags yet." : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous n'avez pas encore créé de tags."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
