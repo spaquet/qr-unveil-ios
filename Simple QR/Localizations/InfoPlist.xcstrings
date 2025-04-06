@@ -5,13 +5,127 @@
       "comment" : "Bundle display name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "QR Unveil"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
         "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR Unveil"
@@ -23,13 +137,127 @@
       "comment" : "Bundle name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Simple QR"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
         "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple QR"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simple QR"
@@ -41,16 +269,130 @@
       "comment" : "Privacy - Camera Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يحتاج QR Unveil إلى الوصول إلى الكاميرا لمسح رموز QR"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necessita accés a la càmera per escanejar codis QR"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil skal have adgang til kameraet for at scanne QR-koder"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil benötigt Kamerazugriff zum Scannen von QR-Codes"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το QR Unveil χρειάζεται πρόσβαση στην κάμερα για σάρωση κωδικών QR"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "QR Unveil needs camera access to scan QR codes"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso a la cámara para escanear códigos QR"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso a la cámara para escanear códigos QR"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso a la cámara para escanear códigos QR"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR Unveil a besoin d'accéder à l'appareil photo pour scanner les codes QR"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil a besoin d'accéder à la caméra pour numériser les codes QR"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil ha bisogno dell'accesso alla fotocamera per scansionare i codici QR"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveilは、QRコードをスキャンするためにカメラへのアクセスが必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil은 QR 코드를 스캔하기 위해 카메라 접근 권한이 필요합니다"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O QR Unveil precisa de acesso à câmera para escanear códigos QR"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necessita de acesso à câmara para ler códigos QR"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil требуется доступ к камере для сканирования QR-кодов"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil behöver kameraåtkomst för att skanna QR-koder"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil, QR kodlarını taramak için kamera erişimine ihtiyaç duyar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil потребує доступ до камери для сканування QR-кодів"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil 需要相机权限以扫描二维码"
           }
         }
       }
@@ -59,16 +401,130 @@
       "comment" : "Privacy - Location When In Use Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يطلب QR Unveil الوصول إلى موقعك لتحسين تجربة مسح رموز QR. عند تمكينه، يتم تخزين موقعك على جهازك فقط ومزامنته عبر حساب iCloud الشخصي الخاص بك. تساعدك هذه المعلومات على تذكر المكان الذي تم فيه مسح رموز QR ولا تتم مشاركتها أبدًا مع أطراف ثالثة."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil sol·licita accés a la teva ubicació per millorar la teva experiència d'escaneig de codis QR. Quan s'activa, la teva ubicació es guarda només al teu dispositiu i es sincronitza a través del teu compte personal d'iCloud. Aquesta informació t'ajuda a recordar on es van escanejar els codis QR i mai es comparteix amb tercers."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil anmoder om adgang til din placering for at forbedre din QR-kodescanningsoplevelse. Når funktionen er aktiveret, gemmes din placering kun på din enhed og synkroniseres på tværs af din personlige iCloud-konto. Disse oplysninger hjælper dig med at huske, hvor QR-koder blev scannet, og deles aldrig med tredjepart."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil benötigt Zugriff auf Ihren Standort, um Ihre QR-Code-Scan-Erfahrung zu verbessern. Wenn aktiviert, wird Ihr Standort nur auf Ihrem Gerät gespeichert und über Ihr persönliches iCloud-Konto synchronisiert. Diese Information hilft Ihnen, sich zu merken, wo QR-Codes gescannt wurden, und wird niemals mit Dritten geteilt."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το QR Unveil ζητά πρόσβαση στην τοποθεσία σας για να βελτιώσει την εμπειρία σάρωσης κωδικών QR. Όταν είναι ενεργοποιημένο, η τοποθεσία σας αποθηκεύεται μόνο στη συσκευή σας και συγχρονίζεται μέσω του προσωπικού σας λογαριασμού iCloud. Αυτές οι πληροφορίες σας βοηθούν να θυμάστε πού σαρώθηκαν οι κωδικοί QR και δεν κοινοποιούνται ποτέ σε τρίτους."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "QR Unveil requests access to your location to enhance your QR code scanning experience. When enabled, your location is stored only on your device and synchronized across your personal iCloud account. This information helps you remember where QR codes were scanned and is never shared with third parties."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está activado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está habilitado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está habilitado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR Unveil demande l'accès à votre position pour améliorer votre expérience de scan de codes QR. Lorsque cette option est activée, votre position est stockée uniquement sur votre appareil et synchronisée avec votre compte iCloud personnel. Ces informations vous aident à vous rappeler où les codes QR ont été scannés et ne sont jamais partagées avec des tiers."
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil demande l'accès à votre position pour améliorer votre expérience de numérisation de codes QR. Lorsqu'activée, votre position est stockée uniquement sur votre appareil et synchronisée via votre compte iCloud personnel. Cette information vous aide à vous rappeler où les codes QR ont été numérisés et n'est jamais partagée avec des tiers."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil richiede l'accesso alla tua posizione per migliorare la tua esperienza di scansione dei codici QR. Quando attivata, la tua posizione viene memorizzata solo sul tuo dispositivo e sincronizzata con il tuo account personale iCloud. Questa informazione ti aiuta a ricordare dove sono stati scansionati i codici QR e non viene mai condivisa con terze parti."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR UnveilはQRコードスキャン体験を向上させるために位置情報へのアクセスを要求します。有効にすると、位置情報はお使いのデバイスにのみ保存され、個人のiCloudアカウント間で同期されます。この情報はQRコードがどこでスキャンされたかを覚えるのに役立ち、第三者と共有されることはありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil은 QR 코드 스캔 경험을 향상시키기 위해 위치 정보에 대한 접근을 요청합니다. 활성화하면 위치 정보는 귀하의 기기에만 저장되고 개인 iCloud 계정 간에 동기화됩니다. 이 정보는 QR 코드가 어디서 스캔되었는지 기억하는 데 도움이 되며 제3자와 절대 공유되지 않습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O QR Unveil solicita acesso à sua localização para melhorar sua experiência de escaneamento de códigos QR. Quando ativado, sua localização é armazenada apenas no seu dispositivo e sincronizada em sua conta pessoal do iCloud. Essas informações ajudam você a lembrar onde os códigos QR foram escaneados e nunca são compartilhadas com terceiros."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil solicita acesso à sua localização para melhorar a sua experiência de leitura de códigos QR. Quando ativada, a sua localização é armazenada apenas no seu dispositivo e sincronizada através da sua conta pessoal iCloud. Esta informação ajuda-o a recordar onde os códigos QR foram lidos e nunca é partilhada com terceiros."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil запрашивает доступ к вашему местоположению для улучшения опыта сканирования QR-кодов. При включении эта информация хранится только на вашем устройстве и синхронизируется через вашу личную учетную запись iCloud. Эта информация помогает вам помнить, где были отсканированы QR-коды, и никогда не передается третьим лицам."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil begär åtkomst till din plats för att förbättra din QR-kodskanning. När detta är aktiverat lagras din plats endast på din enhet och synkroniseras via ditt personliga iCloud-konto. Denna information hjälper dig att komma ihåg var QR-koder skannades och delas aldrig med tredje part."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil, QR kodu tarama deneyiminizi geliştirmek için konum erişimi talep eder. Etkinleştirildiğinde, konumunuz yalnızca cihazınızda saklanır ve kişisel iCloud hesabınız genelinde senkronize edilir. Bu bilgi, QR kodlarının nerede tarandığını hatırlamanıza yardımcı olur ve asla üçüncü taraflarla paylaşılmaz."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil запитує доступ до вашого місцезнаходження, щоб покращити ваш досвід сканування QR-кодів. Коли ця функція увімкнена, ваше місцезнаходження зберігається лише на вашому пристрої та синхронізується через ваш особистий обліковий запис iCloud. Ця інформація допомагає вам пам'ятати, де були відскановані QR-коди, і ніколи не передається третім сторонам."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil 请求访问您的位置信息以提升二维码扫描体验。启用后，您的位置信息仅存储在您的设备上并通过您的个人 iCloud 账户同步。这些信息帮助您记住二维码扫描的位置，绝不会与第三方共享。"
           }
         }
       }
@@ -77,16 +533,130 @@
       "comment" : "Privacy - Photo Library Additions Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يحفظ QR Unveil صور رموز QR في ألبوم مخصص في مكتبة الصور الخاصة بك."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil desa les imatges de codis QR en un àlbum dedicat a la teva biblioteca de fotos."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil gemmer QR-kodebilleder i et dedikeret album i dit fotobibliotek."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil speichert QR-Code-Bilder in einem speziellen Album in Ihrer Fotobibliothek."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το QR Unveil αποθηκεύει εικόνες κωδικών QR σε ένα ειδικό άλμπουμ στη βιβλιοθήκη φωτογραφιών σας."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "QR Unveil saves QR code images to a dedicated album in your photo library."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil guarda las imágenes de códigos QR en un álbum específico en tu biblioteca de fotos."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil guarda las imágenes de códigos QR en un álbum dedicado en tu biblioteca de fotos."
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil guarda las imágenes de códigos QR en un álbum dedicado en tu biblioteca de fotos."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR Unveil enregistre les images de codes QR dans un album dédié de votre photothèque."
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil enregistre les images de codes QR dans un album dédié de votre photothèque."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil salva le immagini dei codici QR in un album dedicato nella tua libreria fotografica."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveilは、QRコード画像をフォトライブラリの専用アルバムに保存します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil은 QR 코드 이미지를 사진 라이브러리의 전용 앨범에 저장합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O QR Unveil salva imagens de códigos QR em um álbum dedicado na sua biblioteca de fotos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil guarda imagens de códigos QR num álbum dedicado na sua biblioteca de fotos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil сохраняет изображения QR-кодов в специальный альбом в вашей фототеке."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil sparar QR-kodbilder i ett dedikerat album i ditt fotobibliotek."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil, QR kod görüntülerini fotoğraf kitaplığınızdaki özel bir albüme kaydeder."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil зберігає зображення QR-кодів у спеціальний альбом у вашій бібліотеці фотографій."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil 将二维码图像保存到您照片库中的专用相册。"
           }
         }
       }
@@ -95,16 +665,130 @@
       "comment" : "Privacy - Photo Library Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يحتاج QR Unveil إلى الوصول لحفظ صور رموز QR في مكتبة الصور الخاصة بك في ألبوم مخصص."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necessita accés per desar imatges de codis QR a la teva biblioteca de fotos en un àlbum dedicat."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil skal have adgang til at gemme QR-kodebilleder i dit fotobibliotek i et dedikeret album."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil benötigt Zugriff, um QR-Code-Bilder in einem speziellen Album in Ihrer Fotobibliothek zu speichern."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το QR Unveil χρειάζεται πρόσβαση για να αποθηκεύσει εικόνες κωδικών QR στη βιβλιοθήκη φωτογραφιών σας σε ένα ειδικό άλμπουμ."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "QR Unveil needs access to save QR code images to your photo library in a dedicated album."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso para guardar imágenes de códigos QR en tu biblioteca de fotos en un álbum específico."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso para guardar imágenes de códigos QR en tu biblioteca de fotos en un álbum dedicado."
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necesita acceso para guardar imágenes de códigos QR en tu biblioteca de fotos en un álbum dedicado."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR Unveil a besoin d'accéder à votre photothèque pour y enregistrer les images de codes QR dans un album dédié."
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil a besoin d'accéder à votre photothèque pour enregistrer les images de codes QR dans un album dédié."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil ha bisogno dell'accesso per salvare le immagini dei codici QR nella tua libreria fotografica in un album dedicato."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveilは、QRコード画像をフォトライブラリの専用アルバムに保存するためのアクセスが必要です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil은 QR 코드 이미지를 사진 라이브러리의 전용 앨범에 저장하기 위해 접근 권한이 필요합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O QR Unveil precisa de acesso para salvar imagens de códigos QR na sua biblioteca de fotos em um álbum dedicado."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil necessita de acesso para guardar imagens de códigos QR na sua biblioteca de fotos num álbum dedicado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil необходим доступ для сохранения изображений QR-кодов в специальный альбом в вашей фототеке."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil behöver åtkomst för att spara QR-kodbilder i ett dedikerat album i ditt fotobibliotek."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil, QR kod görüntülerini fotoğraf kitaplığınızdaki özel bir albüme kaydetmek için erişime ihtiyaç duyar."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil потребує доступ для збереження зображень QR-кодів у спеціальний альбом у вашій бібліотеці фотографій."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Unveil 需要访问权限以将二维码图像保存到您照片库中的专用相册。"
           }
         }
       }
