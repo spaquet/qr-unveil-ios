@@ -53,10 +53,10 @@ struct ContentView: View {
         
         var title: String {
             switch self {
-            case .history: return "History"
-            case .tags: return "Tags"
-            case .tagMap: return "Map"
-            case .settings: return "Settings"
+            case .history: return NSLocalizedString("History", comment: "Menu entry title for history section")
+            case .tags: return NSLocalizedString("Tags", comment: "Menu entry title for tags section")
+            case .tagMap: return NSLocalizedString("Map", comment: "Menu entry title for map section")
+            case .settings: return NSLocalizedString("Settings", comment: "Menu entry title for settings section")
             }
         }
         
