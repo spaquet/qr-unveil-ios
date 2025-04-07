@@ -185,8 +185,13 @@ struct TagDetailView: View {
 
 struct TagPickerView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    
     @Binding var selectedTags: [TagModel]
     @Query private var availableTags: [TagModel]
+    
+    // State for showing tag editor
+    @State private var showingTagEditor = false
     
     var body: some View {
         NavigationStack {
@@ -198,7 +203,7 @@ struct TagPickerView: View {
                         Text("You haven't created any tags yet.")
                     } actions: {
                         Button("Create Tag") {
-                            // Add tag creation logic
+                            showingTagEditor = true
                         }
                     }
                 } else {
@@ -239,7 +244,19 @@ struct TagPickerView: View {
                     }
                     .fontWeight(.semibold)
                 }
+                
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        showingTagEditor = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
             }
+        }
+        .sheet(isPresented: $showingTagEditor) {
+            TagEditorView()
+                .environment(\.modelContext, modelContext)
         }
     }
     

@@ -274,6 +274,7 @@ struct QRBottomSheetView: View {
             }
             .sheet(isPresented: $showTagPicker) {
                 TagPickerView(selectedTags: $selectedTags)
+                    .environment(\.modelContext, modelContext)
             }
             .sheet(isPresented: $showPhotoPermission) {
                 photoPermissionView
