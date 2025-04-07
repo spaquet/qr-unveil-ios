@@ -2,18 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
-	<key>com.apple.developer.icloud-container-identifiers</key>
-	<array>
-		<string>iCloud.com.qrunveil</string>
-	</array>
-	<key>com.apple.developer.icloud-services</key>
-	<array>
-		<string>CloudKit</string>
-	</array>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
+    <key>com.apple.developer.icloud-container-identifiers</key>
+    <array>
+        <string>iCloud.com.qrunveil</string>
+    </array>
+    <key>com.apple.developer.icloud-services</key>
+    <array>
+        <string>CloudKit</string>
+    </array>
     <key>UIApplicationShortcutItems</key>
     <array>
         <dict>
@@ -23,8 +23,8 @@
             <string>Scan QR Code</string>
             <key>UIApplicationShortcutItemSubtitle</key>
             <string>Quickly scan a QR code</string>
-            <key>UIApplicationShortcutItemIconType</key>
-            <string>UIApplicationShortcutIconTypeQRCode</string>
+            <key>UIApplicationShortcutItemIconSymbolName</key>
+            <string>qrcode.viewfinder</string>
         </dict>
     </array>
     <key>CFBundleURLTypes</key>
@@ -40,14 +40,25 @@
             </array>
         </dict>
     </array>
+    
+    <!-- Updated Intent support -->
     <key>INIntentsSupported</key>
     <array>
         <string>QRScanIntent</string>
+        <string>QRScanFromControlCenterIntent</string>
     </array>
-
+    
     <key>NSUserActivityTypes</key>
     <array>
         <string>QRScanIntent</string>
+        <string>QRScanFromControlCenterIntent</string>
+        <string>com.qrunveil.scan</string>
+    </array>
+    
+    <!-- Add Control Center Integration -->
+    <key>NSControlCenterIntents</key>
+    <array>
+        <string>QRScanFromControlCenterIntent</string>
     </array>
 </dict>
 </plist>
