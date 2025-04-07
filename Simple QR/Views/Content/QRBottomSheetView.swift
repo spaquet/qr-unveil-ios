@@ -43,104 +43,130 @@ struct QRBottomSheetView: View {
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 16) {
                         // QR code icon and type with better styling
-                        HStack(spacing: 16) {
+                        HStack(spacing: 14) {
                             ZStack {
                                 Circle()
-                                    .fill(qrTypeColor(safeDetectedType).opacity(0.2))
-                                    .frame(width: 56, height: 56)
+                                    .fill(qrTypeColor(safeDetectedType).opacity(0.15))
+                                    .frame(width: 48, height: 48)
                                 
                                 Image(systemName: qrTypeIcon(safeDetectedType))
-                                    .font(.title2)
+                                    .font(.system(size: 18))
                                     .foregroundColor(qrTypeColor(safeDetectedType))
                             }
                             
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text(qrTypeTitle(safeDetectedType))
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16, weight: .semibold))
                                 
                                 Text("Scanned QR Code")
-                                    .font(.subheadline)
+                                    .font(.system(size: 13))
                                     .foregroundColor(.secondary)
                             }
                             
                             Spacer()
                         }
                         .padding(.horizontal)
-                        .padding(.top, 8)
+                        .padding(.top, 6)
                         
                         Divider()
                             .padding(.horizontal)
                         
                         // QR content with better styling
-                        VStack(alignment: .leading, spacing: 10) {
-                            Label("Content", systemImage: "doc.text")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Label {
+                                Text("Content")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.primary)
+                            } icon: {
+                                Image(systemName: "doc.text")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(qrTypeColor(safeDetectedType))
+                            }
                             
                             ActionableQRContentView(content: safeDetectedContent, type: safeDetectedType)
-                                .font(.body)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                .font(.system(size: 14))
+                                .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                         }
                         .padding(.horizontal)
+                        .padding(.top, 4)
                         
                         // Add custom label field
-                        VStack(alignment: .leading, spacing: 10) {
-                            Label("Label", systemImage: "tag.circle")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Label {
+                                Text("Label")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.primary)
+                            } icon: {
+                                Image(systemName: "tag.circle")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.blue)
+                            }
                             
                             TextField(
                                 generateLabelFromContent(detectedQRCode?.content ?? "",
                                                        type: detectedQRCode?.type ?? "text") ?? "Custom Label",
                                 text: $customLabel
                             )
-                            .font(.body)
-                            .padding()
+                            .font(.system(size: 14))
+                            .padding(12)
                             .background(Color(UIColor.tertiarySystemBackground))
-                            .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                         }
                         .padding(.horizontal)
+                        .padding(.top, 2)
                         
                         // Location toggle with better styling
-                        VStack(alignment: .leading, spacing: 10) {
-                            Label("Options", systemImage: "gear")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Label {
+                                Text("Options")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.primary)
+                            } icon: {
+                                Image(systemName: "gear")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.gray)
+                            }
                             
                             Toggle(isOn: $saveLocation) {
                                 HStack {
                                     Image(systemName: "location.circle.fill")
                                         .foregroundColor(.blue)
-                                        .font(.headline)
+                                        .font(.system(size: 14))
                                     Text("Save location data")
-                                        .font(.subheadline)
+                                        .font(.system(size: 13))
                                 }
                             }
                             .disabled(!LocationManager.shared.isAuthorized)
-                            .padding()
+                            .padding(12)
                             .background(Color(UIColor.tertiarySystemBackground))
-                            .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                             
                             // Show warning if location services are disabled
                             if !LocationManager.shared.isAuthorized {
                                 Text("Location services are disabled. Enable in Settings to use this feature.")
-                                    .font(.caption)
+                                    .font(.system(size: 11))
                                     .foregroundColor(.orange)
-                                    .padding(.horizontal)
+                                    .padding(.horizontal, 4)
                             }
                         }
                         .padding(.horizontal)
+                        .padding(.top, 2)
                         
                         // Tag selection with better styling and button
-                        VStack(alignment: .leading, spacing: 10) {
-                            Label("Tags", systemImage: "tag")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Label {
+                                Text("Tags")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.primary)
+                            } icon: {
+                                Image(systemName: "tag")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.purple)
+                            }
                             
                             Button {
                                 // Show tag picker
@@ -149,24 +175,26 @@ struct QRBottomSheetView: View {
                                 HStack {
                                     if selectedTags.isEmpty {
                                         Text("Add tags")
+                                            .font(.system(size: 13))
                                             .foregroundColor(.primary)
                                     } else {
                                         ScrollView(.horizontal, showsIndicators: false) {
-                                            HStack {
+                                            HStack(spacing: 6) {
                                                 ForEach(selectedTags) { tag in
-                                                    HStack(spacing: 4) {
+                                                    HStack(spacing: 3) {
                                                         Circle()
                                                             .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC"))
-                                                            .frame(width: 8, height: 8)
+                                                            .frame(width: 6, height: 6)
                                                         Text(tag.name)
+                                                            .font(.system(size: 12))
                                                         Image(systemName: "xmark")
-                                                            .font(.system(size: 10))
+                                                            .font(.system(size: 8))
                                                     }
-                                                    .padding(.vertical, 4)
-                                                    .padding(.horizontal, 8)
+                                                    .padding(.vertical, 3)
+                                                    .padding(.horizontal, 6)
                                                     .background(
                                                         Capsule()
-                                                            .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC").opacity(0.2))
+                                                            .fill(ColorUtility.color(from: tag.color ?? "#CCCCCC").opacity(0.15))
                                                     )
                                                 }
                                             }
@@ -176,39 +204,42 @@ struct QRBottomSheetView: View {
                                     Spacer()
                                     
                                     Image(systemName: "chevron.right")
-                                        .font(.caption)
+                                        .font(.system(size: 11))
                                         .foregroundColor(.secondary)
                                 }
                                 .foregroundColor(.primary)
-                                .padding()
+                                .padding(12)
                                 .background(Color(UIColor.tertiarySystemBackground))
-                                .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                             }
                         }
                         .padding(.horizontal)
+                        .padding(.top, 2)
                         
                         Spacer(minLength: 30)
                         
                         // Action buttons with better styling
-                        VStack(spacing: 16) {
+                        VStack(spacing: 12) {
                             Button(action: saveQRCode) {
                                 HStack {
                                     Image(systemName: "qrcode")
+                                        .font(.system(size: 14))
                                     Text("Save QR Code")
-                                        .fontWeight(.semibold)
+                                        .font(.system(size: 15, weight: .semibold))
                                 }
-                                .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(LinearGradient(
-                                    gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ))
-                                .cornerRadius(16)
-                                .shadow(color: Color.blue.opacity(0.3), radius: 4, x: 0, y: 2)
+                                .padding(.vertical, 12)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .cornerRadius(12)
+                                .shadow(color: Color.blue.opacity(0.2), radius: 3, x: 0, y: 2)
                             }
                             
                             Button {
@@ -223,20 +254,20 @@ struct QRBottomSheetView: View {
                                 }
                             } label: {
                                 Text("Scan Another")
-                                    .font(.headline)
+                                    .font(.system(size: 15, weight: .medium))
                                     .foregroundColor(.blue)
                                     .frame(maxWidth: .infinity)
-                                    .padding()
+                                    .padding(.vertical, 12)
                                     .background(Color(UIColor.tertiarySystemBackground))
-                                    .cornerRadius(16)
+                                    .cornerRadius(12)
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.blue.opacity(0.2), lineWidth: 1)
                                     )
                             }
                         }
                         .padding(.horizontal)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 16)
                     }
                     .padding(.vertical)
                 }
