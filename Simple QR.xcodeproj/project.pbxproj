@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		76BDB2762DA3393C00741603 /* SentrySwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 76BDB2752DA3393C00741603 /* SentrySwiftUI */; };
+		D13428020EEA48458E7940EE /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 98617561D44C48AA84202205 /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				76BDB2762DA3393C00741603 /* SentrySwiftUI in Frameworks */,
+				D13428020EEA48458E7940EE /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D13428020EEA48458E7940EE /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D13428020EEA48458E7940EE /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +124,7 @@
 				76873C242D9C7A96009DF973 /* Sources */,
 				76873C252D9C7A96009DF973 /* Frameworks */,
 				76873C262D9C7A96009DF973 /* Resources */,
+				8DC372052FDB40EE90E3382C /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -131,6 +136,7 @@
 			name = "Simple QR";
 			packageProductDependencies = (
 				76BDB2752DA3393C00741603 /* SentrySwiftUI */,
+				98617561D44C48AA84202205 /* Sentry */,
 			);
 			productName = "Simple QR";
 			productReference = 76873C282D9C7A96009DF973 /* Simple QR.app */;
@@ -236,6 +242,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				76BDB2742DA3393C00741603 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				564C901673124CFF80DD255E /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 76873C292D9C7A96009DF973 /* Products */;
@@ -346,6 +353,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Debug;
 		};
@@ -384,6 +393,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Release;
 		};
@@ -630,6 +641,14 @@
 				minimumVersion = 8.48.0;
 			};
 		};
+		564C901673124CFF80DD255E /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -638,7 +657,30 @@
 			package = 76BDB2742DA3393C00741603 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = SentrySwiftUI;
 		};
+		98617561D44C48AA84202205 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 564C901673124CFF80DD255E /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8DC372052FDB40EE90E3382C /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Upload Debug Symbols to Sentry";
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# This script is responsable to upload debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\nexport SENTRY_ORG=qr-unveil-tg\nexport SENTRY_PROJECT=apple-ios\nERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 	};
 	rootObject = 76873C202D9C7A96009DF973 /* Project object */;
 }
