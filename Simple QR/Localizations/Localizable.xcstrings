@@ -1117,6 +1117,9 @@
         }
       }
     },
+    "camera" : {
+
+    },
     "Camera Access" : {
       "localizations" : {
         "ar" : {
@@ -1736,6 +1739,9 @@
           }
         }
       }
+    },
+    "control center" : {
+
     },
     "Coordinates" : {
       "localizations" : {
@@ -5459,6 +5465,9 @@
         }
       }
     },
+    "Message" : {
+
+    },
     "Most Scanned" : {
       "localizations" : {
         "ar" : {
@@ -6699,6 +6708,15 @@
         }
       }
     },
+    "Open the scanner" : {
+
+    },
+    "Opens the QR code scanner" : {
+
+    },
+    "Opens the QR code scanner directly from Control Center" : {
+
+    },
     "Options" : {
       "localizations" : {
         "ar" : {
@@ -7071,6 +7089,9 @@
         }
       }
     },
+    "qr code" : {
+
+    },
     "QR Code Details" : {
       "localizations" : {
         "ar" : {
@@ -7442,6 +7463,12 @@
           }
         }
       }
+    },
+    "QR Scan" : {
+
+    },
+    "QR Scanner" : {
+
     },
     "QR Unveil" : {
       "localizations" : {
@@ -7938,6 +7965,9 @@
           }
         }
       }
+    },
+    "Quick access to QR code scanning." : {
+
     },
     "Region" : {
       "localizations" : {
@@ -8807,6 +8837,9 @@
         }
       }
     },
+    "scan" : {
+
+    },
     "Scan a QR Code" : {
       "localizations" : {
         "ar" : {
@@ -9179,6 +9212,12 @@
         }
       }
     },
+    "Scan QR" : {
+
+    },
+    "Scan QR Code" : {
+
+    },
     "Scan Settings" : {
       "localizations" : {
         "ar" : {
@@ -9426,6 +9465,9 @@
           }
         }
       }
+    },
+    "scanner" : {
+
     },
     "Scanning..." : {
       "localizations" : {
@@ -11288,6 +11330,9 @@
           }
         }
       }
+    },
+    "Unsupported" : {
+
     },
     "URLs" : {
       "localizations" : {

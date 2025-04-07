@@ -43,6 +43,11 @@ struct ContentView: View {
     // View model access
     @Environment(\.modelContext) private var modelContext
     
+    //
+    @State private var shouldDirectlyScan: Bool = false
+    
+    var directScanFromWidget: Bool = false
+    
     // MARK: - View Body
     
     var body: some View {
@@ -91,14 +96,54 @@ struct ContentView: View {
             }) {
                 qrCodeBottomSheet
             }
+            .task {
+                // Check if we should scan immediately
+                if directScanFromWidget || UserDefaults.standard.bool(forKey: "LaunchScanQRDirectly") {
+                    UserDefaults.standard.set(false, forKey: "LaunchScanQRDirectly")
+                    
+                    // Wait a moment for the view to fully initialize
+                    try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+                    
+                    // Activate camera and scanning immediately
+                    if cameraPermission == .authorized {
+                        cameraManager.setupCamera()
+                        cameraManager.resumeScanning()
+                    } else {
+                        checkCameraPermission()
+                    }
+                }
+            }
             .onAppear {
                 // Initialize saveLocation based on current settings
                 saveLocation = settingsManager.saveLocationData
                 
-                checkCameraPermission()
+                //                checkCameraPermission()
+                
+                // Add this check for widget launch
+                if directScanFromWidget {
+                    // Ensure the camera is active immediately
+                    if cameraPermission == .authorized {
+                        cameraManager.setupCamera()
+                        cameraManager.resumeScanning()
+                    } else {
+                        checkCameraPermission()
+                    }
+                }
                 
                 // Check CloudKit status
                 SimpleCloudKitChecker.addCloudKitStatusChecks()
+                
+                if UserDefaults.standard.bool(forKey: "LaunchScanQRDirectly") {
+                    UserDefaults.standard.set(false, forKey: "LaunchScanQRDirectly")
+                    
+                    // Ensure the camera is active immediately
+                    if cameraPermission == .authorized {
+                        cameraManager.setupCamera()
+                        cameraManager.resumeScanning()
+                    } else {
+                        checkCameraPermission()
+                    }
+                }
             }
             .onChange(of: locationManager.authorizationStatus) { _, newStatus in
                 // Update saveLocation based on current settings and authorization

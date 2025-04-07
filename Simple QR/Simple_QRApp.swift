@@ -13,7 +13,9 @@ import SwiftUI
 
 @main
 struct Simple_QRApp: App {
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    @State private var directScanFromWidget: Bool = false
     
     // Setup SwiftData container
     let container: ModelContainer
@@ -106,10 +108,17 @@ struct Simple_QRApp: App {
                 if !hasCompletedOnboarding {
                     OnboardingControllerView()
                 } else {
-                    ContentView()
+                    ContentView(directScanFromWidget: directScanFromWidget)
                 }
             }
             .modelContainer(container)
+            .onOpenURL { url in
+                print("App opened with URL: \(url)")
+                // Handle deep links
+                if url.scheme == "qrunveil" && url.host == "scan" {
+                    directScanFromWidget = true
+                }
+            }
         }
     }
 }
@@ -153,4 +162,46 @@ struct OnboardingControllerView: View {
         // Disable swiping back
         .interactiveDismissDisabled()
     }
+}
+
+// Create a new AppDelegate class
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        let configuration = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        configuration.delegateClass = SceneDelegate.self
+        return configuration
+    }
+}
+
+// Create a new SceneDelegate class
+class SceneDelegate: NSObject, UIWindowSceneDelegate {
+    // Shared state to communicate with SwiftUI views
+    static var quickActionDestination: QuickActionDestination?
+    
+    // Handle Quick Actions when app is already running
+    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        handleShortcutItem(shortcutItem)
+        completionHandler(true)
+    }
+    
+    // Handle Quick Actions when app launches from a shortcut
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        if let shortcutItem = connectionOptions.shortcutItem {
+            handleShortcutItem(shortcutItem)
+        }
+    }
+    
+    private func handleShortcutItem(_ shortcutItem: UIApplicationShortcutItem) {
+        switch shortcutItem.type {
+        case "com.qrunveil.scanQR":
+            SceneDelegate.quickActionDestination = .scanQR
+        default:
+            break
+        }
+    }
+}
+
+// Create an enum for quick action destinations
+enum QuickActionDestination {
+    case scanQR
 }

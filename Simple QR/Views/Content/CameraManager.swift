@@ -5,14 +5,6 @@
 //  Created by Stéphane PAQUET on 4/7/25.
 //
 
-
-//
-//  CameraManager.swift
-//  QR Unveil
-//
-//  Created on 4/7/25.
-//
-
 import AVFoundation
 import CoreLocation
 import AudioToolbox

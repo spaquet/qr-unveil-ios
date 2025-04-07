@@ -792,6 +792,12 @@
           }
         }
       }
+    },
+    "Quickly scan a QR code" : {
+
+    },
+    "Scan QR Code" : {
+
     }
   },
   "version" : "1.0"
