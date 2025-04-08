@@ -108,6 +108,8 @@ struct Simple_QRApp: App {
                 if !hasCompletedOnboarding {
                     OnboardingControllerView()
                 } else {
+                    // When onboarding is complete, go straight to ContentView
+                    // The ContentView will handle its own camera permission check
                     ContentView(directScanFromWidget: directScanFromWidget)
                 }
             }
@@ -141,7 +143,15 @@ struct OnboardingControllerView: View {
             case .welcome:
                 WelcomeView(
                     proceedToNextStep: {
-                        currentStep = .requestCamera
+                        // Check camera permission status before showing camera request screen
+                        let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
+                        
+                        // Skip camera request if already authorized
+                        if cameraStatus == .authorized {
+                            currentStep = .requestLocation
+                        } else {
+                            currentStep = .requestCamera
+                        }
                     }
                 )
             case .requestCamera:

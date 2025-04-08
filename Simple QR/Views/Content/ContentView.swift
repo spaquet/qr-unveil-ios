@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  QR Unveil
-//
-//  Created on 4/3/25.
-//
-
 import SwiftUI
 import SwiftData
 import AVFoundation
@@ -73,6 +66,9 @@ struct ContentView: View {
                     RequestCameraView(proceedToNextStep: {
                         checkCameraPermission()
                     })
+                    .onAppear{
+                        print("Request Camera View")
+                    }
                 }
             }
             .navigationDestination(for: NavDestination.self) { destination in
@@ -117,7 +113,9 @@ struct ContentView: View {
                 // Initialize saveLocation based on current settings
                 saveLocation = settingsManager.saveLocationData
                 
-                //                checkCameraPermission()
+                // Check camera permission on app launch
+                // This should happen before any views are shown
+                checkCameraPermission()
                 
                 // Add this check for widget launch
                 if directScanFromWidget {
@@ -125,8 +123,6 @@ struct ContentView: View {
                     if cameraPermission == .authorized {
                         cameraManager.setupCamera()
                         cameraManager.resumeScanning()
-                    } else {
-                        checkCameraPermission()
                     }
                 }
                 
@@ -140,8 +136,6 @@ struct ContentView: View {
                     if cameraPermission == .authorized {
                         cameraManager.setupCamera()
                         cameraManager.resumeScanning()
-                    } else {
-                        checkCameraPermission()
                     }
                 }
             }
@@ -217,6 +211,7 @@ struct ContentView: View {
     
     /// Checks and requests camera permission if needed
     private func checkCameraPermission() {
+        // Get the current authorization status
         cameraPermission = AVCaptureDevice.authorizationStatus(for: .video)
         
         print("Current camera permission status: \(cameraPermission.rawValue)")
