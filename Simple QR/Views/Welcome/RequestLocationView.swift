@@ -104,7 +104,7 @@ struct RequestLocationView: View {
     private var primaryButtonTitle: String {
         switch locationManager.authorizationStatus {
         case .notDetermined:
-            return "Allow Location Access"
+            return "Continue"
         case .denied, .restricted:
             return "Open Settings"
         case .authorizedWhenInUse, .authorizedAlways:

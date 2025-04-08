@@ -106,7 +106,7 @@ struct RequestCameraView: View {
     private var buttonTitle: String {
         switch cameraAuthStatus {
         case .notDetermined:
-            return "Allow Camera Access"
+            return "Continue"
         case .denied:
             return "Open Settings"
         case .restricted:
