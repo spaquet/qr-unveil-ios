@@ -437,3 +437,60 @@ struct ShareSheetRepresentable: UIViewControllerRepresentable {
         }
     }
 }
+
+
+// Preview for QRDetailHeaderSection
+#Preview {
+    List {
+        QRDetailHeaderSection(
+            qrCode: createSampleQRCode(),
+            isEditing: .constant(false),
+            editedLabel: .constant("Sample QR Code"),
+            modelContext: ModelContext(PreviewContainer)
+        )
+    }
+    .listStyle(InsetGroupedListStyle())
+}
+
+// Create a shared preview container
+private let PreviewContainer: ModelContainer = {
+    do {
+        let container = try ModelContainer(
+            for: QRCodeModel.self, LocationModel.self, TagModel.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        return container
+    } catch {
+        fatalError("Failed to create preview container: \(error.localizedDescription)")
+    }
+}()
+
+// Helper function to create a sample QR code with tags and location
+private func createSampleQRCode() -> QRCodeModel {
+    let tag1 = TagModel(name: "Important", color: "#FF5733")
+    let tag2 = TagModel(name: "Work", color: "#33FF57")
+    
+    let qrCode = QRCodeModel(
+        label: "Company Website",
+        content: "https://www.example.com",
+        qrType: "url"
+    )
+    
+    qrCode.scanCount = 5
+    qrCode.isFavorite = true
+    qrCode.lastScanned = Date()
+    qrCode.tags = [tag1, tag2]
+    
+    // Create and connect location
+    let location = LocationModel(
+        qrCode: qrCode,
+        name: "Office",
+        latitude: 37.7749,
+        longitude: -122.4194,
+        address: "123 Main Street, San Francisco, CA 94105"
+    )
+    
+    qrCode.qrLocation = location
+    
+    return qrCode
+}
