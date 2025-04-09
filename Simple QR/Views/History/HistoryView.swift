@@ -5,6 +5,7 @@
 //  Created by Stéphane PAQUET on 4/2/25.
 //
 
+import Photos
 import SwiftData
 import SwiftUI
 
@@ -94,6 +95,12 @@ struct HistoryView: View {
     private func deleteQRCodes(offsets: IndexSet) {
         for index in offsets {
             let qrCodeToDelete = filteredQRCodes[index]
+            
+            // Delete associated image if it exists
+            if let photoAssetId = qrCodeToDelete.photoAssetId {
+                deleteAssociatedImage(assetId: photoAssetId)
+            }
+            
             modelContext.delete(qrCodeToDelete)
         }
         
@@ -101,6 +108,34 @@ struct HistoryView: View {
             try modelContext.save()
         } catch {
             print("Error deleting QR code: \(error.localizedDescription)")
+        }
+    }
+
+    private func deleteAssociatedImage(assetId: String) {
+        // Request photo library access if needed
+        if PhotoManager.shared.authorizationStatus != .authorized &&
+           PhotoManager.shared.authorizationStatus != .limited {
+            PhotoManager.shared.requestPhotoLibraryAccess { success in
+                if success {
+                    self.performImageDeletion(assetId: assetId)
+                }
+            }
+        } else {
+            performImageDeletion(assetId: assetId)
+        }
+    }
+
+    private func performImageDeletion(assetId: String) {
+        let assets = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil)
+        
+        if let asset = assets.firstObject {
+            PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.deleteAssets([asset] as NSFastEnumeration)
+            } completionHandler: { success, error in
+                if let error = error {
+                    print("Error deleting image: \(error.localizedDescription)")
+                }
+            }
         }
     }
 }
