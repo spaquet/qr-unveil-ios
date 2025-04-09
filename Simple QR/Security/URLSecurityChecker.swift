@@ -11,6 +11,8 @@ import Network
 class URLSecurityChecker {
     static let shared = URLSecurityChecker()
     
+    private let maxRedirects = 20
+    
     private init() {}
     
     /// Check SSL certificate validity and redirects for a URL
@@ -58,7 +60,15 @@ class URLSecurityChecker {
         
         // Create a URLSession with strict SSL validation
         let sessionConfig = URLSessionConfiguration.ephemeral
-        let session = URLSession(configuration: sessionConfig)
+        sessionConfig.httpMaximumConnectionsPerHost = 1
+        sessionConfig.timeoutIntervalForRequest = 10.0
+        sessionConfig.requestCachePolicy = .reloadIgnoringLocalCacheData
+        sessionConfig.httpShouldUsePipelining = false
+        sessionConfig.httpMaximumConnectionsPerHost = 1
+        sessionConfig.httpShouldSetCookies = false
+        sessionConfig.httpCookieAcceptPolicy = .never
+        
+        let session = URLSession(configuration: sessionConfig, delegate: RedirectDelegate(maxRedirects: maxRedirects), delegateQueue: nil)
         
         var redirectCount = 0
         var finalURL = url
@@ -121,4 +131,24 @@ struct URLSecurityResult {
     var redirectCount: Int?
     var finalDestination: String?
     var error: String?
+}
+
+class RedirectDelegate: NSObject, URLSessionTaskDelegate {
+    private let maxRedirects: Int
+    private var redirectCount = 0
+    
+    init(maxRedirects: Int) {
+        self.maxRedirects = maxRedirects
+        super.init()
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+        redirectCount += 1
+        
+        if redirectCount >= maxRedirects {
+            completionHandler(nil) // Stop following redirects
+        } else {
+            completionHandler(request) // Continue with redirection
+        }
+    }
 }
