@@ -69,6 +69,11 @@ struct QRDetailView: View {
             } else {
                 QRDetailTagsSection(tags: qrCode.tags ?? [])
             }
+            
+            // Security section (only visible in non-editing mode)
+            if !isEditing && qrCode.qrType == "url" {
+                QRDetailSecuritySection(qrCode: qrCode)
+            }
         }
         .navigationTitle("QR Code Details")
         .toolbar {

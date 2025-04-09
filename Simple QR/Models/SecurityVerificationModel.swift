@@ -289,20 +289,20 @@ final class SecurityVerificationModel: Codable {
     /// Returns a user-friendly summary of the security verification
     func securitySummary() -> String {
         if !isVerified {
-            return "Not verified yet"
+            return NSLocalizedString("Not verified yet", comment: "Indicates if a QR code content has been verified")
         }
         
         switch threatLevel {
         case .safe:
-            return "Safe to use (Score: \(securityScore)/100)"
+            return NSLocalizedString("Safe to use (Score: \(securityScore)/100)", comment: "Indicates that there is no major threat detected in the QR code content")
         case .lowRisk:
-            return "Low risk - Proceed with awareness (Score: \(securityScore)/100)"
+            return NSLocalizedString("Low risk - Proceed with awareness (Score: \(securityScore)/100)", comment: "Indicates that there is a minor threat detected in the QR code content")
         case .suspicious:
-            return "Suspicious - Use with caution (Score: \(securityScore)/100)"
+            return NSLocalizedString("Suspicious - Use with caution (Score: \(securityScore)/100)", comment: "Indicates that a significant threat is detected in the QR code content")
         case .dangerous:
-            return "Dangerous - Not recommended (Score: \(securityScore)/100)"
+            return NSLocalizedString("Dangerous - Not recommended (Score: \(securityScore)/100)", comment: "Indi")
         case .unknown:
-            return "Security status unknown"
+            return NSLocalizedString("Security status unknown", comment: "Indication that the security status of the QR code content could not be determined")
         }
     }
     
@@ -324,6 +324,13 @@ final class SecurityVerificationModel: Codable {
             }
             if let isDomainSuspicious = isDomainSuspicious, isDomainSuspicious {
                 warnings.append("This domain has been flagged as potentially suspicious")
+            }
+            if let redirectsCount = redirectsCount, redirectsCount > 0 {
+                warnings.append("This URL redirects \(redirectsCount) time\(redirectsCount > 1 ? "s" : "")")
+                
+                if let finalDestination = finalDestination {
+                    warnings.append("Final destination: \(finalDestination)")
+                }
             }
             
         case "phone", "sms":

@@ -1489,6 +1489,9 @@
         }
       }
     },
+    "Consider only visiting websites that use HTTPS encryption" : {
+      "comment" : "HTTPS recommendation"
+    },
     "Contacts" : {
       "localizations" : {
         "ar" : {
@@ -2110,6 +2113,7 @@
       }
     },
     "Copy" : {
+      "comment" : "Copy URL button",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4093,6 +4097,12 @@
         }
       }
     },
+    "Final destination:" : {
+      "comment" : "Final URL label"
+    },
+    "Final destination: %@" : {
+      "comment" : "Final URL after redirects"
+    },
     "Get Started" : {
       "localizations" : {
         "ar" : {
@@ -4340,6 +4350,9 @@
           }
         }
       }
+    },
+    "High Risk" : {
+      "comment" : "High risk security rating"
     },
     "History" : {
       "comment" : "Menu entry title for history section",
@@ -4713,6 +4726,9 @@
           }
         }
       }
+    },
+    "Info Sec" : {
+
     },
     "Keep History: %lld days" : {
       "localizations" : {
@@ -5582,6 +5598,9 @@
         }
       }
     },
+    "Low Risk" : {
+      "comment" : "Low risk security rating"
+    },
     "Made with ❤️ in SF" : {
       "localizations" : {
         "ar" : {
@@ -5954,6 +5973,9 @@
           }
         }
       }
+    },
+    "Moderate" : {
+      "comment" : "Moderate security rating"
     },
     "Most Scanned" : {
       "localizations" : {
@@ -6699,6 +6721,9 @@
         }
       }
     },
+    "No security information available" : {
+      "comment" : "No security info message"
+    },
     "No tags" : {
       "localizations" : {
         "ar" : {
@@ -6947,6 +6972,9 @@
         }
       }
     },
+    "Not verified yet" : {
+      "comment" : "Indicates if a QR code content has been verified"
+    },
     "OK" : {
       "localizations" : {
         "ar" : {
@@ -7194,6 +7222,9 @@
           }
         }
       }
+    },
+    "Open" : {
+      "comment" : "Open URL button"
     },
     "Open the scanner" : {
       "localizations" : {
@@ -9303,6 +9334,12 @@
         }
       }
     },
+    "Recommendations:" : {
+      "comment" : "Security recommendations header"
+    },
+    "Redirects: %d" : {
+      "comment" : "Redirect count"
+    },
     "Region" : {
       "localizations" : {
         "ar" : {
@@ -9426,6 +9463,9 @@
           }
         }
       }
+    },
+    "Safe" : {
+      "comment" : "Safe security rating"
     },
     "Save" : {
       "localizations" : {
@@ -11535,6 +11575,15 @@
         }
       }
     },
+    "Secure HTTPS connection" : {
+      "comment" : "HTTPS secure message"
+    },
+    "Security Information" : {
+      "comment" : "Security section title"
+    },
+    "Security status unknown" : {
+      "comment" : "Indication that the security status of the QR code content could not be determined"
+    },
     "Select Tags" : {
       "localizations" : {
         "ar" : {
@@ -12280,6 +12329,9 @@
         }
       }
     },
+    "SSL certificate issues detected" : {
+      "comment" : "SSL issues message"
+    },
     "State" : {
       "localizations" : {
         "ar" : {
@@ -12901,6 +12953,15 @@
         }
       }
     },
+    "This URL redirects %d time(s)" : {
+      "comment" : "Redirect count"
+    },
+    "This URL uses unencrypted HTTP instead of HTTPS" : {
+      "comment" : "Warning about HTTP usage"
+    },
+    "This website has SSL certificate issues" : {
+      "comment" : "SSL warning"
+    },
     "Time" : {
       "localizations" : {
         "ar" : {
@@ -13148,6 +13209,12 @@
           }
         }
       }
+    },
+    "Unencrypted HTTP connection" : {
+      "comment" : "HTTP insecure message"
+    },
+    "Unsafe" : {
+      "comment" : "Unsafe security rating"
     },
     "Unsupported" : {
       "localizations" : {
@@ -13397,6 +13464,9 @@
         }
       }
     },
+    "Verify the website's security before proceeding" : {
+      "comment" : "Security verification recommendation"
+    },
     "Vibration Feedback" : {
       "localizations" : {
         "ar" : {
@@ -13520,6 +13590,9 @@
           }
         }
       }
+    },
+    "Warnings:" : {
+      "comment" : "Security warnings header"
     },
     "We only use the camera during active scanning. Scanned images may be saved to your Photos app, under your control. We don’t store anything on our servers or with third parties. If synced with iCloud, it’s managed privately by you, with no access by us." : {
       "localizations" : {

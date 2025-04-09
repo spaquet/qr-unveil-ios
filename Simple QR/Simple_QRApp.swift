@@ -49,6 +49,9 @@ struct Simple_QRApp: App {
             
             // Initialize default data if needed
             initializeDefaultDataIfNeeded()
+            
+            // Initialize NetworkMonitor
+            _ = NetworkMonitor.shared
         } catch {
             fatalError("Failed to create SwiftData container: \(error.localizedDescription)")
         }

@@ -5,9 +5,10 @@
 //  Created on 4/7/25.
 //
 
-import SwiftUI
-import SwiftData
 import CoreLocation
+import SwiftData
+import SwiftUI
+import Network
 import UIKit
 
 /// Bottom sheet view displayed when a QR code is detected
@@ -488,6 +489,30 @@ struct QRBottomSheetView: View {
     private func finalizeQRCodeSave() {
         // Add security verification before finalizing
         if let qrCode = detectedQRCode, !qrCode.content.isEmpty {
+            securityVerification()
+        }
+        
+        // Provide feedback
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        
+        // Clear state
+        detectedQRCode = nil
+        customLabel = ""
+        selectedTags = []
+        
+        // IMPORTANT: Ensure we dismiss first, then resume scanning
+        // to prevent incorrect calles
+        
+        // Explicitly dismiss the sheet
+        DispatchQueue.main.async {
+            cameraManager.resumeScanning()
+            dismiss()
+        }
+    }
+    
+    /// Common URL checks such as https/http, cetificate validity and redirection
+    private func securityVerification() {
+        if let qrCode = detectedQRCode, !qrCode.content.isEmpty {
             do {
                 // Get the content string directly
                 let contentString = qrCode.content
@@ -516,20 +541,69 @@ struct QRBottomSheetView: View {
                     verification.isVerified = true
                     verification.verificationDate = Date()
                     
-                    // For URLs, verify HTTPS
+                    // For URLs, perform security checks
                     if qrCode.type == "url", let url = URL(string: contentString) {
-                        verification.isHttps = url.scheme?.lowercased() == "https"
+                        verification.isHttps = url.isHttps
                         
-                        // If not HTTPS, reduce security score and set as suspicious
-                        if verification.isHttps == false {
+                        // If not HTTPS, reduce security score immediately
+                        if !url.isHttps {
                             verification.securityScore -= 30
                             verification.threatLevel = SecurityVerificationModel.ThreatLevel.suspicious
-                            
-                            // Add warning about HTTP
-                            verification.securityWarnings = ["This URL uses unencrypted HTTP instead of HTTPS"]
-                            verification.securityRecommendations = ["Consider only visiting websites that use HTTPS encryption"]
+                            verification.securityWarnings = [NSLocalizedString("This URL uses unencrypted HTTP instead of HTTPS", comment: "Warning about HTTP usage")]
+                            verification.securityRecommendations = [NSLocalizedString("Consider only visiting websites that use HTTPS encryption", comment: "HTTPS recommendation")]
+
                         } else {
                             verification.threatLevel = SecurityVerificationModel.ThreatLevel.safe
+                            
+                            // Only perform additional checks for HTTPS URLs if we have network connectivity
+                            if NetworkMonitor.shared.isConnected {
+                                // Perform additional security checks in background
+                                URLSecurityChecker.shared.checkURLSecurity(urlString: contentString) { result in
+                                    DispatchQueue.main.async {
+                                        do {
+                                            // Update security verification with the results
+                                            verification.hasSslIssues = result.hasSslIssues
+                                            verification.redirectsCount = result.redirectCount
+                                            verification.finalDestination = result.finalDestination
+                                            
+                                            // Update security score and warnings based on SSL issues
+                                            if let hasSslIssues = result.hasSslIssues, hasSslIssues {
+                                                verification.securityScore -= 30
+                                                verification.threatLevel = .suspicious
+                                                
+                                                var warnings = verification.securityWarnings ?? []
+                                                warnings.append(NSLocalizedString("This website has SSL certificate issues", comment: "SSL warning"))
+                                                verification.securityWarnings = warnings
+                                                
+                                                var recommendations = verification.securityRecommendations ?? []
+                                                recommendations.append(NSLocalizedString("Verify the website's security before proceeding", comment: "Security verification recommendation"))
+                                                verification.securityRecommendations = recommendations
+                                            }
+                                            
+                                            // Handle redirects
+                                            if let redirectCount = result.redirectCount, redirectCount > 0 {
+                                                // Minor penalty for redirects
+                                                verification.securityScore -= min(redirectCount * 5, 15)
+                                                
+                                                var warnings = verification.securityWarnings ?? []
+                                                warnings.append(String(format: NSLocalizedString("This URL redirects %d time(s)", comment: "Redirect count"), redirectCount))
+                                                verification.securityWarnings = warnings
+                                                
+                                                if let finalDest = result.finalDestination {
+                                                    var info = verification.securityRecommendations ?? []
+                                                    info.append(String(format: NSLocalizedString("Final destination: %@", comment: "Final URL after redirects"), finalDest))
+                                                    verification.securityRecommendations = info
+                                                }
+                                            }
+                                            
+                                            // Save the updated verification
+                                            try self.modelContext.save()
+                                        } catch {
+                                            print("Error updating security verification with network results: \(error)")
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     
@@ -541,23 +615,6 @@ struct QRBottomSheetView: View {
             } catch {
                 print("Error updating security verification: \(error.localizedDescription)")
             }
-        }
-        
-        // Provide feedback
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
-        
-        // Clear state
-        detectedQRCode = nil
-        customLabel = ""
-        selectedTags = []
-        
-        // IMPORTANT: Ensure we dismiss first, then resume scanning
-        // to prevent incorrect calles
-        
-        // Explicitly dismiss the sheet
-        DispatchQueue.main.async {
-            cameraManager.resumeScanning()
-            dismiss()
         }
     }
     
