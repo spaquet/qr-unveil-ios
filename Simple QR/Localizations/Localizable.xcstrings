@@ -4591,7 +4591,128 @@
       }
     },
     "HTTP/HTTPS Status" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حالة HTTP/HTTPS"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estat HTTP/HTTPS"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS-status"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS-Status"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κατάσταση HTTP/HTTPS"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado HTTP/HTTPS"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado HTTP/HTTPS"
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado HTTP/HTTPS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statut HTTP/HTTPS"
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "État HTTP/HTTPS"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stato HTTP/HTTPS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS ステータス"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS 상태"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status HTTP/HTTPS"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado HTTP/HTTPS"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус HTTP/HTTPS"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS-status"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS Durumu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус HTTP/HTTPS"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP/HTTPS 状态"
+          }
+        }
+      }
     },
     "Keep History: %lld days" : {
       "localizations" : {
@@ -13401,7 +13522,128 @@
       }
     },
     "We only use the camera during active scanning. Scanned images may be saved to your Photos app, under your control. We don’t store anything on our servers or with third parties. If synced with iCloud, it’s managed privately by you, with no access by us." : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نحن نستخدم الكاميرا فقط أثناء المسح النشط. قد يتم حفظ الصور الممسوحة ضوئيًا في تطبيق الصور الخاص بك، تحت سيطرتك. نحن لا نخزن أي شيء على خوادمنا أو مع أطراف ثالثة. إذا تمت المزامنة مع iCloud، فستتم إدارتها بشكل خاص من قبلك، دون أي وصول من قبلنا."
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Només utilitzem la càmera durant l'escaneig actiu. Les imatges escanejades es poden desar a la teva aplicació de Fotos, sota el teu control. No emmagatzemem res als nostres servidors o amb tercers. Si es sincronitza amb iCloud, és gestionat privadament per tu, sense accés per part nostra."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi bruger kun kameraet under aktiv scanning. Scannede billeder kan gemmes i din Fotos-app under din kontrol. Vi gemmer ikke noget på vores servere eller hos tredjeparter. Hvis synkroniseret med iCloud, administreres det privat af dig, uden adgang fra os."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir verwenden die Kamera nur während des aktiven Scannens. Gescannte Bilder können unter Ihrer Kontrolle in Ihrer Fotos-App gespeichert werden. Wir speichern nichts auf unseren Servern oder bei Dritten. Bei Synchronisierung mit iCloud wird dies privat von Ihnen verwaltet, ohne Zugriff durch uns."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χρησιμοποιούμε την κάμερα μόνο κατά τη διάρκεια ενεργής σάρωσης. Οι σαρωμένες εικόνες μπορούν να αποθηκευτούν στην εφαρμογή Φωτογραφίες, υπό τον έλεγχό σας. Δεν αποθηκεύουμε τίποτα στους διακομιστές μας ή σε τρίτους. Εάν συγχρονιστεί με το iCloud, διαχειρίζεται ιδιωτικά από εσάς, χωρίς πρόσβαση από εμάς."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo usamos la cámara durante el escaneo activo. Las imágenes escaneadas pueden guardarse en tu aplicación Fotos, bajo tu control. No almacenamos nada en nuestros servidores o con terceros. Si se sincroniza con iCloud, es gestionado de forma privada por ti, sin acceso por nuestra parte."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo usamos la cámara durante el escaneo activo. Las imágenes escaneadas pueden guardarse en tu aplicación Fotos, bajo tu control. No almacenamos nada en nuestros servidores o con terceros. Si se sincroniza con iCloud, es administrado de forma privada por ti, sin acceso de nuestra parte."
+          }
+        },
+        "es-US" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo usamos la cámara durante el escaneo activo. Las imágenes escaneadas pueden guardarse en tu aplicación Fotos, bajo tu control. No almacenamos nada en nuestros servidores o con terceros. Si se sincroniza con iCloud, es administrado de forma privada por ti, sin acceso de nuestra parte."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous utilisons l'appareil photo uniquement pendant la numérisation active. Les images numérisées peuvent être enregistrées dans votre application Photos, sous votre contrôle. Nous ne stockons rien sur nos serveurs ou auprès de tiers. Si synchronisé avec iCloud, il est géré en privé par vous, sans accès de notre part."
+          }
+        },
+        "fr-CA" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous utilisons la caméra uniquement pendant la numérisation active. Les images numérisées peuvent être sauvegardées dans votre application Photos, sous votre contrôle. Nous ne stockons rien sur nos serveurs ou auprès de tiers. Si synchronisé avec iCloud, il est géré en privé par vous, sans accès de notre part."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizziamo la fotocamera solo durante la scansione attiva. Le immagini scansionate possono essere salvate nella tua app Foto, sotto il tuo controllo. Non memorizziamo nulla sui nostri server o con terze parti. Se sincronizzato con iCloud, è gestito privatamente da te, senza alcun accesso da parte nostra."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カメラは、アクティブスキャン中にのみ使用します。スキャンされた画像は、お客様の管理下でフォトアプリに保存される場合があります。当社はサーバーやサードパーティに何も保存しません。iCloud と同期している場合、当社からのアクセスなしに、お客様によって個人的に管理されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활성 스캔 중에만 카메라를 사용합니다. 스캔된 이미지는 사용자의 제어 하에 사진 앱에 저장될 수 있습니다. 우리는 서버나 제3자에게 어떤 것도 저장하지 않습니다. iCloud와 동기화된 경우, 우리의 접근 없이 사용자가 개인적으로 관리합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos a câmera apenas durante a digitalização ativa. As imagens digitalizadas podem ser salvas no seu aplicativo Fotos, sob seu controle. Não armazenamos nada em nossos servidores ou com terceiros. Se sincronizado com o iCloud, é gerenciado de forma privada por você, sem acesso por nós."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizamos a câmara apenas durante a digitalização ativa. As imagens digitalizadas podem ser guardadas na sua aplicação Fotografias, sob o seu controle. Não armazenamos nada nos nossos servidores ou com terceiros. Se sincronizado com o iCloud, é gerido de forma privada por si, sem acesso por nós."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мы используем камеру только во время активного сканирования. Отсканированные изображения могут быть сохранены в вашем приложении «Фото» под вашим контролем. Мы не храним ничего на наших серверах или у третьих сторон. При синхронизации с iCloud управление осуществляется вами в частном порядке, без доступа с нашей стороны."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi använder endast kameran under aktiv skanning. Skannade bilder kan sparas i din Foton-app, under din kontroll. Vi lagrar ingenting på våra servrar eller hos tredje part. Om synkroniserad med iCloud hanteras den privat av dig, utan åtkomst från oss."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamerayı yalnızca aktif tarama sırasında kullanıyoruz. Taranan görüntüler, kontrolünüz altında Fotoğraflar uygulamanıza kaydedilebilir. Sunucularımızda veya üçüncü taraflarla hiçbir şey depolamıyoruz. iCloud ile senkronize edilirse, tarafımızdan erişim olmadan sizin tarafınızdan özel olarak yönetilir."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ми використовуємо камеру лише під час активного сканування. Відскановані зображення можуть бути збережені у вашому додатку \"Фото\" під вашим контролем. Ми не зберігаємо нічого на наших серверах або у третіх сторін. Якщо синхронізовано з iCloud, це керується вами приватно, без доступу з нашого боку."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我们仅在主动扫描期间使用相机。扫描的图像可能会在您的控制下保存到您的照片应用程序中。我们不会在我们的服务器上或与第三方一起存储任何内容。如果与 iCloud 同步，它将由您私下管理，我们无法访问。"
+          }
+        }
+      }
     },
     "Welcome to QR Unveil" : {
       "localizations" : {
