@@ -232,6 +232,30 @@ struct QRDetailInfoSection: View {
     var body: some View {
         Section("Details") {
             LabeledContent("Type", value: qrCode.qrType.capitalized)
+            
+            // Security status for URLs
+            if qrCode.qrType == "url" {
+                HStack {
+                    Text("HTTP/HTTPS Status")
+                    
+                    Spacer()
+                    
+                    // Show security indicator based on verification data
+                    if let verification = qrCode.securityVerification, verification.isVerified {
+                        if let isHttps = verification.isHttps {
+                            HTTPSecurityIndicator(
+                                status: isHttps ? .secure : .insecure
+                            )
+                        } else {
+                            HTTPSecurityIndicator(status: .unknown)
+                        }
+                    } else {
+                        // No verification data yet
+                        HTTPSecurityIndicator(status: .unknown)
+                    }
+                }
+            }
+            
             LabeledContent("Created", value: formattedDate(qrCode.createdAt))
             LabeledContent("Last Scanned", value: qrCode.lastScanned != nil ? formattedDate(qrCode.lastScanned!) : "N/A")
         }
@@ -423,9 +447,9 @@ struct ShareSheetRepresentable: UIViewControllerRepresentable {
             if let popover = activityVC.popoverPresentationController {
                 popover.sourceView = uiViewController.view
                 popover.sourceRect = CGRect(x: uiViewController.view.bounds.midX,
-                                          y: uiViewController.view.bounds.midY,
-                                          width: 0,
-                                          height: 0)
+                                            y: uiViewController.view.bounds.midY,
+                                            width: 0,
+                                            height: 0)
                 popover.permittedArrowDirections = []
             }
             

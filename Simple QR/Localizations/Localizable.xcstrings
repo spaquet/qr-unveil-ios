@@ -4590,6 +4590,9 @@
         }
       }
     },
+    "HTTP/HTTPS Status" : {
+
+    },
     "Keep History: %lld days" : {
       "localizations" : {
         "ar" : {
@@ -13397,129 +13400,8 @@
         }
       }
     },
-    "We only use the camera when you're actively scanning, and we never store photos or videos." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "نحن نستخدم الكاميرا فقط عندما تقوم بالمسح بشكل نشط، ولا نقوم أبدًا بتخزين الصور أو مقاطع الفيديو."
-          }
-        },
-        "ca" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Només utilitzem la càmera quan estàs escanejant activament, i mai emmagatzemem fotos o vídeos."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vi bruger kun kameraet, når du aktivt scanner, og vi gemmer aldrig fotos eller videoer."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wir verwenden die Kamera nur, wenn Sie aktiv scannen, und wir speichern niemals Fotos oder Videos."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Χρησιμοποιούμε την κάμερα μόνο όταν σαρώνετε ενεργά και δεν αποθηκεύουμε ποτέ φωτογραφίες ή βίντεο."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo usamos la cámara cuando estás escaneando activamente, y nunca almacenamos fotos o vídeos."
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo usamos la cámara cuando estás escaneando activamente, y nunca almacenamos fotos o videos."
-          }
-        },
-        "es-US" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo usamos la cámara cuando estás escaneando activamente, y nunca almacenamos fotos o videos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nous n'utilisons l'appareil photo que lorsque vous scannez activement, et nous ne stockons jamais de photos ou de vidéos."
-          }
-        },
-        "fr-CA" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nous n'utilisons la caméra que lorsque vous numérisez activement, et nous ne stockons jamais de photos ou de vidéos."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utilizziamo la fotocamera solo quando stai attivamente scansionando, e non memorizziamo mai foto o video."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カメラの使用は積極的にスキャンしている時のみで、写真や動画を保存することはありません。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "카메라는 실제로 스캔할 때만 사용되며, 사진이나 비디오를 저장하지 않습니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Só usamos a câmera quando você está ativamente escaneando, e nunca armazenamos fotos ou vídeos."
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apenas utilizamos a câmara quando está ativamente a ler, e nunca armazenamos fotos ou vídeos."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Мы используем камеру только когда вы активно сканируете, и мы никогда не сохраняем фотографии или видео."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vi använder endast kameran när du aktivt skannar, och vi lagrar aldrig foton eller videor."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kamerayı yalnızca aktif olarak tarama yaparken kullanırız ve asla fotoğraf veya video saklamayız."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ми використовуємо камеру тільки коли ви активно скануєте, і ми ніколи не зберігаємо фотографії або відео."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "我们仅在您主动扫描时使用相机，并且绝不存储照片或视频。"
-          }
-        }
-      }
+    "We only use the camera during active scanning. Scanned images may be saved to your Photos app, under your control. We don’t store anything on our servers or with third parties. If synced with iCloud, it’s managed privately by you, with no access by us." : {
+
     },
     "Welcome to QR Unveil" : {
       "localizations" : {

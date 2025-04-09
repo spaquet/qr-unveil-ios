@@ -49,7 +49,7 @@ struct RequestCameraView: View {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                     
-                    Text("We only use the camera when you're actively scanning, and we never store photos or videos.")
+                    Text("We only use the camera during active scanning. Scanned images may be saved to your Photos app, under your control. We don’t store anything on our servers or with third parties. If synced with iCloud, it’s managed privately by you, with no access by us.")
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)

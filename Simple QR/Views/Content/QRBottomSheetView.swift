@@ -65,6 +65,17 @@ struct QRBottomSheetView: View {
                                     .foregroundColor(.secondary)
                             }
                             
+                            if safeDetectedType == "url" {
+                                // URL security indicator
+                                HStack {
+                                    Spacer()
+                                    
+                                    HTTPSecurityIndicator(url: safeDetectedContent)
+                                        .padding(.trailing)
+                                }
+                                .padding(.top, -8) // Adjust spacing as needed
+                            }
+                            
                             Spacer()
                         }
                         .padding(.horizontal)
@@ -106,7 +117,7 @@ struct QRBottomSheetView: View {
                             
                             TextField(
                                 generateLabelFromContent(detectedQRCode?.content ?? "",
-                                                       type: detectedQRCode?.type ?? "text") ?? "Custom Label",
+                                                         type: detectedQRCode?.type ?? "text") ?? "Custom Label",
                                 text: $customLabel
                             )
                             .font(.system(size: 14))
@@ -475,6 +486,63 @@ struct QRBottomSheetView: View {
     
     /// Common finalization steps for QR code save
     private func finalizeQRCodeSave() {
+        // Add security verification before finalizing
+        if let qrCode = detectedQRCode, !qrCode.content.isEmpty {
+            do {
+                // Get the content string directly
+                let contentString = qrCode.content
+                
+                // Use the content string in the predicate
+                let descriptor = FetchDescriptor<QRCodeModel>(
+                    predicate: #Predicate<QRCodeModel> { code in
+                        code.content == contentString
+                    }
+                )
+                
+                let savedCodes = try modelContext.fetch(descriptor)
+                
+                // Get the most recently created QR code with this content
+                guard let savedCode = savedCodes.sorted(by: { $0.createdAt > $1.createdAt }).first else {
+                    print("Could not find the saved QR code")
+                    return
+                }
+                
+                // Add security verification if not already present
+                if savedCode.securityVerification == nil {
+                    let verification = SecurityVerificationModel(qrCode: savedCode)
+                    
+                    // Set initial security score
+                    verification.securityScore = 80 // Default good score
+                    verification.isVerified = true
+                    verification.verificationDate = Date()
+                    
+                    // For URLs, verify HTTPS
+                    if qrCode.type == "url", let url = URL(string: contentString) {
+                        verification.isHttps = url.scheme?.lowercased() == "https"
+                        
+                        // If not HTTPS, reduce security score and set as suspicious
+                        if verification.isHttps == false {
+                            verification.securityScore -= 30
+                            verification.threatLevel = SecurityVerificationModel.ThreatLevel.suspicious
+                            
+                            // Add warning about HTTP
+                            verification.securityWarnings = ["This URL uses unencrypted HTTP instead of HTTPS"]
+                            verification.securityRecommendations = ["Consider only visiting websites that use HTTPS encryption"]
+                        } else {
+                            verification.threatLevel = SecurityVerificationModel.ThreatLevel.safe
+                        }
+                    }
+                    
+                    savedCode.securityVerification = verification
+                    
+                    // Save the updated model
+                    try modelContext.save()
+                }
+            } catch {
+                print("Error updating security verification: \(error.localizedDescription)")
+            }
+        }
+        
         // Provide feedback
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         
@@ -482,10 +550,13 @@ struct QRBottomSheetView: View {
         detectedQRCode = nil
         customLabel = ""
         selectedTags = []
-        cameraManager.resumeScanning()
+        
+        // IMPORTANT: Ensure we dismiss first, then resume scanning
+        // to prevent incorrect calles
         
         // Explicitly dismiss the sheet
         DispatchQueue.main.async {
+            cameraManager.resumeScanning()
             dismiss()
         }
     }
