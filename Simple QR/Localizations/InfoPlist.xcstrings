@@ -404,127 +404,127 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يطلب QR Unveil الوصول إلى موقعك لتحسين تجربة مسح رموز QR. عند تمكينه، يتم تخزين موقعك على جهازك فقط ومزامنته عبر حساب iCloud الشخصي الخاص بك. تساعدك هذه المعلومات على تذكر المكان الذي تم فيه مسح رموز QR ولا تتم مشاركتها أبدًا مع أطراف ثالثة."
+            "value" : "الوصول إلى الموقع يسمح لـ QR Unveil بتسجيل المكان الذي قمت فيه بمسح الرموز. تظل هذه البيانات على جهازك وحساب iCloud الشخصي الخاص بك فقط."
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil sol·licita accés a la teva ubicació per millorar la teva experiència d'escaneig de codis QR. Quan s'activa, la teva ubicació es guarda només al teu dispositiu i es sincronitza a través del teu compte personal d'iCloud. Aquesta informació t'ajuda a recordar on es van escanejar els codis QR i mai es comparteix amb tercers."
+            "value" : "L'accés a la ubicació permet a QR Unveil registrar on has escanejat els codis. Aquestes dades es queden només al teu dispositiu i al teu compte personal d'iCloud.\r\n\r\n"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil anmoder om adgang til din placering for at forbedre din QR-kodescanningsoplevelse. Når funktionen er aktiveret, gemmes din placering kun på din enhed og synkroniseres på tværs af din personlige iCloud-konto. Disse oplysninger hjælper dig med at huske, hvor QR-koder blev scannet, og deles aldrig med tredjepart."
+            "value" : "Adgang til placering gør det muligt for QR Unveil at registrere, hvor du har scannet koder. Disse data forbliver kun på din enhed og din personlige iCloud-konto."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil benötigt Zugriff auf Ihren Standort, um Ihre QR-Code-Scan-Erfahrung zu verbessern. Wenn aktiviert, wird Ihr Standort nur auf Ihrem Gerät gespeichert und über Ihr persönliches iCloud-Konto synchronisiert. Diese Information hilft Ihnen, sich zu merken, wo QR-Codes gescannt wurden, und wird niemals mit Dritten geteilt."
+            "value" : "Der Standortzugriff erlaubt es QR Unveil, den Ort zu speichern, an dem Sie Codes gescannt haben. Diese Daten bleiben ausschließlich auf Ihrem Gerät und Ihrem persönlichen iCloud-Konto."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Το QR Unveil ζητά πρόσβαση στην τοποθεσία σας για να βελτιώσει την εμπειρία σάρωσης κωδικών QR. Όταν είναι ενεργοποιημένο, η τοποθεσία σας αποθηκεύεται μόνο στη συσκευή σας και συγχρονίζεται μέσω του προσωπικού σας λογαριασμού iCloud. Αυτές οι πληροφορίες σας βοηθούν να θυμάστε πού σαρώθηκαν οι κωδικοί QR και δεν κοινοποιούνται ποτέ σε τρίτους."
+            "value" : "Η πρόσβαση στη θέση επιτρέπει στο QR Unveil να καταγράφει πού σαρώσατε κωδικούς. Αυτά τα δεδομένα παραμένουν μόνο στη συσκευή σας και στον προσωπικό σας λογαριασμό iCloud."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "QR Unveil requests access to your location to enhance your QR code scanning experience. When enabled, your location is stored only on your device and synchronized across your personal iCloud account. This information helps you remember where QR codes were scanned and is never shared with third parties."
+            "value" : "Location access allows QR Unveil to record where you scanned codes. This data stays on your device and your personal iCloud account only."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está activado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud."
           }
         },
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está habilitado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud."
           }
         },
         "es-US" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil solicita acceso a tu ubicación para mejorar tu experiencia de escaneo de códigos QR. Cuando está habilitado, tu ubicación se almacena solo en tu dispositivo y se sincroniza a través de tu cuenta personal de iCloud. Esta información te ayuda a recordar dónde se escanearon los códigos QR y nunca se comparte con terceros."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil demande l'accès à votre position pour améliorer votre expérience de scan de codes QR. Lorsque cette option est activée, votre position est stockée uniquement sur votre appareil et synchronisée avec votre compte iCloud personnel. Ces informations vous aident à vous rappeler où les codes QR ont été scannés et ne sont jamais partagées avec des tiers."
+            "value" : "L'accès à la localisation permet à QR Unveil d'enregistrer l'endroit où vous avez scanné les codes. Ces données restent uniquement sur votre appareil et votre compte iCloud personnel."
           }
         },
         "fr-CA" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil demande l'accès à votre position pour améliorer votre expérience de numérisation de codes QR. Lorsqu'activée, votre position est stockée uniquement sur votre appareil et synchronisée via votre compte iCloud personnel. Cette information vous aide à vous rappeler où les codes QR ont été numérisés et n'est jamais partagée avec des tiers."
+            "value" : "L’accès à la localisation permet à QR Unveil d’enregistrer où vous avez numérisé les codes. Ces données restent uniquement sur votre appareil et votre compte iCloud personnel."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil richiede l'accesso alla tua posizione per migliorare la tua esperienza di scansione dei codici QR. Quando attivata, la tua posizione viene memorizzata solo sul tuo dispositivo e sincronizzata con il tuo account personale iCloud. Questa informazione ti aiuta a ricordare dove sono stati scansionati i codici QR e non viene mai condivisa con terze parti."
+            "value" : "L'accesso alla posizione consente a QR Unveil di registrare dove hai scansionato i codici. Questi dati rimangono solo sul tuo dispositivo e sul tuo account iCloud personale"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR UnveilはQRコードスキャン体験を向上させるために位置情報へのアクセスを要求します。有効にすると、位置情報はお使いのデバイスにのみ保存され、個人のiCloudアカウント間で同期されます。この情報はQRコードがどこでスキャンされたかを覚えるのに役立ち、第三者と共有されることはありません。"
+            "value" : "位置情報へのアクセスにより、QR Unveil はコードをスキャンした場所を記録できます。このデータはデバイスと個人の iCloud アカウントにのみ保存されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil은 QR 코드 스캔 경험을 향상시키기 위해 위치 정보에 대한 접근을 요청합니다. 활성화하면 위치 정보는 귀하의 기기에만 저장되고 개인 iCloud 계정 간에 동기화됩니다. 이 정보는 QR 코드가 어디서 스캔되었는지 기억하는 데 도움이 되며 제3자와 절대 공유되지 않습니다."
+            "value" : "위치 액세스를 통해 QR Unveil은 코드를 스캔한 위치를 기록할 수 있습니다. 이 데이터는 귀하의 기기와 개인 iCloud 계정에만 저장됩니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O QR Unveil solicita acesso à sua localização para melhorar sua experiência de escaneamento de códigos QR. Quando ativado, sua localização é armazenada apenas no seu dispositivo e sincronizada em sua conta pessoal do iCloud. Essas informações ajudam você a lembrar onde os códigos QR foram escaneados e nunca são compartilhadas com terceiros."
+            "value" : "O acesso à localização permite que o QR Unveil registre onde você escaneou os códigos. Esses dados permanecem apenas no seu dispositivo e na sua conta pessoal do iCloud."
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil solicita acesso à sua localização para melhorar a sua experiência de leitura de códigos QR. Quando ativada, a sua localização é armazenada apenas no seu dispositivo e sincronizada através da sua conta pessoal iCloud. Esta informação ajuda-o a recordar onde os códigos QR foram lidos e nunca é partilhada com terceiros."
+            "value" : "O acesso à localização permite que o QR Unveil registe onde escaneou os códigos. Estes dados permanecem apenas no seu dispositivo e na sua conta pessoal do iCloud."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil запрашивает доступ к вашему местоположению для улучшения опыта сканирования QR-кодов. При включении эта информация хранится только на вашем устройстве и синхронизируется через вашу личную учетную запись iCloud. Эта информация помогает вам помнить, где были отсканированы QR-коды, и никогда не передается третьим лицам."
+            "value" : "Доступ к местоположению позволяет QR Unveil записывать, где вы сканировали коды. Эти данные остаются только на вашем устройстве и в вашем личном аккаунте iCloud."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil begär åtkomst till din plats för att förbättra din QR-kodskanning. När detta är aktiverat lagras din plats endast på din enhet och synkroniseras via ditt personliga iCloud-konto. Denna information hjälper dig att komma ihåg var QR-koder skannades och delas aldrig med tredje part."
+            "value" : "Åtkomst till platsdata gör det möjligt för QR Unveil att registrera var du skannade koder. Dessa data stannar endast på din enhet och ditt personliga iCloud-konto."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil, QR kodu tarama deneyiminizi geliştirmek için konum erişimi talep eder. Etkinleştirildiğinde, konumunuz yalnızca cihazınızda saklanır ve kişisel iCloud hesabınız genelinde senkronize edilir. Bu bilgi, QR kodlarının nerede tarandığını hatırlamanıza yardımcı olur ve asla üçüncü taraflarla paylaşılmaz."
+            "value" : "Konum erişimi, QR Unveil'in kodları nerede taradığınızı kaydetmesine olanak tanır. Bu veriler yalnızca cihazınızda ve kişisel iCloud hesabınızda kalır."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil запитує доступ до вашого місцезнаходження, щоб покращити ваш досвід сканування QR-кодів. Коли ця функція увімкнена, ваше місцезнаходження зберігається лише на вашому пристрої та синхронізується через ваш особистий обліковий запис iCloud. Ця інформація допомагає вам пам'ятати, де були відскановані QR-коди, і ніколи не передається третім сторонам."
+            "value" : "Доступ до місцезнаходження дозволяє QR Unveil записувати, де ви сканували коди. Ці дані залишаються лише на вашому пристрої та у вашому особистому обліковому записі iCloud."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Unveil 请求访问您的位置信息以提升二维码扫描体验。启用后，您的位置信息仅存储在您的设备上并通过您的个人 iCloud 账户同步。这些信息帮助您记住二维码扫描的位置，绝不会与第三方共享。"
+            "value" : "位置访问权限允许 QR Unveil 记录您扫描代码的位置。此数据仅保留在您的设备和个人 iCloud 账户中。"
           }
         }
       }

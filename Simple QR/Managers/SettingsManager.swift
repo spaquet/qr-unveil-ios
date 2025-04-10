@@ -45,6 +45,31 @@ class SettingsManager {
         }
     }
     
+    func updateSaveLocationDataPreference(enabled: Bool) {
+        // Ensure we have valid settings
+        guard let settings = self.settings else {
+            print("Error: Unable to update location preference - settings not initialized")
+            return
+        }
+        
+        // Ensure we have a valid model context
+        guard let modelContext = self.modelContext else {
+            print("Error: Unable to update location preference - model context not initialized")
+            return
+        }
+        
+        // Update the setting
+        settings.saveLocationData = enabled
+        
+        // Persist the change
+        do {
+            try modelContext.save()
+            print("Location preference updated to: \(enabled)")
+        } catch {
+            print("Error saving location preference update: \(error)")
+        }
+    }
+    
     // Convenience methods to access settings
     var vibrationFeedback: Bool {
         return settings?.vibrationFeedback ?? true

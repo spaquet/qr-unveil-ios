@@ -5959,126 +5959,126 @@
         }
       }
     },
-    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
+    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is required for full functionality." : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يتيح الوصول إلى الموقع لـ QR Unveil توفير ميزات تعتمد على الموقع الجغرافي عند مسح رموز QR للمواقع. هذا اختياري ولكنه موصى به للحصول على وظائف كاملة."
+            "value" : "الوصول إلى الموقع يسمح لـ QR Unveil بتسجيل المكان الذي قمت فيه بمسح الرموز. تظل هذه البيانات على جهازك وحساب iCloud الشخصي الخاص بك فقط."
           }
         },
         "ca" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'accés a la ubicació permet a QR Unveil proporcionar funcions basades en geolocalització quan escaneja codis QR de localització. Això és opcional però es recomana per a una funcionalitat completa."
+            "value" : "L'accés a la ubicació permet a QR Unveil registrar on has escanejat els codis. Aquestes dades es queden només al teu dispositiu i al teu compte personal d'iCloud."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Placeringsadgang giver QR Unveil mulighed for at tilbyde geografibaserede funktioner, når du scanner placerings-QR-koder. Dette er valgfrit, men anbefales for fuld funktionalitet."
+            "value" : "Adgang til placering gør det muligt for QR Unveil at registrere, hvor du har scannet koder. Disse data forbliver kun på din enhed og din personlige iCloud-konto."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Standortzugriff ermöglicht es QR Unveil, standortbasierte Funktionen beim Scannen von Standort-QR-Codes bereitzustellen. Dies ist optional, wird jedoch für die volle Funktionalität empfohlen."
+            "value" : "Der Standortzugriff erlaubt es QR Unveil, den Ort zu speichern, an dem Sie Codes gescannt haben. Diese Daten bleiben ausschließlich auf Ihrem Gerät und Ihrem persönlichen iCloud-Konto."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Η πρόσβαση τοποθεσίας επιτρέπει στο QR Unveil να παρέχει λειτουργίες με βάση τη γεωγραφική θέση κατά τη σάρωση κωδικών QR τοποθεσίας. Αυτό είναι προαιρετικό αλλά συνιστάται για πλήρη λειτουργικότητα."
+            "value" : "Η πρόσβαση στη θέση επιτρέπει στο QR Unveil να καταγράφει πού σαρώσατε κωδικούς. Αυτά τα δεδομένα παραμένουν μόνο στη συσκευή σας και στον προσωπικό σας λογαριασμό iCloud."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El acceso a la ubicación permite a QR Unveil proporcionar funciones geográficas al escanear códigos QR de ubicación. Esto es opcional pero recomendado para una funcionalidad completa."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud."
           }
         },
         "es-419" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El acceso a la ubicación permite a QR Unveil proporcionar funciones basadas en la geolocalización al escanear códigos QR de ubicación. Esto es opcional pero recomendado para una funcionalidad completa."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud."
           }
         },
         "es-US" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El acceso a la ubicación permite a QR Unveil proporcionar funciones geográficas al escanear códigos QR de ubicación. Esto es opcional pero recomendado para una funcionalidad completa."
+            "value" : "El acceso a la ubicación permite a QR Unveil registrar dónde escaneaste los códigos. Estos datos permanecen solo en tu dispositivo y en tu cuenta personal de iCloud"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'accès à la localisation permet à QR Unveil de fournir des fonctionnalités géolocalisées lors du scan de codes QR de lieu. Cette option est facultative mais recommandée pour une fonctionnalité complète."
+            "value" : "L'accès à la localisation permet à QR Unveil d'enregistrer l'endroit où vous avez scanné les codes. Ces données restent uniquement sur votre appareil et votre compte iCloud personnel."
           }
         },
         "fr-CA" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'accès à la localisation permet à QR Unveil de fournir des fonctionnalités géolocalisées lors de la numérisation des codes QR de lieu. C'est optionnel mais recommandé pour une fonctionnalité complète."
+            "value" : "L’accès à la localisation permet à QR Unveil d’enregistrer où vous avez numérisé les codes. Ces données restent uniquement sur votre appareil et votre compte iCloud personnel."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'accesso alla posizione consente a QR Unveil di fornire funzionalità basate sulla geolocalizzazione durante la scansione dei codici QR di posizione. Questo è opzionale ma consigliato per la piena funzionalità."
+            "value" : "L'accesso alla posizione consente a QR Unveil di registrare dove hai scansionato i codici. Questi dati rimangono solo sul tuo dispositivo e sul tuo account iCloud personale."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "位置情報へのアクセスを許可すると、QR Unveilは位置情報QRコードをスキャンする際に地理ベースの機能を提供できます。これはオプションですが、すべての機能を利用するためにお勧めします。"
+            "value" : "位置情報へのアクセスにより、QR Unveil はコードをスキャンした場所を記録できます。このデータはデバイスと個人の iCloud アカウントにのみ保存されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "위치 접근을 허용하면 QR Unveil이 위치 QR 코드를 스캔할 때 지리 기반 기능을 제공할 수 있습니다. 이는 선택 사항이지만 완전한 기능을 위해 권장됩니다."
+            "value" : "위치 액세스를 통해 QR Unveil은 코드를 스캔한 위치를 기록할 수 있습니다. 이 데이터는 귀하의 기기와 개인 iCloud 계정에만 저장됩니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O acesso à localização permite que o QR Unveil forneça recursos baseados em geolocalização ao escanear códigos QR de localização. Isso é opcional, mas recomendado para funcionalidade completa."
+            "value" : "O acesso à localização permite que o QR Unveil registre onde você escaneou os códigos. Esses dados permanecem apenas no seu dispositivo e na sua conta pessoal do iCloud."
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O acesso à localização permite ao QR Unveil fornecer funcionalidades baseadas em localização ao ler códigos QR de locais. Esta opção é opcional, mas recomendada para funcionalidade completa."
+            "value" : "O acesso à localização permite que o QR Unveil registe onde escaneou os códigos. Estes dados permanecem apenas no seu dispositivo e na sua conta pessoal do iCloud."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступ к местоположению позволяет QR Unveil предоставлять геолокационные функции при сканировании QR-кодов с местоположением. Это необязательно, но рекомендуется для полной функциональности."
+            "value" : "Доступ к местоположению позволяет QR Unveil записывать, где вы сканировали коды. Эти данные остаются только на вашем устройстве и в вашем личном аккаунте iCloud."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Platsåtkomst låter QR Unveil tillhandahålla platsbaserade funktioner vid skanning av QR-koder för platser. Detta är valfritt men rekommenderas för full funktionalitet."
+            "value" : "Åtkomst till platsdata gör det möjligt för QR Unveil att registrera var du skannade koder. Dessa data stannar endast på din enhet och ditt personliga iCloud-konto."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Konum erişimi, QR Unveil'in konum QR kodlarını tararken coğrafi tabanlı özellikler sunmasına olanak tanır. Bu isteğe bağlıdır ancak tam işlevsellik için önerilir."
+            "value" : "Konum erişimi, QR Unveil'in kodları nerede taradığınızı kaydetmesine olanak tanır. Bu veriler yalnızca cihazınızda ve kişisel iCloud hesabınızda kalır."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступ до місцезнаходження дозволяє QR Unveil надавати геолокаційні функції при скануванні QR-кодів із місцезнаходженням. Це необов'язково, але рекомендується для повної функціональності."
+            "value" : "Доступ до місцезнаходження дозволяє QR Unveil записувати, де ви сканували коди. Ці дані залишаються лише на вашому пристрої та у вашому особистому обліковому записі iCloud."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "位置访问允许 QR Unveil 在扫描位置相关二维码时提供基于地理位置的功能。这是可选的，但建议启用以获得完整功能。"
+            "value" : "位置访问权限允许 QR Unveil 记录您扫描代码的位置。此数据仅保留在您的设备和个人 iCloud 账户中。"
           }
         }
       }

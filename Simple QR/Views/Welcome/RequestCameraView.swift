@@ -100,6 +100,12 @@ struct RequestCameraView: View {
             // Check current authorization status when view appears
             cameraAuthStatus = AVCaptureDevice.authorizationStatus(for: .video)
         }
+        .onChange(of: cameraAuthStatus) { _, newStatus in
+            // When status changes to authorized, proceed to next step
+            if newStatus == .authorized {
+                proceedToNextStep()
+            }
+        }
     }
     
     // Dynamic button title based on authorization status
@@ -125,11 +131,7 @@ struct RequestCameraView: View {
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
                     cameraAuthStatus = granted ? .authorized : .denied
-                    
-                    // If access granted, proceed to next step
-                    if granted {
-                        proceedToNextStep()
-                    }
+                    // No longer proceeding - we will use onChange handler instead
                 }
             }
         case .denied, .restricted:
@@ -138,7 +140,7 @@ struct RequestCameraView: View {
                 UIApplication.shared.open(url)
             }
         case .authorized:
-            // Already authorized, proceed to next step
+            // Already authorized, proceed to next step when button is pressed
             proceedToNextStep()
         @unknown default:
             // Handle future cases
