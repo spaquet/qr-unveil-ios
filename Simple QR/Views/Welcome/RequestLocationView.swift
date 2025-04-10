@@ -49,7 +49,7 @@ struct RequestLocationView: View {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                     
-                    Text("Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality.")
+                    Text("Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is required for full functionality.")
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
@@ -59,44 +59,39 @@ struct RequestLocationView: View {
                 
                 Spacer()
                 
-                // Buttons for location access or continue without
-                VStack(spacing: 16) {
-                    Button {
-                        requestLocationAccess()
-                    } label: {
-                        Text(primaryButtonTitle)
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color.accentColor, Color.accentColor.opacity(0.8)]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
+                // Single button for location access
+                Button {
+                    requestLocationAccess()
+                } label: {
+                    Text(primaryButtonTitle)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color.accentColor, Color.accentColor.opacity(0.8)]),
+                                startPoint: .leading,
+                                endPoint: .trailing
                             )
-                            .cornerRadius(12)
-                            .shadow(color: Color.accentColor.opacity(0.3), radius: 5, x: 0, y: 3)
-                    }
-                    .padding(.horizontal, 30)
-                    
-                    // Secondary button to skip location access
-                    Button {
-                        // Complete onboarding without location access
-                        completeOnboarding()
-                    } label: {
-                        Text(secondaryButtonTitle)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
+                        )
+                        .cornerRadius(12)
+                        .shadow(color: Color.accentColor.opacity(0.3), radius: 5, x: 0, y: 3)
                 }
+                .padding(.horizontal, 30)
                 .padding(.bottom, 50)
             }
         }
         .onAppear {
             // Check current authorization status on view appear
             checkLocationStatus()
+        }
+        .onChange(of: locationManager.authorizationStatus) { _, newStatus in
+            // When status changes from notDetermined, update settings and complete
+            if newStatus != .notDetermined {
+                let isAuthorized = newStatus == .authorizedWhenInUse || newStatus == .authorizedAlways
+                updateSettingsAndComplete(authorized: isAuthorized)
+            }
         }
     }
     
@@ -114,19 +109,6 @@ struct RequestLocationView: View {
         }
     }
     
-    private var secondaryButtonTitle: String {
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            return "Skip for Now"
-        case .denied, .restricted:
-            return "Continue Without Location"
-        case .authorizedWhenInUse, .authorizedAlways:
-            return ""  // No secondary button needed when authorized
-        @unknown default:
-            return "Skip for Now"
-        }
-    }
-    
     // Check current location authorization status
     private func checkLocationStatus() {
         if locationManager.authorizationStatus == .authorizedWhenInUse ||
@@ -134,7 +116,7 @@ struct RequestLocationView: View {
             // If already authorized, we can automatically complete onboarding
             // However, let's give the user a moment to read the screen first
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                completeOnboarding()
+                updateSettingsAndComplete(authorized: true)
             }
         }
     }
@@ -144,26 +126,27 @@ struct RequestLocationView: View {
         switch locationManager.authorizationStatus {
         case .notDetermined:
             locationManager.requestAuthorization()
-            // We'll complete onboarding when the user makes a choice via the delegate
-            
-            // Set up a listener to proceed when status changes
-            // This is a simplification; in a real app you'd use Combine or a delegate pattern
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if locationManager.authorizationStatus != .notDetermined {
-                    completeOnboarding()
-                }
-            }
+            // No need for additional logic here - will be handled by onChange
         case .denied, .restricted:
             // Open app settings
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(url)
             }
         case .authorizedWhenInUse, .authorizedAlways:
-            // Already authorized, proceed to main app
-            completeOnboarding()
+            // Already authorized, update settings and proceed to main app
+            updateSettingsAndComplete(authorized: true)
         @unknown default:
             break
         }
+    }
+    
+    // Save the user's location preference to SettingsManager and complete onboarding
+    private func updateSettingsAndComplete(authorized: Bool) {
+        // Update the saveLocationData setting based on user's choice
+        SettingsManager.shared.updateSaveLocationDataPreference(enabled: authorized)
+        
+        // Complete onboarding regardless of the user's choice
+        completeOnboarding()
     }
 }
 

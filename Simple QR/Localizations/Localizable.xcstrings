@@ -5960,6 +5960,7 @@
       }
     },
     "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is optional but recommended for full functionality." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -6082,6 +6083,9 @@
           }
         }
       }
+    },
+    "Location access allows QR Unveil to provide geo-based features when scanning location QR codes. This is required for full functionality." : {
+
     },
     "Location services are disabled. Enable in Settings to use this feature." : {
       "localizations" : {
