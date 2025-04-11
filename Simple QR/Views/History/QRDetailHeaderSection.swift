@@ -256,6 +256,23 @@ struct QRDetailInfoSection: View {
                 }
             }
             
+            // Security status for Email
+            if qrCode.qrType == "email" {
+                HStack {
+                    Text("Email Domain Status")
+                    
+                    Spacer()
+                    
+                    // Show email security indicator based on verification data
+                    if let verification = qrCode.securityVerification, verification.isVerified {
+                        EmailSecurityIndicator(isDisposable: verification.isDisposableEmail)
+                    } else {
+                        // No verification data yet
+                        EmailSecurityIndicator(isDisposable: nil)
+                    }
+                }
+            }
+            
             LabeledContent("Created", value: formattedDate(qrCode.createdAt))
             LabeledContent("Last Scanned", value: qrCode.lastScanned != nil ? formattedDate(qrCode.lastScanned!) : "N/A")
         }

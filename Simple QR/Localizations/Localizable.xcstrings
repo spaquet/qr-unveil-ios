@@ -3227,11 +3227,23 @@
         }
       }
     },
+    "Disposable email detected" : {
+      "comment" : "Disposable email message"
+    },
     "Disposable Email Protection" : {
 
     },
+    "Disposable email services are often used for spam or fraud. Proceed with caution." : {
+      "comment" : "Disposable email recommendation"
+    },
     "Domain list not yet downloaded" : {
 
+    },
+    "Domain reputation: %@" : {
+      "comment" : "Email domain reputation"
+    },
+    "Domain:" : {
+      "comment" : "Email domain label"
     },
     "Done" : {
       "localizations" : {
@@ -3604,6 +3616,9 @@
           }
         }
       }
+    },
+    "Email Domain Status" : {
+
     },
     "Enhance Your QR Experience" : {
       "localizations" : {
@@ -6216,6 +6231,9 @@
         }
       }
     },
+    "Low" : {
+      "comment" : "Used to indicate a low reputation for an email domain"
+    },
     "Low Risk" : {
       "comment" : "Low risk security rating",
       "localizations" : {
@@ -7708,6 +7726,9 @@
         }
       }
     },
+    "No security information available for this type" : {
+      "comment" : "No security info message"
+    },
     "No tags" : {
       "localizations" : {
         "ar" : {
@@ -7955,6 +7976,9 @@
           }
         }
       }
+    },
+    "Normal" : {
+      "comment" : "Used to indicate a normal reputation for an email domain"
     },
     "Not verified yet" : {
       "comment" : "Indicates if a QR code content has been verified",
@@ -8949,6 +8973,9 @@
           }
         }
       }
+    },
+    "Phone number security verification" : {
+
     },
     "Photo Library Access" : {
       "localizations" : {
@@ -10935,6 +10962,9 @@
           }
         }
       }
+    },
+    "Regular email domain" : {
+      "comment" : "Regular email message"
     },
     "Safe" : {
       "comment" : "Safe security rating",
@@ -15035,6 +15065,9 @@
         }
       }
     },
+    "This email uses a disposable/temporary email service" : {
+      "comment" : "Disposable email warning"
+    },
     "This URL redirects %d time(s)" : {
       "comment" : "Redirect count",
       "localizations" : {
@@ -16904,6 +16937,9 @@
           }
         }
       }
+    },
+    "WiFi security verification" : {
+
     },
     "You haven't created any tags yet." : {
       "localizations" : {

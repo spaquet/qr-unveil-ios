@@ -512,108 +512,161 @@ struct QRBottomSheetView: View {
     
     /// Common URL checks such as https/http, cetificate validity and redirection
     private func securityVerification() {
-        if let qrCode = detectedQRCode, !qrCode.content.isEmpty {
-            do {
-                // Get the content string directly
-                let contentString = qrCode.content
-                
-                // Use the content string in the predicate
-                let descriptor = FetchDescriptor<QRCodeModel>(
-                    predicate: #Predicate<QRCodeModel> { code in
-                        code.content == contentString
-                    }
-                )
-                
-                let savedCodes = try modelContext.fetch(descriptor)
-                
-                // Get the most recently created QR code with this content
-                guard let savedCode = savedCodes.sorted(by: { $0.createdAt > $1.createdAt }).first else {
-                    print("Could not find the saved QR code")
-                    return
+        guard let qrCode = detectedQRCode, !qrCode.content.isEmpty else { return }
+        
+        do {
+            // Find the saved QR code
+            let contentString = qrCode.content
+            let descriptor = FetchDescriptor<QRCodeModel>(
+                predicate: #Predicate<QRCodeModel> { code in
+                    code.content == contentString
                 }
+            )
+            
+            let savedCodes = try modelContext.fetch(descriptor)
+            guard let savedCode = savedCodes.sorted(by: { $0.createdAt > $1.createdAt }).first else {
+                print("Could not find the saved QR code")
+                return
+            }
+            
+            // Add security verification if not already present
+            if savedCode.securityVerification == nil {
+                let verification = SecurityVerificationModel(qrCode: savedCode)
                 
-                // Add security verification if not already present
-                if savedCode.securityVerification == nil {
-                    let verification = SecurityVerificationModel(qrCode: savedCode)
-                    
-                    // Set initial security score
-                    verification.securityScore = 80 // Default good score
-                    verification.isVerified = true
-                    verification.verificationDate = Date()
-                    
-                    // For URLs, perform security checks
-                    if qrCode.type == "url", let url = URL(string: contentString) {
+                // Set initial security score and verification status
+                verification.securityScore = 80 // Default good score
+                verification.isVerified = true
+                verification.verificationDate = Date()
+                verification.threatLevel = .safe
+                
+                // Create empty arrays for warnings and recommendations
+                var warnings: [String] = []
+                var recommendations: [String] = []
+                
+                // Perform type-specific security checks
+                switch qrCode.type {
+                case "url":
+                    if let url = URL(string: contentString) {
+                        // Check for HTTPS
                         verification.isHttps = url.isHttps
                         
-                        // If not HTTPS, reduce security score immediately
+                        // If not HTTPS, reduce security score
                         if !url.isHttps {
                             verification.securityScore -= 30
-                            verification.threatLevel = SecurityVerificationModel.ThreatLevel.suspicious
-                            verification.securityWarnings = [NSLocalizedString("This URL uses unencrypted HTTP instead of HTTPS", comment: "Warning about HTTP usage")]
-                            verification.securityRecommendations = [NSLocalizedString("Consider only visiting websites that use HTTPS encryption", comment: "HTTPS recommendation")]
-
-                        } else {
-                            verification.threatLevel = SecurityVerificationModel.ThreatLevel.safe
-                            
-                            // Only perform additional checks for HTTPS URLs if we have network connectivity
-                            if NetworkMonitor.shared.isConnected {
-                                // Perform additional security checks in background
-                                URLSecurityChecker.shared.checkURLSecurity(urlString: contentString) { result in
-                                    DispatchQueue.main.async {
-                                        do {
-                                            // Update security verification with the results
-                                            verification.hasSslIssues = result.hasSslIssues
-                                            verification.redirectsCount = result.redirectCount
-                                            verification.finalDestination = result.finalDestination
-                                            
-                                            // Update security score and warnings based on SSL issues
-                                            if let hasSslIssues = result.hasSslIssues, hasSslIssues {
-                                                verification.securityScore -= 30
-                                                verification.threatLevel = .suspicious
-                                                
-                                                var warnings = verification.securityWarnings ?? []
-                                                warnings.append(NSLocalizedString("This website has SSL certificate issues", comment: "SSL warning"))
-                                                verification.securityWarnings = warnings
-                                                
-                                                var recommendations = verification.securityRecommendations ?? []
-                                                recommendations.append(NSLocalizedString("Verify the website's security before proceeding", comment: "Security verification recommendation"))
-                                                verification.securityRecommendations = recommendations
-                                            }
-                                            
-                                            // Handle redirects
-                                            if let redirectCount = result.redirectCount, redirectCount > 0 {
-                                                // Minor penalty for redirects
-                                                verification.securityScore -= min(redirectCount * 5, 15)
-                                                
-                                                var warnings = verification.securityWarnings ?? []
-                                                warnings.append(String(format: NSLocalizedString("This URL redirects %d time(s)", comment: "Redirect count"), redirectCount))
-                                                verification.securityWarnings = warnings
-                                                
-                                                if let finalDest = result.finalDestination {
-                                                    var info = verification.securityRecommendations ?? []
-                                                    info.append(String(format: NSLocalizedString("Final destination: %@", comment: "Final URL after redirects"), finalDest))
-                                                    verification.securityRecommendations = info
-                                                }
-                                            }
-                                            
-                                            // Save the updated verification
-                                            try self.modelContext.save()
-                                        } catch {
-                                            print("Error updating security verification with network results: \(error)")
-                                        }
-                                    }
-                                }
-                            }
+                            verification.threatLevel = .suspicious
+                            warnings.append(NSLocalizedString("This URL uses unencrypted HTTP instead of HTTPS", comment: "Warning about HTTP usage"))
+                            recommendations.append(NSLocalizedString("Consider only visiting websites that use HTTPS encryption", comment: "HTTPS recommendation"))
+                        }
+                        
+                        // Perform network security checks if connected
+                        if NetworkMonitor.shared.isConnected {
+                            performURLNetworkSecurityChecks(contentString, verification)
                         }
                     }
                     
-                    savedCode.securityVerification = verification
+                case "email":
+                    if let emailAddress = contentString.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                        // Check if it's a disposable email
+                        let isDisposable = DisposableEmailChecker.shared.isDisposableEmail(emailAddress)
+                        verification.isDisposableEmail = isDisposable
+                        
+                        // Set domain reputation based on disposable status
+                        if isDisposable {
+                            verification.emailDomainReputation = NSLocalizedString("Low", comment: "Used to indicate a low reputation for an email domain")
+                            verification.securityScore -= 30
+                            verification.threatLevel = .suspicious
+                            warnings.append(NSLocalizedString("This email uses a disposable/temporary email service", comment: "Disposable email warning"))
+                            recommendations.append(NSLocalizedString("Disposable email services are often used for spam or fraud. Proceed with caution.", comment: "Disposable email recommendation"))
+                        } else {
+                            verification.emailDomainReputation = NSLocalizedString("Normal", comment: "Used to indicate a normal reputation for an email domain")
+                        }
+                    }
                     
-                    // Save the updated model
-                    try modelContext.save()
+                case "phone", "sms":
+                    // Placeholder for future phone number verification
+                    // We could check for premium rate numbers, scam reports, etc.
+                    print("Phone, sms verification not yet implemented")
+                    break
+                    
+                case "wifi":
+                    // Placeholder for future WiFi security verification
+                    // Check encryption type, open networks, etc.
+                    print("Wifi verification not yet implemented")
+                    break
+                    
+                case "vcard":
+                    // Placeholder for future vCard verification
+                    // Check for suspicious fields, etc.
+                    print("vcCard verification not yet implemented")
+                    break
+                    
+                default:
+                    // Generic verification for other types
+                    print("Error: Unsupported content type for security verification: \(qrCode.type)")
+                    break
                 }
-            } catch {
-                print("Error updating security verification: \(error.localizedDescription)")
+                
+                // Set warnings and recommendations
+                if !warnings.isEmpty {
+                    verification.securityWarnings = warnings
+                }
+                
+                if !recommendations.isEmpty {
+                    verification.securityRecommendations = recommendations
+                }
+                
+                // Associate verification with QR code
+                savedCode.securityVerification = verification
+                
+                // Save the updated model
+                try modelContext.save()
+            }
+        } catch {
+            print("Error updating security verification: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Helper method for URL network security checks
+    private func performURLNetworkSecurityChecks(_ urlString: String, _ verification: SecurityVerificationModel) {
+        URLSecurityChecker.shared.checkURLSecurity(urlString: urlString) { result in
+            DispatchQueue.main.async {
+                do {
+                    // Update security verification with the results
+                    verification.hasSslIssues = result.hasSslIssues
+                    verification.redirectsCount = result.redirectCount
+                    verification.finalDestination = result.finalDestination
+                    
+                    var warnings = verification.securityWarnings ?? []
+                    var recommendations = verification.securityRecommendations ?? []
+                    
+                    // Update security score and warnings based on SSL issues
+                    if let hasSslIssues = result.hasSslIssues, hasSslIssues {
+                        verification.securityScore -= 30
+                        verification.threatLevel = .suspicious
+                        warnings.append(NSLocalizedString("This website has SSL certificate issues", comment: "SSL warning"))
+                        recommendations.append(NSLocalizedString("Verify the website's security before proceeding", comment: "Security verification recommendation"))
+                    }
+                    
+                    // Handle redirects
+                    if let redirectCount = result.redirectCount, redirectCount > 0 {
+                        // Minor penalty for redirects
+                        verification.securityScore -= min(redirectCount * 5, 15)
+                        warnings.append(String(format: NSLocalizedString("This URL redirects %d time(s)", comment: "Redirect count"), redirectCount))
+                        
+                        if let finalDest = result.finalDestination {
+                            recommendations.append(String(format: NSLocalizedString("Final destination: %@", comment: "Final URL after redirects"), finalDest))
+                        }
+                    }
+                    
+                    // Update warnings and recommendations
+                    verification.securityWarnings = warnings
+                    verification.securityRecommendations = recommendations
+                    
+                    // Save the updated verification
+                    try self.modelContext.save()
+                } catch {
+                    print("Error updating security verification with network results: \(error)")
+                }
             }
         }
     }
