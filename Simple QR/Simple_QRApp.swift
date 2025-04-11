@@ -177,15 +177,6 @@ struct OnboardingControllerView: View {
     }
 }
 
-// Create a new AppDelegate class
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        let configuration = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
-        configuration.delegateClass = SceneDelegate.self
-        return configuration
-    }
-}
-
 // Create a new SceneDelegate class
 class SceneDelegate: NSObject, UIWindowSceneDelegate {
     // Shared state to communicate with SwiftUI views

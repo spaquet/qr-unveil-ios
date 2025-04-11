@@ -24,6 +24,9 @@ struct SettingsView: View {
     @State private var showFavoritesSection = true
     @State private var showDeletionAlert = false
     
+    @State private var isUpdatingDomains = false
+    @State private var lastUpdateDate: Date? = nil
+    
     var currentSettings: SettingsModel? {
         settings.first
     }
@@ -71,6 +74,30 @@ struct SettingsView: View {
                 .onChange(of: defaultSortOrder) { updateSettings() }
             }
             
+            Section("Disposable Email Protection") {
+                if let date = lastUpdateDate {
+                    LabeledContent("Last Updated", value: formattedDate(date))
+                } else {
+                    Text("Domain list not yet downloaded")
+                        .foregroundColor(.secondary)
+                }
+                
+                Button(action: {
+                    updateDisposableDomains()
+                }) {
+                    HStack {
+                        Text("Update Domain List")
+                        
+                        if isUpdatingDomains {
+                            Spacer()
+                            ProgressView()
+                                .controlSize(.small)
+                        }
+                    }
+                }
+                .disabled(isUpdatingDomains)
+            }
+            
             // App info at the bottom of the view
             Section {
                 VStack(spacing: 8) {
@@ -93,6 +120,38 @@ struct SettingsView: View {
             
             // Also refresh the settings manager
             settingsManager.loadSettings()
+            
+            // Load the last update date
+                if let metadata = DisposableDomainsManager.shared.getMetadata() {
+                    lastUpdateDate = metadata.lastUpdated
+                }
+        }
+    }
+    
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    private func updateDisposableDomains() {
+        isUpdatingDomains = true
+        
+        DisposableDomainsManager.shared.downloadDomainsFile { success, error in
+            DispatchQueue.main.async {
+                isUpdatingDomains = false
+                
+                if success {
+                    // Get the metadata to show the last update date
+                    if let metadata = DisposableDomainsManager.shared.getMetadata() {
+                        lastUpdateDate = metadata.lastUpdated
+                    }
+                    
+                    // Reload domains in the checker
+                    DisposableEmailChecker.shared.reloadDomains()
+                }
+            }
         }
     }
     
