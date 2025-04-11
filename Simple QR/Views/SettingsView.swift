@@ -26,6 +26,8 @@ struct SettingsView: View {
     
     @State private var isUpdatingDomains = false
     @State private var lastUpdateDate: Date? = nil
+    @State private var updateStatusMessage: String? = nil
+    @State private var showingUpdateAlert = false
     
     var currentSettings: SettingsModel? {
         settings.first
@@ -82,6 +84,12 @@ struct SettingsView: View {
                         .foregroundColor(.secondary)
                 }
                 
+                if let message = updateStatusMessage {
+                    Text(message)
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
+                }
+                
                 Button(action: {
                     updateDisposableDomains()
                 }) {
@@ -122,9 +130,16 @@ struct SettingsView: View {
             settingsManager.loadSettings()
             
             // Load the last update date
-                if let metadata = DisposableDomainsManager.shared.getMetadata() {
-                    lastUpdateDate = metadata.lastUpdated
-                }
+            if let metadata = DisposableDomainsManager.shared.getMetadata() {
+                lastUpdateDate = metadata.lastUpdated
+            }
+        }
+        .alert(isPresented: $showingUpdateAlert) {
+            Alert(
+                title: Text("Update Error"),
+                message: Text(updateStatusMessage ?? "Could not update the domain list."),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
     
@@ -136,9 +151,16 @@ struct SettingsView: View {
     }
 
     private func updateDisposableDomains() {
-        isUpdatingDomains = true
+        guard !isUpdatingDomains else { return }
         
-        DisposableDomainsManager.shared.downloadDomainsFile { success, error in
+        isUpdatingDomains = true
+        updateStatusMessage = nil
+        
+        // For manual updates, bypass network restrictions (allow cellular/low power)
+        DisposableDomainsManager.shared.smartDownloadDomainsFile(
+            forceCheck: true,
+            bypassNetworkRestrictions: true
+        ) { success, error in
             DispatchQueue.main.async {
                 isUpdatingDomains = false
                 
@@ -150,6 +172,27 @@ struct SettingsView: View {
                     
                     // Reload domains in the checker
                     DisposableEmailChecker.shared.reloadDomains()
+                    
+                    updateStatusMessage = "Successfully updated domain list."
+                } else if let error = error {
+                    let nsError = error as NSError
+                    
+                    // Show user-friendly error message
+                    if nsError.domain == "com.qrunveil.disposabledomains" {
+                        switch nsError.code {
+                        case 1003:
+                            updateStatusMessage = "Update already in progress."
+                        case 1004:
+                            updateStatusMessage = "No network connection available."
+                            showingUpdateAlert = true
+                        default:
+                            updateStatusMessage = error.localizedDescription
+                            showingUpdateAlert = true
+                        }
+                    } else {
+                        updateStatusMessage = "Failed to update: \(error.localizedDescription)"
+                        showingUpdateAlert = true
+                    }
                 }
             }
         }
