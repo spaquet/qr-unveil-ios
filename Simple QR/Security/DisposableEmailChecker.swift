@@ -40,7 +40,15 @@ class DisposableEmailChecker {
         
         do {
             let domainsURL = DisposableDomainsManager.shared.getDomainsFileURL()
+            print("Loading domains from \(domainsURL.path)")
+            
             let domainsContent = try String(contentsOf: domainsURL, encoding: .utf8)
+            print("Loaded \(domainsContent.count) characters")
+            
+            // Sample of content for debugging
+            if domainsContent.count > 100 {
+                print("Sample of content: \(domainsContent.prefix(100))...")
+            }
             
             // Split the content by new lines and add to set
             let domains = domainsContent.components(separatedBy: .newlines)
@@ -51,6 +59,13 @@ class DisposableEmailChecker {
             isLoaded = true
             
             print("Loaded \(disposableDomains.count) disposable domains")
+            
+            // Check for specific domains that should be in the list
+            let testDomains = ["mailinator.com", "10minutemail.com", "guerrillamail.com"]
+            for testDomain in testDomains {
+                print("Test domain \(testDomain) in list: \(disposableDomains.contains(testDomain))")
+            }
+            
             return true
         } catch {
             print("Error loading disposable domains: \(error.localizedDescription)")
@@ -67,16 +82,28 @@ class DisposableEmailChecker {
     func isDisposableEmail(_ email: String) -> Bool {
         // Ensure domains are loaded
         if !isLoaded {
-            _ = loadDomains()
+            let loadResult = loadDomains()
+            print("Initial domain load result: \(loadResult)")
+            print("Loaded \(disposableDomains.count) domains")
+        }
+        
+        // Log some sample domains for verification
+        if !disposableDomains.isEmpty {
+            let sampleDomains = Array(disposableDomains.prefix(5))
+            print("Sample domains: \(sampleDomains)")
         }
         
         // Extract domain from email
         guard let domain = extractDomain(from: email)?.lowercased() else {
+            print("Failed to extract domain from \(email)")
             return false
         }
         
-        // Check if domain exists in our set
-        return disposableDomains.contains(domain)
+        print("Checking if \(domain) is in disposable domains list")
+        let isDisposable = disposableDomains.contains(domain)
+        print("Result: \(isDisposable)")
+        
+        return isDisposable
     }
     
     /**
@@ -86,11 +113,30 @@ class DisposableEmailChecker {
      * @return The domain part of the email, or nil if invalid format
      */
     private func extractDomain(from email: String) -> String? {
-        let components = email.components(separatedBy: "@")
+        // Handle "mailto:" prefix if present
+        let cleanEmail = email.hasPrefix("mailto:") ?
+            email.replacingOccurrences(of: "mailto:", with: "") : email
+        
+        // First, extract just the email part before any URL parameters
+        let emailPart: String
+        if let questionMarkIndex = cleanEmail.firstIndex(of: "?") {
+            emailPart = String(cleanEmail[..<questionMarkIndex])
+        } else {
+            emailPart = cleanEmail
+        }
+        
+        // Now extract the domain from the clean email
+        let components = emailPart.components(separatedBy: "@")
         guard components.count == 2 else {
+            print("Invalid email format: \(emailPart)")
             return nil
         }
-        return components[1]
+        
+        // Get domain part
+        let domain = components[1].trimmingCharacters(in: .whitespacesAndNewlines)
+        print("Extracted domain: \(domain)")
+        
+        return domain
     }
     
     /**

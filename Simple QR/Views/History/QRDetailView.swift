@@ -71,7 +71,7 @@ struct QRDetailView: View {
             }
             
             // Security section (only visible in non-editing mode)
-            if !isEditing && qrCode.qrType == "url" {
+            if !isEditing && (qrCode.qrType == "url" || qrCode.qrType == "email") {
                 QRDetailSecuritySection(qrCode: qrCode)
             }
         }
