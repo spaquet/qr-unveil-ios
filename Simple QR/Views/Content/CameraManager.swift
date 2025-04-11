@@ -152,6 +152,19 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    /// Toggle detection. When we are not on the main view in ContentView we should turn off detection to avoid detecting a QR code while performing another activity
+    func handleNavigationEvent(isLeavingMainView: Bool) {
+        if isLeavingMainView {
+            // Either completely stop the session or just pause QR detection
+            pauseQRDetection()
+            // Optionally: captureSession.stopRunning()
+        } else {
+            // Resume QR detection when returning to main view
+            resumeScanning()
+            // Optionally: if !captureSession.isRunning { captureSession.startRunning() }
+        }
+    }
+    
     /// Toggles the device torch (flashlight) on/off
     func toggleTorch() {
         guard let device = captureDevice, device.hasTorch else { return }

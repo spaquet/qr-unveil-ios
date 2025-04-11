@@ -74,13 +74,21 @@ struct ContentView: View {
             .navigationDestination(for: NavDestination.self) { destination in
                 switch destination {
                 case .history:
-                    HistoryView()
+                    NavigationDestinationView(cameraManager: cameraManager) {
+                        HistoryView()
+                    }
                 case .tags:
-                    TagsView()
+                    NavigationDestinationView(cameraManager: cameraManager) {
+                        TagsView()
+                    }
                 case .tagMap:
-                    MapView()
+                    NavigationDestinationView(cameraManager: cameraManager) {
+                        MapView()
+                    }
                 case .settings:
-                    SettingsView()
+                    NavigationDestinationView(cameraManager: cameraManager) {
+                        SettingsView()
+                    }
                 }
             }
             .sheet(isPresented: $showQRBottomSheet, onDismiss: {
@@ -268,5 +276,26 @@ enum NavDestination: String, Identifiable, Hashable, CaseIterable {
         case .tagMap: return "map"
         case .settings: return "gear"
         }
+    }
+}
+
+// Wrapper view used by navigationDestination to activate / deactivate detection depending on the view
+struct NavigationDestinationView<Content: View>: View {
+    @ObservedObject var cameraManager: CameraManager
+    let content: Content
+    
+    init(cameraManager: CameraManager, @ViewBuilder content: () -> Content) {
+        self.cameraManager = cameraManager
+        self.content = content()
+    }
+    
+    var body: some View {
+        content
+            .onAppear {
+                cameraManager.handleNavigationEvent(isLeavingMainView: true)
+            }
+            .onDisappear {
+                cameraManager.handleNavigationEvent(isLeavingMainView: false)
+            }
     }
 }
